@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Никита Иванов](https://up.htmlacademy.ru/ecmascript/11/user/1318817).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Рожков](https://htmlacademy.ru/profile/id1069033).
 
 ---
 
