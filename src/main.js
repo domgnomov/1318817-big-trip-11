@@ -338,8 +338,8 @@ const tripInfoElement = tripMainElement.querySelector(`.trip-main__trip-info`);
 const tripInfoMainElement = tripInfoElement.querySelector(`.trip-info__main`);
 render(tripInfoMainElement, createMainInfoTemplate(), `afterbegin`);
 
-const costElement = tripInfoElement.querySelector(`.trip-info__cost`);
-render(costElement, createCostTemplate(), `afterbegin`);
+const tripCostElement = tripInfoElement.querySelector(`.trip-info__cost`);
+render(tripCostElement, createCostTemplate(), `afterbegin`);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-main__trip-controls`);
 const tripControlsFirstElement = tripControlsElement.querySelector(`.visually-hidden:nth-child(1)`);
