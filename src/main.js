@@ -1,5 +1,7 @@
 'use strict';
 
+const TASK_COUNT = 3;
+
 const createTripInfoTemplate = () => {
   return (
     `<section class="trip-main__trip-info  trip-info">
@@ -359,7 +361,7 @@ render(tripItemsContainerElement, createTripItemTemplate(), `afterbegin`);
 
 const tripEventsList = tripItemsContainerElement.querySelector(`.trip-events__list`);
 render(tripEventsList, createEditItemTemplate(), `beforeend`);
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < TASK_COUNT; i++) {
   render(tripEventsList, createItemTemplate(), `beforeend`);
 }
 
