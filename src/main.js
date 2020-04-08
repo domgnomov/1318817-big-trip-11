@@ -8,8 +8,9 @@ import {createDaysContainerTemplate} from "./components/daysContainer.js";
 import {createDayTemplate} from "./components/day.js";
 import {createDayItemTemplate} from "./components/dayItem.js";
 import {createEditDayItemTemplate} from "./components/editDayItem.js";
+import {generateDayItems} from "./mock/dayItem.js";
 
-const TASK_COUNT = 3;
+const ITEMS_COUNT = 20;
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -43,7 +44,10 @@ render(daysContainerElement, createDayTemplate(), `afterbegin`);
 
 const dayItemList = daysContainerElement.querySelector(`.trip-events__list`);
 render(dayItemList, createEditDayItemTemplate(), `beforeend`);
-for (let i = 0; i < TASK_COUNT; i++) {
+
+const dayItems = generateDayItems(ITEMS_COUNT) ;
+
+for (let i = 0; i < ITEMS_COUNT; i++) {
   render(dayItemList, createDayItemTemplate(), `beforeend`);
 }
 

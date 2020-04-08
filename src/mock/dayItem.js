@@ -41,7 +41,9 @@ const Descriptions = [
 
 const getRandomPhotos = (min, max) => {
   const randomIndex = getRandomIntegerNumber(min, max);
-  return Array(randomIndex).fill().map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
+  return Array(randomIndex)
+    .fill(``)
+    .map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
 };
 
 const getRandomIntegerNumber = (min, max) => {
@@ -62,16 +64,27 @@ const getOffers = () => {
 const getRandomArrayItems = (array, min, max) => {
   const randomIndex = getRandomIntegerNumber(min, max);
 
-  return array.slice(randomIndex);
+  return array.slice(min, randomIndex);
 };
 
-const generatDayItem = () => {
+const getDescription = (array, min, max) => {
+  return getRandomArrayItems(array, min, max).join(` `);
+};
 
+const generateDayItem = () => {
   return {
     type: getRandomArrayItem(DayItemTypes),
     city: getRandomArrayItem(Cities),
-    offers: getOffers,
-    description: getRandomArrayItems(Descriptions, 1, 5),
+    offers: getOffers(),
+    description: getDescription(Descriptions, 1, 5),
     photos: getRandomPhotos(1, 5),
   };
 };
+
+const generateDayItems = (count) => {
+  return new Array(count)
+    .fill(``)
+    .map(generateDayItem);
+};
+
+export {generateDayItems};
