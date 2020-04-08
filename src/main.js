@@ -45,10 +45,8 @@ render(daysContainerElement, createDayTemplate(), `afterbegin`);
 const dayItemList = daysContainerElement.querySelector(`.trip-events__list`);
 render(dayItemList, createEditDayItemTemplate(), `beforeend`);
 
-const dayItems = generateDayItems(ITEMS_COUNT) ;
-
-for (let i = 0; i < ITEMS_COUNT; i++) {
-  render(dayItemList, createDayItemTemplate(), `beforeend`);
-}
+const dayItems = generateDayItems(ITEMS_COUNT);
+dayItems.slice(1, ITEMS_COUNT)
+  .forEach((item) => render(dayItemList, createDayItemTemplate(item), `beforeend`));
 
 
