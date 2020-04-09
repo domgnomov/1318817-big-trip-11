@@ -1,3 +1,5 @@
+import {typeInPreposition} from "./const";
+
 const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
 };
@@ -7,4 +9,8 @@ export const formatTime = (date) => {
   const minutes = castTimeFormat(date.getMinutes());
 
   return `${hours}:${minutes}`;
+};
+
+export const getPreposition = (type) => {
+  return typeInPreposition.includes(type) ? `in` : `to`;
 };

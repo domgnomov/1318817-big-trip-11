@@ -42,10 +42,10 @@ render(sortingElement, createDaysContainerTemplate(), `afterend`);
 const daysContainerElement = document.querySelector(`.trip-days`);
 render(daysContainerElement, createDayTemplate(), `afterbegin`);
 
-const dayItemList = daysContainerElement.querySelector(`.trip-events__list`);
-render(dayItemList, createEditDayItemTemplate(), `beforeend`);
-
 const dayItems = generateDayItems(ITEMS_COUNT);
+const dayItemList = daysContainerElement.querySelector(`.trip-events__list`);
+render(dayItemList, createEditDayItemTemplate(dayItems[0]), `beforeend`);
+
 dayItems.slice(1, ITEMS_COUNT)
   .forEach((item) => render(dayItemList, createDayItemTemplate(item), `beforeend`));
 

@@ -1,4 +1,4 @@
-let offers;
+let randomOffers;
 
 const DayItemTypes = [
   `Taxi`,
@@ -21,14 +21,23 @@ const Cities = [
 ];
 
 //TODO
-const OfferNames = [
-  `Order Uber`,
-  `Rent a car`,
-  `Add breakfast`,
-  `Book tickets`,
-  `Lunch in city`,
-  `Switch to comfort`,
-];
+const Offers = {
+    luggage: {name: `luggage`,
+              title: `Add luggage`,
+              price: 30},
+    comfort: {name: `comfort`,
+              title: `Switch to comfort class`,
+              price: 100},
+    meal:    {name: `meal`,
+              title: `Add luggage`,
+              price: 15},
+    seats:   {name: `seats`,
+              title: `Choose seats`,
+              price: 5},
+    train:   {name: `train`,
+              title: `Travel by train`,
+              price: 40},
+};
 
 const Descriptions = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
@@ -44,14 +53,14 @@ const Descriptions = [
   `In rutrum ac purus sit amet tempus.`,
 ];
 
-const generateOffers = () => {
+const generateRandomOffers = () => {
   return new Map(DayItemTypes.map(type => [type,
     new Array(getRandomIntegerNumber(1, 5))
         .fill(``)
         .map(() => {
           const offer = {
             type: type,
-            title: getRandomArrayItem(OfferNames),
+            title: getRandomArrayItem(Array.from(Object.values(Offers))).title,
             cost: Math.floor(Math.random() * 10),
           };
           return offer;
@@ -97,8 +106,8 @@ const getRandomDate = () => {
 };
 
 const generateDayItem = () => {
-  if (!offers) {
-    offers = generateOffers();
+  if (!randomOffers) {
+    randomOffers = generateRandomOffers();
   }
   const type = getRandomArrayItem(DayItemTypes);
   const startTime = getRandomDate();
@@ -108,7 +117,7 @@ const generateDayItem = () => {
   return {
     type: type,
     city: getRandomArrayItem(Cities),
-    offers: offers.get(type),
+    offers: randomOffers.get(type),
     price: getRandomIntegerNumber(1, 100),
     startDate: startTime,
     endDate: endTime,

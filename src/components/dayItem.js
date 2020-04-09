@@ -1,5 +1,4 @@
-import {typeInPreposition} from "../const.js";
-import {formatTime} from "../utils.js";
+import {formatTime, getPreposition} from "../utils.js";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -15,9 +14,7 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-const getPreposition = (type) => {
-  return typeInPreposition.includes(type) ? `in` : `to`;
-};
+
 
 export const createDayItemTemplate = (item) => {
   const {type, city, offers, price, startDate, endDate, duration} = item;
@@ -62,4 +59,4 @@ export const createDayItemTemplate = (item) => {
       </div>
     </li>`
   );
-}
+};
