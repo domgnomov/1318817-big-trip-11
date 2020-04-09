@@ -9,7 +9,7 @@ const DayItemTypes = [
   `Drive`,
   `Flight`,
   `Check-in`,
-  `Sightseeng`,
+  `Sightseeing`,
   `Restaurant`,
 ];
 
@@ -86,15 +86,33 @@ const getDescription = (array, min, max) => {
   return getRandomArrayItems(array, min, max).join(` `);
 };
 
+const getRandomDate = () => {
+  const targetDate = new Date();
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, 8);
+
+  targetDate.setDate(targetDate.getDate() + diffValue);
+
+  return targetDate;
+};
+
 const generateDayItem = () => {
   if (!offers) {
     offers = generateOffers();
   }
   const type = getRandomArrayItem(DayItemTypes);
+  const startTime = getRandomDate();
+  const duration = getRandomIntegerNumber(1, 30);
+  const endTime = new Date(startTime.getTime() + duration * 60000);
+
   return {
     type: type,
     city: getRandomArrayItem(Cities),
     offers: offers.get(type),
+    price: getRandomIntegerNumber(1, 100),
+    startDate: startTime,
+    endDate: endTime,
+    duration: duration,
     description: getDescription(Descriptions, 1, 5),
     photos: getRandomPhotos(1, 5),
   };
