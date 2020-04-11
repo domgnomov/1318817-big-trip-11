@@ -1,8 +1,10 @@
+/* global require */
+
 const DELIMITER = `&mdash;`;
 
 const getTitle = (days) => {
-  const allDayItems = [].concat.apply([], Array.from(days.values()));
-  const title = allDayItems.reduce(function(acc, current) {
+  const allDayItems = [].concat(...Array.from(days.values()));
+  const title = allDayItems.reduce(function (acc, current) {
     return `${acc} ${current.city} ${DELIMITER}`;
   }, ``);
   return title.slice(0, title.length - DELIMITER.length);
@@ -13,11 +15,11 @@ const getDateInterval = (days) => {
   const startDate = daysKeys[0];
   const endDate = daysKeys[daysKeys.length - 1];
 
-  const dateFormat = require('dateformat');
-  const startMonthDate = String(dateFormat(startDate, `mmmm dd`)).toUpperCase();
-  const endMonthDate = dateFormat(endDate, `dd`);
+  const dateFormat = require(`dateformat`);
+  const formattedStartDateWithMonthName = String(dateFormat(startDate, `mmmm dd`)).toUpperCase();
+  const formattedEndDate = dateFormat(endDate, `dd`);
 
-  return `${startMonthDate} ${DELIMITER} ${endMonthDate}`;
+  return `${formattedStartDateWithMonthName} ${DELIMITER} ${formattedEndDate}`;
 };
 
 export const createInfoMainTemplate = (days) => {

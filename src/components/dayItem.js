@@ -20,8 +20,8 @@ export const createDayItemTemplate = (item) => {
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
   const typePreposition = getPreposition(type);
-  const startDateTime = startDate.toISOString().split('.')[0];
-  const endDateTime = endDate.toISOString().split('.')[0];
+  const startDateTime = startDate.toISOString().split(`.`)[0];
+  const endDateTime = endDate.toISOString().split(`.`)[0];
   const startTime = formatTime(startDate);
   const endTime = formatTime(endDate);
 

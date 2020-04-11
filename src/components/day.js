@@ -1,15 +1,17 @@
+/* global require */
+
 import {createDayItemTemplate} from "./dayItem";
 import {createEditDayItemTemplate} from "./editDayItem";
 
-let isEditDayItemCreated = false;
+let isEditDayItemAlreadyCreated = false;
 
 const createDayItemsMarkup = (dayItems) => {
   return dayItems
     .map((dayItem) => {
-      if (isEditDayItemCreated) {
+      if (isEditDayItemAlreadyCreated) {
         return createDayItemTemplate(dayItem);
       } else {
-        isEditDayItemCreated = true;
+        isEditDayItemAlreadyCreated = true;
         return createEditDayItemTemplate(dayItem);
       }
     })
@@ -20,15 +22,15 @@ export const createDayTemplate = (day, dayItems, dayCount) => {
   const dayItemsMarkup = createDayItemsMarkup(dayItems);
 
   const date = new Date(day);
-  const dateFormat = require('dateformat');
-  const dateTime = dateFormat(date, `yyyy-mm-dd`);
-  const monthDate = String(dateFormat(date, `mmmm dd`)).toUpperCase();
+  const dateFormat = require(`dateformat`);
+  const formattedDate = dateFormat(date, `yyyy-mm-dd`);
+  const formattedDateWithMonthName = String(dateFormat(date, `mmmm dd`)).toUpperCase();
 
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
         <span class="day__counter">${dayCount}</span>
-        <time class="day__date" datetime="${dateTime}">${monthDate}</time>
+        <time class="day__date" datetime="${formattedDate}">${formattedDateWithMonthName}</time>
       </div>
 
       <ul class="trip-events__list">

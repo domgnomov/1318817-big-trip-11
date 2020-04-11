@@ -1,7 +1,3 @@
-let randomOffers;
-
-const ITEMS_COUNT = 20;
-
 const DayItemTypes = [
   `Taxi`,
   `Bus`,
@@ -22,23 +18,32 @@ const Cities = [
   `Paris`,
 ];
 
-//TODO
 const Offers = {
-    luggage: {name: `luggage`,
-              title: `Add luggage`,
-              price: 30},
-    comfort: {name: `comfort`,
-              title: `Switch to comfort class`,
-              price: 100},
-    meal:    {name: `meal`,
-              title: `Add luggage`,
-              price: 15},
-    seats:   {name: `seats`,
-              title: `Choose seats`,
-              price: 5},
-    train:   {name: `train`,
-              title: `Travel by train`,
-              price: 40},
+  luggage: {
+    name: `luggage`,
+    title: `Add luggage`,
+    price: 30
+  },
+  comfort: {
+    name: `comfort`,
+    title: `Switch to comfort class`,
+    price: 100
+  },
+  meal: {
+    name: `meal`,
+    title: `Add luggage`,
+    price: 15
+  },
+  seats: {
+    name: `seats`,
+    title: `Choose seats`,
+    price: 5
+  },
+  train: {
+    name: `train`,
+    title: `Travel by train`,
+    price: 40
+  },
 };
 
 const Descriptions = [
@@ -55,13 +60,15 @@ const Descriptions = [
   `In rutrum ac purus sit amet tempus.`,
 ];
 
+let randomOffers;
+
 const generateRandomOffers = () => {
-  return new Map(DayItemTypes.map(type => [type,
+  return new Map(DayItemTypes.map((type) => [type,
     new Array(getRandomIntegerNumber(1, 6))
         .fill(``)
         .map(() => {
           const offer = {
-            type: type,
+            type,
             title: getRandomArrayItem(Array.from(Object.values(Offers))).title,
             cost: Math.floor(Math.random() * 10),
           };
@@ -113,7 +120,7 @@ const getRandomBoolean = () => {
   return randomInteger === 1;
 };
 
-const generateDayItem = () => {
+export const generateDayItem = () => {
   if (!randomOffers) {
     randomOffers = generateRandomOffers();
   }
@@ -123,40 +130,15 @@ const generateDayItem = () => {
   const endTime = new Date(startTime.getTime() + duration * 60000);
 
   return {
-    type: type,
+    type,
     city: getRandomArrayItem(Cities),
     offers: randomOffers.get(type),
     price: getRandomIntegerNumber(1, 100),
     startDate: startTime,
     endDate: endTime,
-    duration: duration,
+    duration,
     description: getDescription(Descriptions, 1, 6),
     photos: getRandomPhotos(1, 6),
     isFavorite: getRandomBoolean(),
   };
 };
-
-const generateDayItems = (count) => {
-  return new Array(count)
-    .fill(``)
-    .map(generateDayItem);
-};
-
-const generateDays = () => {
-  const dayItems = generateDayItems(ITEMS_COUNT);
-  dayItems.sort(function(a, b) {
-    return a.startDate.getTime() - b.startDate.getTime() ;
-  });
-  const days = new Map();
-  dayItems.forEach(dayItem => {
-    const date = dayItem.startDate;
-    date.setHours(0,0,0,0);
-    if (!days.has(date.toString())) {
-      days.set(date.toString(), []);
-    }
-    days.get(date.toString()).push(dayItem);
-  });
-  return days;
-};
-
-export {generateDayItems, generateDays, generateDayItem};

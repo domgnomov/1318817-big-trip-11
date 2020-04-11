@@ -6,7 +6,7 @@ import {createFiltersTemplate} from "./components/filters.js";
 import {createSortingTemplate} from "./components/sorting.js";
 import {createDaysContainerTemplate} from "./components/daysContainer.js";
 import {createDayTemplate} from "./components/day.js";
-import {generateDays} from "./mock/dayItem.js";
+import {generateDays} from "./mock/day.js";
 
 const INITIAL_DAYS_COUNT = 1;
 const days = generateDays();
@@ -42,7 +42,4 @@ let dayCount = INITIAL_DAYS_COUNT;
 for (const [day, dayItems] of days.entries()) {
   render(daysContainerElement, createDayTemplate(day, dayItems, dayCount++), `beforeend`);
 }
-
-
-
 

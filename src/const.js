@@ -1,5 +1,5 @@
 export const typeInPreposition = [
-  'Check-in',
+  `Check-in`,
   `Sightseeing`,
   `Restaurant`,
 ];

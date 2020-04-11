@@ -1,7 +1,7 @@
 const getCostValue = (days) => {
-  const allDayItems = [].concat.apply([], Array.from(days.values()));
-  return allDayItems.reduce(function(sum, current) {
-    return sum + current.price
+  const allDayItems = [].concat(...Array.from(days.values()));
+  return allDayItems.reduce(function (sum, current) {
+    return sum + current.price;
   }, 0);
 };
 

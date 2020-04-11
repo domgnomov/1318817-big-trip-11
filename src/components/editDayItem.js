@@ -1,3 +1,5 @@
+/* global require */
+
 import {getPreposition} from "../utils.js";
 
 const createOffersMarkup = (offers) => {
@@ -23,9 +25,9 @@ export const createEditDayItemTemplate = (item) => {
   const typePreposition = getPreposition(type);
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
-  const dateFormat  = require('dateformat');
-  const startDateTime = dateFormat(startDate, `dd/mm/yy HH:MM`);
-  const endDateTime = dateFormat(endDate, `dd/mm/yy HH:MM`);
+  const dateFormat = require(`dateformat`);
+  const formattedStartDate = dateFormat(startDate, `dd/mm/yy HH:MM`);
+  const formattedEndDate = dateFormat(endDate, `dd/mm/yy HH:MM`);
 
   return (
     `<li class="trip-events__item">
@@ -115,12 +117,12 @@ export const createEditDayItemTemplate = (item) => {
             <label class="visually-hidden" for="event-start-time-1">
               From
             </label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDateTime}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formattedStartDate}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">
               To
             </label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDateTime}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formattedEndDate}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
