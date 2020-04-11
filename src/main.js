@@ -6,11 +6,10 @@ import {createFiltersTemplate} from "./components/filters.js";
 import {createSortingTemplate} from "./components/sorting.js";
 import {createDaysContainerTemplate} from "./components/daysContainer.js";
 import {createDayTemplate} from "./components/day.js";
-import {createDayItemTemplate} from "./components/dayItem.js";
 import {createEditDayItemTemplate} from "./components/editDayItem.js";
-import {generateDayItems} from "./mock/dayItem.js";
+import {generateDays} from "./mock/dayItem.js";
 
-const ITEMS_COUNT = 20;
+const INITIAL_DAYS_COUNT = 1;
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -39,14 +38,17 @@ render(eventsContainerFirstElement, createSortingTemplate(), `afterend`);
 const sortingElement = document.querySelector(`.trip-events__trip-sort`);
 render(sortingElement, createDaysContainerTemplate(), `afterend`);
 
+const days = generateDays();
 const daysContainerElement = document.querySelector(`.trip-days`);
-render(daysContainerElement, createDayTemplate(), `afterbegin`);
 
-const dayItems = generateDayItems(ITEMS_COUNT);
+let dayCount = INITIAL_DAYS_COUNT;
+for (const [day, dayItems] of days.entries()) {
+  render(daysContainerElement, createDayTemplate(day, dayItems, dayCount++), `beforeend`);
+}
+// Сделать EDIT добавить на страницу
 const dayItemList = daysContainerElement.querySelector(`.trip-events__list`);
 render(dayItemList, createEditDayItemTemplate(dayItems[0]), `beforeend`);
 
-dayItems.slice(1, ITEMS_COUNT)
-  .forEach((item) => render(dayItemList, createDayItemTemplate(item), `beforeend`));
+
 
 

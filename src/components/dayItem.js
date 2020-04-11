@@ -14,8 +14,6 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-
-
 export const createDayItemTemplate = (item) => {
   const {type, city, offers, price, startDate, endDate, duration} = item;
 
