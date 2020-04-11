@@ -159,4 +159,4 @@ const generateDays = () => {
   return days;
 };
 
-export {generateDayItems, generateDays};
+export {generateDayItems, generateDays, generateDayItem};
