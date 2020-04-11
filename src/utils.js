@@ -1,4 +1,4 @@
-import {typeInPreposition} from "./const";
+import {TypesInPreposition} from "./const";
 
 const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
@@ -12,5 +12,5 @@ export const formatTime = (date) => {
 };
 
 export const getPreposition = (type) => {
-  return typeInPreposition.includes(type) ? `in` : `to`;
+  return TypesInPreposition.includes(type) ? `in` : `to`;
 };
