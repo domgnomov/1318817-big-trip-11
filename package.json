@@ -18,5 +18,9 @@
   },
   "engines": {
     "node": "10"
+  },
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "flatpickr": "^4.6.3"
   }
 }
