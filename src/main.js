@@ -1,5 +1,3 @@
-import {createSortingTemplate} from "./components/sorting.js";
-import {createDaysContainerTemplate} from "./components/daysContainer.js";
 import {createDayTemplate} from "./components/day.js";
 import {generateDays} from "./mock/day.js";
 import {RenderPosition, renderAnotherWay} from "./utils.js";
@@ -8,6 +6,8 @@ import InfoMain from "./components/infoMain";
 import InfoContainer from "./components/infoContainer";
 import Menu from "./components/menu";
 import Filters from "./components/filters";
+import Sorting from "./components/sorting";
+import DaysContainer from "./components/daysContainer";
 
 const INITIAL_DAYS_COUNT = 1;
 const days = generateDays();
@@ -35,8 +35,10 @@ const filtersComponent = new Filters();
 renderAnotherWay(controlsSecondElement, filtersComponent.getElement(), RenderPosition.AFTEREND);
 
 const eventsContainerElement = document.querySelector(`.trip-events`);
-render(eventsContainerElement, createSortingTemplate(), `beforeend`);
-render(eventsContainerElement, createDaysContainerTemplate(), `beforeend`);
+const sortingComponent = new Sorting();
+renderAnotherWay(eventsContainerElement, sortingComponent.getElement(), RenderPosition.BEFOREEND);
+const daysContainerComponent = new DaysContainer();
+renderAnotherWay(eventsContainerElement, daysContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
 const daysContainerElement = document.querySelector(`.trip-days`);
 
