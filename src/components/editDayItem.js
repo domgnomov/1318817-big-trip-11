@@ -1,6 +1,7 @@
 /* global require */
 
 import {getPreposition} from "../utils.js";
+import {createElement} from "../utils";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -19,7 +20,7 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-export const createEditDayItemTemplate = (item) => {
+const createEditDayItemTemplate = (item) => {
   const {type, city, offers, price, startDate, endDate, isFavorite} = item;
 
   const typePreposition = getPreposition(type);
@@ -161,4 +162,28 @@ export const createEditDayItemTemplate = (item) => {
     </li>`
   );
 };
+
+export default class EditDayItem {
+  constructor(item) {
+    this._item = item;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditDayItemTemplate(this._item);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
 
