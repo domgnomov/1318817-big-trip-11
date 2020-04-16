@@ -28,8 +28,8 @@ export const createElement = (template) => {
 
   return newElement.firstChild;
 };
-//TODO Поменять название функции на просто render
-export const renderAnotherWay = (container, element, place) => {
+
+export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);

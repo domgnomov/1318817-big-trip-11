@@ -2,6 +2,7 @@
 
 import {createDayItemTemplate} from "./dayItem";
 import {createEditDayItemTemplate} from "./editDayItem";
+import {createElement} from "../utils";
 
 let isEditDayItemAlreadyCreated = false;
 
@@ -18,7 +19,7 @@ const createDayItemsMarkup = (dayItems) => {
     .join(`\n`);
 };
 
-export const createDayTemplate = (day, dayItems, dayCount) => {
+const createDayTemplate = (day, dayItems, dayCount) => {
   const dayItemsMarkup = createDayItemsMarkup(dayItems);
 
   const date = new Date(day);
@@ -39,3 +40,29 @@ export const createDayTemplate = (day, dayItems, dayCount) => {
     </li>`
   );
 };
+
+export default class Day {
+  constructor(day, dayItems, dayCount) {
+    this._day = day;
+    this._dayItems = dayItems;
+    this._dayCount = dayCount;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createDayTemplate(this._day, this._dayItems, this._dayCount);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
