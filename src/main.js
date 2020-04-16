@@ -1,12 +1,13 @@
 import {createInfoContainerTemplate} from "./components/infoContainer.js";
-import {createInfoMainTemplate} from "./components/infoMain.js";
-import {createInfoCostTemplate} from "./components/infoCost.js";
 import {createMenuTemplate} from "./components/menu.js";
 import {createFiltersTemplate} from "./components/filters.js";
 import {createSortingTemplate} from "./components/sorting.js";
 import {createDaysContainerTemplate} from "./components/daysContainer.js";
 import {createDayTemplate} from "./components/day.js";
 import {generateDays} from "./mock/day.js";
+import {RenderPosition, renderAnotherWay} from "./utils.js";
+import InfoCost from "./components/infoCost";
+import InfoMain from "./components/infoMain";
 
 const INITIAL_DAYS_COUNT = 1;
 const days = generateDays();
@@ -19,12 +20,12 @@ const mainElement = document.querySelector(`.trip-main`);
 render(mainElement, createInfoContainerTemplate(), `afterbegin`);
 
 const infoContainerElement = mainElement.querySelector(`.trip-main__trip-info`);
-const infoMainElement = infoContainerElement.querySelector(`.trip-info__main`);
-render(infoMainElement, createInfoMainTemplate(days), `afterbegin`);
 
+const infoMainComponent = new InfoMain(days);
+renderAnotherWay(infoContainerElement, infoMainComponent.getElement(), RenderPosition.BEFOREEND);
 
-const infoCostElement = infoContainerElement.querySelector(`.trip-info__cost`);
-render(infoCostElement, createInfoCostTemplate(days), `afterbegin`);
+const infoCostComponent = new InfoCost(days);
+renderAnotherWay(infoContainerElement, infoCostComponent.getElement(), RenderPosition.BEFOREEND);
 
 const controlsContainerElement = mainElement.querySelector(`.trip-main__trip-controls`);
 const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
