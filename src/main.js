@@ -39,8 +39,8 @@ render(eventsContainerElement, sortingComponent.getElement(), RenderPosition.BEF
 const daysContainerComponent = new DaysContainer();
 render(eventsContainerElement, daysContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
-const renderDayItem = (dayItem, day) => {
-  const dayItemListElement = day.getElement().querySelector(`.trip-events__list`);
+const renderDayItem = (dayItem, dayComponent) => {
+  const dayItemListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
 
   const onEditButtonClick = () => {
     dayItemListElement.replaceChild(editDayItemComponent.getElement(), dayItemComponent.getElement());
