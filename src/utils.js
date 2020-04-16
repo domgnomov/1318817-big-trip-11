@@ -2,6 +2,7 @@ import {TypesInPreposition} from "./const";
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
+  AFTEREND: `afterend`,
   BEFOREEND: `beforeend`
 };
 
