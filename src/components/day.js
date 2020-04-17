@@ -1,25 +1,8 @@
 /* global require */
 
-import {createDayItemTemplate} from "./dayItem";
-import {createEditDayItemTemplate} from "./editDayItem";
+import {createElement} from "../utils";
 
-let isEditDayItemAlreadyCreated = false;
-
-const createDayItemsMarkup = (dayItems) => {
-  return dayItems
-    .map((dayItem) => {
-      if (isEditDayItemAlreadyCreated) {
-        return createDayItemTemplate(dayItem);
-      } else {
-        isEditDayItemAlreadyCreated = true;
-        return createEditDayItemTemplate(dayItem);
-      }
-    })
-    .join(`\n`);
-};
-
-export const createDayTemplate = (day, dayItems, dayCount) => {
-  const dayItemsMarkup = createDayItemsMarkup(dayItems);
+const createDayTemplate = (day, dayCount) => {
 
   const date = new Date(day);
   const dateFormat = require(`dateformat`);
@@ -33,9 +16,32 @@ export const createDayTemplate = (day, dayItems, dayCount) => {
         <time class="day__date" datetime="${formattedDate}">${formattedDateWithMonthName}</time>
       </div>
 
-      <ul class="trip-events__list">
-        ${dayItemsMarkup}
-      </ul>
+      <ul class="trip-events__list"></ul>
     </li>`
   );
 };
+
+export default class Day {
+  constructor(day, dayCount) {
+    this._day = day;
+    this._dayCount = dayCount;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createDayTemplate(this._day, this._dayCount);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,5 @@
 import {formatTime, getPreposition} from "../utils.js";
+import {createElement} from "../utils";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -14,7 +15,7 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-export const createDayItemTemplate = (item) => {
+const createDayItemTemplate = (item) => {
   const {type, city, offers, price, startDate, endDate, duration} = item;
 
   const hasOffers = Array.isArray(offers) && offers.length;
@@ -58,3 +59,27 @@ export const createDayItemTemplate = (item) => {
     </li>`
   );
 };
+
+export default class DayItem {
+  constructor(item) {
+    this._item = item;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createDayItemTemplate(this._item);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

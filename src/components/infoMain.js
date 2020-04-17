@@ -1,5 +1,7 @@
 /* global require */
 
+import {createElement} from "../utils";
+
 const DELIMITER = `&mdash;`;
 
 const getTitle = (days) => {
@@ -22,14 +24,40 @@ const getDateInterval = (days) => {
   return `${formattedStartDateWithMonthName} ${DELIMITER} ${formattedEndDate}`;
 };
 
-export const createInfoMainTemplate = (days) => {
+const createInfoMainTemplate = (days) => {
   const title = getTitle(days);
   const dateInterval = getDateInterval(days);
 
   return (
-    `<h1 class="trip-info__title">${title}</h1>
-      
-     <p class="trip-info__dates">${dateInterval}</p>`
+    `<div class="trip-info__main">
+        <h1 class="trip-info__title">${title}</h1>
+        
+        <p class="trip-info__dates">${dateInterval}</p>
+     </div>`
   );
 };
+
+export default class InfoMain {
+  constructor(days) {
+    this._days = days;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createInfoMainTemplate(this._days);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
 
