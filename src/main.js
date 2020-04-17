@@ -75,7 +75,7 @@ const renderPage = () => {
 
   const eventsContainerElement = document.querySelector(`.trip-events`);
 
-  if (days.size === 0) {
+  if (days.length === 0) {
     render(eventsContainerElement, new NoItemsComponent().getElement(), RenderPosition.BEFOREEND);
     return;
   }

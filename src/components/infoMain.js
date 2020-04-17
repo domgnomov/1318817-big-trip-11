@@ -13,6 +13,9 @@ const getTitle = (days) => {
 };
 
 const getDateInterval = (days) => {
+  if (days.length === 0) {
+    return ``;
+  }
   const daysKeys = Array.from(days.keys());
   const startDate = daysKeys[0];
   const endDate = daysKeys[daysKeys.length - 1];
