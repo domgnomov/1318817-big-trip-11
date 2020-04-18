@@ -36,15 +36,13 @@ const renderDayItem = (dayItem, dayComponent) => {
   };
 
   const dayItemComponent = new DayItem(dayItem);
-  const editButton = dayItemComponent.getElement().querySelector(`.event__rollup-btn`);
-  editButton.addEventListener(`click`, () => {
+  dayItemComponent.setEditButtonClickHandler(() => {
     replaceItemToEdit();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
   const editDayItemComponent = new EditDayItem(dayItem);
-  const editForm = editDayItemComponent.getElement().querySelector(`form`);
-  editForm.addEventListener(`submit`, (evt) => {
+  editDayItemComponent.setSubmitHandler((evt) => {
     evt.preventDefault();
     replaceEditToItem();
     document.removeEventListener(`keydown`, onEscKeyDown);

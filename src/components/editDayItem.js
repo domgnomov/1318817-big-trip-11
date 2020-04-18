@@ -173,5 +173,10 @@ export default class EditDayItem extends AbstractComponent {
   getTemplate() {
     return createEditDayItemTemplate(this._item);
   }
+
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, handler);
+  }
 }
 
