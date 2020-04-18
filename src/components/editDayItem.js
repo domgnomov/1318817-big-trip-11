@@ -1,7 +1,7 @@
 /* global require */
 
 import {getPreposition} from "../utils.js";
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -163,27 +163,15 @@ const createEditDayItemTemplate = (item) => {
   );
 };
 
-export default class EditDayItem {
+export default class EditDayItem extends AbstractComponent {
   constructor(item) {
-    this._item = item;
+    super();
 
-    this._element = null;
+    this._item = item;
   }
 
   getTemplate() {
     return createEditDayItemTemplate(this._item);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

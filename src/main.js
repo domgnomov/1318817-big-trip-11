@@ -4,8 +4,8 @@ import InfoCost from "./components/infoCost";
 import InfoMain from "./components/infoMain";
 import InfoContainer from "./components/infoContainer";
 import Menu from "./components/menu";
-import Filters from "./components/filters";
-import Sorting from "./components/sorting";
+import Filter from "./components/filter";
+import Sort from "./components/sort";
 import DaysContainer from "./components/daysContainer";
 import Day from "./components/day";
 import DayItem from "./components/dayItem";
@@ -70,7 +70,7 @@ const renderPage = () => {
   const controlsSecondElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(2)`);
   const menuComponent = new Menu();
   render(controlsFirstElement, menuComponent.getElement(), RenderPosition.AFTEREND);
-  const filtersComponent = new Filters();
+  const filtersComponent = new Filter();
   render(controlsSecondElement, filtersComponent.getElement(), RenderPosition.AFTEREND);
 
   const eventsContainerElement = document.querySelector(`.trip-events`);
@@ -80,7 +80,7 @@ const renderPage = () => {
     return;
   }
 
-  const sortingComponent = new Sorting();
+  const sortingComponent = new Sort();
   render(eventsContainerElement, sortingComponent.getElement(), RenderPosition.BEFOREEND);
 
   const daysContainerComponent = new DaysContainer();
