@@ -1,5 +1,5 @@
 import {generateDays} from "./mock/day.js";
-import {RenderPosition, render} from "./utils.js";
+import {RenderPosition, render} from "./utils/render.js";
 import InfoCost from "./components/infoCost";
 import InfoMain from "./components/infoMain";
 import InfoContainer from "./components/infoContainer";
@@ -50,47 +50,47 @@ const renderDayItem = (dayItem, dayComponent) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(dayItemListElement, dayItemComponent.getElement(), RenderPosition.BEFOREEND);
+  render(dayItemListElement, dayItemComponent, RenderPosition.BEFOREEND);
 };
 
 const renderPage = () => {
   const mainElement = document.querySelector(`.trip-main`);
 
   const infoContainerComponent = new InfoContainer();
-  render(mainElement, infoContainerComponent.getElement(), RenderPosition.AFTERBEGIN);
+  render(mainElement, infoContainerComponent, RenderPosition.AFTERBEGIN);
   const infoContainerElement = mainElement.querySelector(`.trip-main__trip-info`);
   const infoMainComponent = new InfoMain(days);
-  render(infoContainerElement, infoMainComponent.getElement(), RenderPosition.BEFOREEND);
+  render(infoContainerElement, infoMainComponent, RenderPosition.BEFOREEND);
   const infoCostComponent = new InfoCost(days);
-  render(infoContainerElement, infoCostComponent.getElement(), RenderPosition.BEFOREEND);
+  render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
 
   const controlsContainerElement = mainElement.querySelector(`.trip-main__trip-controls`);
 
   const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
   const controlsSecondElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(2)`);
   const menuComponent = new Menu();
-  render(controlsFirstElement, menuComponent.getElement(), RenderPosition.AFTEREND);
+  render(controlsFirstElement, menuComponent, RenderPosition.AFTEREND);
   const filtersComponent = new Filter();
-  render(controlsSecondElement, filtersComponent.getElement(), RenderPosition.AFTEREND);
+  render(controlsSecondElement, filtersComponent, RenderPosition.AFTEREND);
 
   const eventsContainerElement = document.querySelector(`.trip-events`);
 
   if (days.length === 0) {
-    render(eventsContainerElement, new NoItemsComponent().getElement(), RenderPosition.BEFOREEND);
+    render(eventsContainerElement, new NoItemsComponent(), RenderPosition.BEFOREEND);
     return;
   }
 
   const sortingComponent = new Sort();
-  render(eventsContainerElement, sortingComponent.getElement(), RenderPosition.BEFOREEND);
+  render(eventsContainerElement, sortingComponent, RenderPosition.BEFOREEND);
 
   const daysContainerComponent = new DaysContainer();
-  render(eventsContainerElement, daysContainerComponent.getElement(), RenderPosition.BEFOREEND);
+  render(eventsContainerElement, daysContainerComponent, RenderPosition.BEFOREEND);
 
   const daysContainerElement = document.querySelector(`.trip-days`);
   let dayCount = INITIAL_DAYS_COUNT;
   for (const [day, dayItems] of days.entries()) {
     const dayComponent = new Day(day, dayCount++);
-    render(daysContainerElement, dayComponent.getElement(), RenderPosition.BEFOREEND);
+    render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
     dayItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
   }
 };
