@@ -1,6 +1,6 @@
 /* global require */
 
-import {getPreposition} from "../utils.js";
+import {getPreposition} from "../utils/common.js";
 import AbstractComponent from "./abstract-component";
 
 const createOffersMarkup = (offers) => {

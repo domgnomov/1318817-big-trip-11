@@ -1,4 +1,4 @@
-import {TypesInPreposition} from "./const";
+import {TypesInPreposition} from "../const";
 
 const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
