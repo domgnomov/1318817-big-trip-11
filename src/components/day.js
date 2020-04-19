@@ -3,7 +3,9 @@
 import AbstractComponent from "./abstract-component";
 
 const createDayTemplate = (day, dayCount) => {
-  let date, formattedDate, formattedDateWithMonthName;
+  let date;
+  let formattedDate;
+  let formattedDateWithMonthName;
   if (day) {
     const dateFormat = require(`dateformat`);
     date = new Date(day);

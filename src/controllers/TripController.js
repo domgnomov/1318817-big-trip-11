@@ -57,7 +57,7 @@ const renderDayItems = (days, daysContainerElement) => {
     render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
     dayItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
   }
-}
+};
 
 const getSortedItems = (items, sortType) => {
   let sortedItems = [];
