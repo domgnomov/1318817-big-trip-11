@@ -3,7 +3,7 @@
 import AbstractComponent from "./abstract-component";
 
 const createDayTemplate = (day, dayCount) => {
-
+  const showDayInfo = day && dayCount;
   const date = new Date(day);
   const dateFormat = require(`dateformat`);
   const formattedDate = dateFormat(date, `yyyy-mm-dd`);
@@ -12,8 +12,8 @@ const createDayTemplate = (day, dayCount) => {
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
-        <span class="day__counter">${dayCount}</span>
-        <time class="day__date" datetime="${formattedDate}">${formattedDateWithMonthName}</time>
+        <span class="day__counter">${showDayInfo ? dayCount : ``}</span>
+        <time class="day__date" datetime="${formattedDate}">${showDayInfo ? formattedDateWithMonthName : ``}</time>
       </div>
 
       <ul class="trip-events__list"></ul>
