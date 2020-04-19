@@ -11,7 +11,7 @@ import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 
-const INITIAL_DAYS_COUNT = 1;
+export const INITIAL_DAYS_COUNT = 1;
 
 const renderDayItem = (dayItem, dayComponent) => {
   const dayItemListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
@@ -134,7 +134,7 @@ export default class TripController {
 
       daysContainerElement.innerHTML = ``;
 
-      const dayComponent = new Day(Array.from(days.keys())[0], 0);
+      const dayComponent = new Day();
       render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
       sortedItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
     });

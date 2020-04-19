@@ -1,4 +1,5 @@
 import {generateDayItem} from "./dayItem";
+import {getRandomIntegerNumber} from "../utils/common";
 
 const ITEMS_COUNT = 20;
 
@@ -16,7 +17,7 @@ export const generateDays = () => {
   const days = new Map();
   dayItems.forEach((dayItem) => {
     const date = dayItem.startDate;
-    date.setHours(0, 0, 0, 0);
+    date.setHours(getRandomIntegerNumber(0, 10), 0, 0, 0);
     if (!days.has(date.toString())) {
       days.set(date.toString(), []);
     }

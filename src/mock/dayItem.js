@@ -1,3 +1,5 @@
+import {getRandomIntegerNumber} from "../utils/common";
+
 const DayItemTypes = [
   `Taxi`,
   `Bus`,
@@ -84,10 +86,6 @@ const getRandomPhotos = (min, max) => {
     .map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
 };
 
-const getRandomIntegerNumber = (min, max) => {
-  return min + Math.floor(Math.random() * (max - min));
-};
-
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
@@ -125,8 +123,8 @@ export const generateDayItem = () => {
     randomOffers = generateRandomOffers();
   }
   const type = getRandomArrayItem(DayItemTypes);
-  const startTime = getRandomDate();
   const duration = getRandomIntegerNumber(1, 31);
+  const startTime = new Date();
   const endTime = new Date(startTime.getTime() + duration * 60000);
 
   return {
