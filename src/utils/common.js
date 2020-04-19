@@ -14,3 +14,7 @@ export const formatTime = (date) => {
 export const getPreposition = (type) => {
   return TypesInPreposition.includes(type) ? `in` : `to`;
 };
+
+export const getRandomIntegerNumber = (min, max) => {
+  return min + Math.floor(Math.random() * (max - min));
+};

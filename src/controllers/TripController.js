@@ -1,8 +1,8 @@
 import InfoContainer from "../components/infoContainer";
-import Menu from "../components/menu";
-import Filter from "../components/filter";
+import MenuComponent from "../components/menu";
+import FilterComponent from "../components/filter";
 import NoItemsComponent from "../components/no-items";
-import Sort from "../components/sort";
+import SortComponent, {SortType} from "../components/sort";
 import DaysContainer from "../components/daysContainer";
 import DayItem from "../components/dayItem";
 import EditDayItem from "../components/editDayItem";
@@ -11,7 +11,7 @@ import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 
-const INITIAL_DAYS_COUNT = 1;
+export const INITIAL_DAYS_COUNT = 1;
 
 const renderDayItem = (dayItem, dayComponent) => {
   const dayItemListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
@@ -49,15 +49,44 @@ const renderDayItem = (dayItem, dayComponent) => {
   render(dayItemListElement, dayItemComponent, RenderPosition.BEFOREEND);
 };
 
+const renderDayItems = (days, daysContainerElement) => {
+  daysContainerElement.innerHTML = ``;
+  let dayCount = INITIAL_DAYS_COUNT;
+  for (const [day, dayItems] of days.entries()) {
+    const dayComponent = new Day(day, dayCount++);
+    render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
+    dayItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
+  }
+};
+
+const getSortedItems = (items, sortType) => {
+  let sortedItems = [];
+  const showingItems = items.slice();
+
+  switch (sortType) {
+    case SortType.TIME:
+      sortedItems = showingItems.sort((a, b) => a.startDate - b.startDate);
+      break;
+    case SortType.PRICE:
+      sortedItems = showingItems.sort((a, b) => b.price - a.price);
+      break;
+    case SortType.DEFAULT:
+      sortedItems = showingItems;
+      break;
+  }
+
+  return sortedItems.slice();
+};
+
 export default class TripController {
   constructor(container) {
     this._container = container;
 
     this._infoContainer = new InfoContainer();
-    this._menu = new Menu();
-    this._filter = new Filter();
+    this._menuComponent = new MenuComponent();
+    this._filterComponent = new FilterComponent();
     this._noItemsComponent = new NoItemsComponent();
-    this._sort = new Sort();
+    this._sortComponent = new SortComponent();
     this._daysContainer = new DaysContainer();
 
   }
@@ -74,8 +103,8 @@ export default class TripController {
 
     const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
     const controlsSecondElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(2)`);
-    render(controlsFirstElement, this._menu, RenderPosition.AFTEREND);
-    render(controlsSecondElement, this._filter, RenderPosition.AFTEREND);
+    render(controlsFirstElement, this._menuComponent, RenderPosition.AFTEREND);
+    render(controlsSecondElement, this._filterComponent, RenderPosition.AFTEREND);
 
     const eventsContainerElement = document.querySelector(`.trip-events`);
 
@@ -84,16 +113,30 @@ export default class TripController {
       return;
     }
 
-    render(eventsContainerElement, this._sort, RenderPosition.BEFOREEND);
+    render(eventsContainerElement, this._sortComponent, RenderPosition.BEFOREEND);
 
     render(eventsContainerElement, this._daysContainer, RenderPosition.BEFOREEND);
 
     const daysContainerElement = document.querySelector(`.trip-days`);
-    let dayCount = INITIAL_DAYS_COUNT;
-    for (const [day, dayItems] of days.entries()) {
-      const dayComponent = new Day(day, dayCount++);
+
+    renderDayItems(days, daysContainerElement);
+
+
+    this._sortComponent.setSortTypeChangeHandler((sortType) => {
+      if (sortType === SortType.DEFAULT) {
+        renderDayItems(days, daysContainerElement);
+        return;
+      }
+
+      const dayItems = [].concat(...Array.from(days.values()));
+
+      const sortedItems = getSortedItems(dayItems, sortType);
+
+      daysContainerElement.innerHTML = ``;
+
+      const dayComponent = new Day();
       render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
-      dayItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
-    }
+      sortedItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
+    });
   }
 }
