@@ -1,6 +1,6 @@
 /* global require */
 
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const DELIMITER = `&mdash;`;
 
@@ -40,27 +40,14 @@ const createInfoMainTemplate = (days) => {
   );
 };
 
-export default class InfoMain {
+export default class InfoMain extends AbstractComponent {
   constructor(days) {
-    this._days = days;
+    super();
 
-    this._element = null;
+    this._days = days;
   }
 
   getTemplate() {
     return createInfoMainTemplate(this._days);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-

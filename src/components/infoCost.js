@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const getCostValue = (days) => {
   const allDayItems = [].concat(...Array.from(days.values()));
@@ -16,26 +16,14 @@ const createInfoCostTemplate = (days) => {
   );
 };
 
-export default class InfoCost {
+export default class InfoCost extends AbstractComponent {
   constructor(days) {
-    this._days = days;
+    super();
 
-    this._element = null;
+    this._days = days;
   }
 
   getTemplate() {
     return createInfoCostTemplate(this._days);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
