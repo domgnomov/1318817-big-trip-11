@@ -20,8 +20,8 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-const createEditDayItemTemplate = (item) => {
-  const {type, city, offers, price, startDate, endDate, isFavorite} = item;
+const createEditPointTemplate = (point) => {
+  const {type, city, offers, price, startDate, endDate, isFavorite} = point;
 
   const typePreposition = getPreposition(type);
   const hasOffers = Array.isArray(offers) && offers.length;
@@ -163,15 +163,15 @@ const createEditDayItemTemplate = (item) => {
   );
 };
 
-export default class EditDayItem extends AbstractComponent {
-  constructor(item) {
+export default class EditPoint extends AbstractComponent {
+  constructor(point) {
     super();
 
-    this._item = item;
+    this._point = point;
   }
 
   getTemplate() {
-    return createEditDayItemTemplate(this._item);
+    return createEditPointTemplate(this._point);
   }
 
   setSubmitHandler(handler) {

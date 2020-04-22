@@ -1,11 +1,11 @@
 import InfoContainer from "../components/infoContainer";
 import MenuComponent from "../components/menu";
 import FilterComponent from "../components/filter";
-import NoItemsComponent from "../components/no-items";
+import NoPointsComponent from "../components/no-points";
 import SortComponent, {SortType} from "../components/sort";
 import DaysContainer from "../components/daysContainer";
-import DayItem from "../components/dayItem";
-import EditDayItem from "../components/editDayItem";
+import Point from "../components/point";
+import EditPoint from "../components/editPoint";
 import {render, RenderPosition} from "../utils/render";
 import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
@@ -13,69 +13,69 @@ import Day from "../components/day";
 
 export const INITIAL_DAYS_COUNT = 1;
 
-const renderDayItem = (dayItem, dayComponent) => {
-  const dayItemListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
+const renderPoint = (point, dayComponent) => {
+  const pointListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
 
-  const replaceItemToEdit = () => {
-    dayItemListElement.replaceChild(editDayItemComponent.getElement(), dayItemComponent.getElement());
+  const replacePointToEdit = () => {
+    pointListElement.replaceChild(editPointComponent.getElement(), pointComponent.getElement());
   };
 
-  const replaceEditToItem = () => {
-    dayItemListElement.replaceChild(dayItemComponent.getElement(), editDayItemComponent.getElement());
+  const replaceEditToPoint = () => {
+    pointListElement.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
   };
 
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      replaceEditToItem();
+      replaceEditToPoint();
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
 
-  const dayItemComponent = new DayItem(dayItem);
-  dayItemComponent.setEditButtonClickHandler(() => {
-    replaceItemToEdit();
+  const pointComponent = new Point(point);
+  pointComponent.setEditButtonClickHandler(() => {
+    replacePointToEdit();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  const editDayItemComponent = new EditDayItem(dayItem);
-  editDayItemComponent.setSubmitHandler((evt) => {
+  const editPointComponent = new EditPoint(point);
+  editPointComponent.setSubmitHandler((evt) => {
     evt.preventDefault();
-    replaceEditToItem();
+    replaceEditToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(dayItemListElement, dayItemComponent, RenderPosition.BEFOREEND);
+  render(pointListElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
-const renderDayItems = (days, daysContainerElement) => {
+const renderPoints = (days, daysContainerElement) => {
   daysContainerElement.innerHTML = ``;
   let dayCount = INITIAL_DAYS_COUNT;
-  for (const [day, dayItems] of days.entries()) {
+  for (const [day, points] of days.entries()) {
     const dayComponent = new Day(day, dayCount++);
     render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
-    dayItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
+    points.forEach((point) => renderPoint(point, dayComponent));
   }
 };
 
-const getSortedItems = (items, sortType) => {
-  let sortedItems = [];
-  const showingItems = items.slice();
+const getSortedPoints = (points, sortType) => {
+  let sortedPoints = [];
+  const showingPoints = points.slice();
 
   switch (sortType) {
     case SortType.TIME:
-      sortedItems = showingItems.sort((a, b) => a.startDate - b.startDate);
+      sortedPoints = showingPoints.sort((a, b) => a.startDate - b.startDate);
       break;
     case SortType.PRICE:
-      sortedItems = showingItems.sort((a, b) => b.price - a.price);
+      sortedPoints = showingPoints.sort((a, b) => b.price - a.price);
       break;
     case SortType.DEFAULT:
-      sortedItems = showingItems;
+      sortedPoints = showingPoints;
       break;
   }
 
-  return sortedItems.slice();
+  return sortedPoints.slice();
 };
 
 export default class TripController {
@@ -85,7 +85,7 @@ export default class TripController {
     this._infoContainer = new InfoContainer();
     this._menuComponent = new MenuComponent();
     this._filterComponent = new FilterComponent();
-    this._noItemsComponent = new NoItemsComponent();
+    this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
     this._daysContainer = new DaysContainer();
 
@@ -109,7 +109,7 @@ export default class TripController {
     const eventsContainerElement = document.querySelector(`.trip-events`);
 
     if (days.length === 0) {
-      render(eventsContainerElement, this._noItemsComponent, RenderPosition.BEFOREEND);
+      render(eventsContainerElement, this._noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -119,24 +119,24 @@ export default class TripController {
 
     const daysContainerElement = document.querySelector(`.trip-days`);
 
-    renderDayItems(days, daysContainerElement);
+    renderPoints(days, daysContainerElement);
 
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       if (sortType === SortType.DEFAULT) {
-        renderDayItems(days, daysContainerElement);
+        renderPoints(days, daysContainerElement);
         return;
       }
 
-      const dayItems = [].concat(...Array.from(days.values()));
+      const points = [].concat(...Array.from(days.values()));
 
-      const sortedItems = getSortedItems(dayItems, sortType);
+      const sortedPoints = getSortedPoints(points, sortType);
 
       daysContainerElement.innerHTML = ``;
 
       const dayComponent = new Day();
       render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
-      sortedItems.forEach((dayItem) => renderDayItem(dayItem, dayComponent));
+      sortedPoints.forEach((point) => renderPoint(point, dayComponent));
     });
   }
 }

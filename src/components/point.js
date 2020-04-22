@@ -15,8 +15,8 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-const createDayItemTemplate = (item) => {
-  const {type, city, offers, price, startDate, endDate, duration} = item;
+const createPointTemplate = (point) => {
+  const {type, city, offers, price, startDate, endDate, duration} = point;
 
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
@@ -60,15 +60,15 @@ const createDayItemTemplate = (item) => {
   );
 };
 
-export default class DayItem extends AbstractComponent {
-  constructor(item) {
+export default class Point extends AbstractComponent {
+  constructor(point) {
     super();
 
-    this._item = item;
+    this._point = point;
   }
 
   getTemplate() {
-    return createDayItemTemplate(this._item);
+    return createPointTemplate(this._point);
   }
 
   setEditButtonClickHandler(handler) {

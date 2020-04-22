@@ -1,6 +1,6 @@
 import {getRandomIntegerNumber} from "../utils/common";
 
-const DayItemTypes = [
+const PointTypes = [
   `Taxi`,
   `Bus`,
   `Train`,
@@ -65,13 +65,13 @@ const Descriptions = [
 let randomOffers;
 
 const generateRandomOffers = () => {
-  return new Map(DayItemTypes.map((type) => [type,
+  return new Map(PointTypes.map((type) => [type,
     new Array(getRandomIntegerNumber(1, 6))
         .fill(``)
         .map(() => {
           const offer = {
             type,
-            title: getRandomArrayItem(Array.from(Object.values(Offers))).title,
+            title: getRandomArrayPoint(Array.from(Object.values(Offers))).title,
             cost: Math.floor(Math.random() * 10),
           };
           return offer;
@@ -86,20 +86,20 @@ const getRandomPhotos = (min, max) => {
     .map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
 };
 
-const getRandomArrayItem = (array) => {
+const getRandomArrayPoint = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
   return array[randomIndex];
 };
 
-const getRandomArrayItems = (array, min, max) => {
+const getRandomArrayPoints = (array, min, max) => {
   const randomIndex = getRandomIntegerNumber(min, max);
 
   return array.slice(min, randomIndex);
 };
 
 const getDescription = (array, min, max) => {
-  return getRandomArrayItems(array, min, max).join(` `);
+  return getRandomArrayPoints(array, min, max).join(` `);
 };
 
 const getRandomBoolean = () => {
@@ -108,18 +108,18 @@ const getRandomBoolean = () => {
   return randomInteger === 1;
 };
 
-export const generateDayItem = () => {
+export const generatePoint = () => {
   if (!randomOffers) {
     randomOffers = generateRandomOffers();
   }
-  const type = getRandomArrayItem(DayItemTypes);
+  const type = getRandomArrayPoint(PointTypes);
   const duration = getRandomIntegerNumber(1, 31);
   const startTime = new Date();
   const endTime = new Date(startTime.getTime() + duration * 60000);
 
   return {
     type,
-    city: getRandomArrayItem(Cities),
+    city: getRandomArrayPoint(Cities),
     offers: randomOffers.get(type),
     price: getRandomIntegerNumber(1, 100),
     startDate: startTime,
