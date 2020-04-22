@@ -8,12 +8,13 @@ const Mode = {
 };
 
 export default class PointController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
 
     this._pointComponent = null;
     this._pointEditComponent = null;
     this._mode = Mode.DEFAULT;
+    this._onDataChange = onDataChange;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -35,6 +36,12 @@ export default class PointController {
       this._replaceEditToPoint();
       //TODO НЕ надо разве?
       //document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+    this._pointEditComponent.setFavoritesButtonClickHandler(() => {
+      this._onDataChange(this, point, Object.assign({}, point, {
+        isFavorite: !point.isFavorite,
+      }));
     });
 
     if (oldPointEditComponent && oldPointComponent) {

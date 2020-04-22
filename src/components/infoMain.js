@@ -1,12 +1,13 @@
 /* global require */
 
 import AbstractComponent from "./abstract-component";
+import {getAllPoints} from "../utils/common";
+
 
 const DELIMITER = `&mdash;`;
 
 const getTitle = (days) => {
-  const allPoints = [].concat(...Array.from(days.values()));
-  const title = allPoints.reduce(function (acc, current) {
+  const title = getAllPoints(days).reduce(function (acc, current) {
     return `${acc} ${current.city} ${DELIMITER}`;
   }, ``);
   return title.slice(0, title.length - DELIMITER.length);
