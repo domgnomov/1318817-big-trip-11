@@ -4,50 +4,13 @@ import FilterComponent from "../components/filter";
 import NoPointsComponent from "../components/no-points";
 import SortComponent, {SortType} from "../components/sort";
 import DaysContainer from "../components/daysContainer";
-import Point from "../components/point";
-import EditPoint from "../components/editPoint";
 import {render, RenderPosition} from "../utils/render";
 import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
+import PointController from "./PointController";
 
 export const INITIAL_DAYS_COUNT = 1;
-
-const renderPoint = (point, dayComponent) => {
-  const pointListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
-
-  const replacePointToEdit = () => {
-    pointListElement.replaceChild(editPointComponent.getElement(), pointComponent.getElement());
-  };
-
-  const replaceEditToPoint = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
-  };
-
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      replaceEditToPoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const pointComponent = new Point(point);
-  pointComponent.setEditButtonClickHandler(() => {
-    replacePointToEdit();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-
-  const editPointComponent = new EditPoint(point);
-  editPointComponent.setSubmitHandler((evt) => {
-    evt.preventDefault();
-    replaceEditToPoint();
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  });
-
-  render(pointListElement, pointComponent, RenderPosition.BEFOREEND);
-};
 
 const renderPoints = (days, daysContainerElement) => {
   daysContainerElement.innerHTML = ``;
@@ -55,7 +18,11 @@ const renderPoints = (days, daysContainerElement) => {
   for (const [day, points] of days.entries()) {
     const dayComponent = new Day(day, dayCount++);
     render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
-    points.forEach((point) => renderPoint(point, dayComponent));
+    const container = dayComponent.getElement().querySelector(`.trip-events__list`);
+    points.forEach((point) => {
+      const pointController = new PointController(container);
+      pointController.render(point);
+    });
   }
 };
 
@@ -136,7 +103,11 @@ export default class TripController {
 
       const dayComponent = new Day();
       render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
-      sortedPoints.forEach((point) => renderPoint(point, dayComponent));
+      const container = dayComponent.getElement().querySelector(`.trip-events__list`);
+      sortedPoints.forEach((point) => {
+        const pointController = new PointController(container);
+        pointController.render(point);
+      });
     });
   }
 }
