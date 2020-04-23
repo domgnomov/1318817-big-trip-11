@@ -2,6 +2,7 @@
 
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
+import {randomOffers, randomDescriptions} from "../mock/point.js";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -108,9 +109,10 @@ const createEditPointTemplate = (point) => {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              <option value="Moscow"></option>
+              <option value="New-York"></option>
+              <option value="London"></option>
+              <option value="Paris"></option>
             </datalist>
           </div>
 
@@ -198,14 +200,24 @@ export default class EditPoint extends AbstractSmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
+
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
-
+        debugger;
         this._point.type = capitalize(evt.target.value);
-
+        this._point.offers = randomOffers.get(this._point.type);
         this.rerender();
       });
-    })
+    });
+
+    element.querySelector(`.event__input--destination `)
+      .addEventListener(`change`, (evt) => {
+        this._point.city = capitalize(evt.target.value);
+        this._point.description = randomDescriptions.get(this._point.city);
+        this.rerender();
+    });
+
+
   }
 }
 
