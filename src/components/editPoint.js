@@ -1,7 +1,7 @@
 /* global require */
 
-import {getPreposition} from "../utils/common.js";
-import AbstractComponent from "./abstract-component";
+import {getPreposition, capitalize} from "../utils/common.js";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -163,15 +163,22 @@ const createEditPointTemplate = (point) => {
   );
 };
 
-export default class EditPoint extends AbstractComponent {
+export default class EditPoint extends AbstractSmartComponent {
   constructor(point) {
     super();
 
     this._point = point;
+    this._submitHandler = null;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
+  }
+
+  rerender() {
+    super.rerender();
   }
 
   setSubmitHandler(handler) {
@@ -182,6 +189,23 @@ export default class EditPoint extends AbstractComponent {
   setFavoritesButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this._subscribeOnEvents();
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    element.querySelectorAll(`.event__type-list input`).forEach((el) => {
+      el.addEventListener(`click`, (evt) => {
+
+        this._point.type = capitalize(evt.target.value);
+
+        this.rerender();
+      });
+    })
   }
 }
 

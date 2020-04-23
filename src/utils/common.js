@@ -22,3 +22,7 @@ export const getRandomIntegerNumber = (min, max) => {
 export const getAllPoints = (days) => {
   return [].concat(...Array.from(days.values()));
 };
+
+export const capitalize = (text) => {
+  return text[0].toUpperCase() + text.slice(1);
+}
