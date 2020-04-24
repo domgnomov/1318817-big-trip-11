@@ -123,7 +123,7 @@ export const generatePoint = () => {
 
   return {
     type,
-    city: city,
+    city,
     offers: randomOffers.get(type),
     price: getRandomIntegerNumber(1, 100),
     startDate: startTime,

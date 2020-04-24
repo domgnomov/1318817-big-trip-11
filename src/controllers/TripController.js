@@ -14,7 +14,6 @@ import {getAllPoints} from "../utils/common";
 export const INITIAL_DAYS_COUNT = 1;
 
 
-
 const getSortedPoints = (points, sortType) => {
   let sortedPoints = [];
   const showingPoints = points.slice();
@@ -71,7 +70,7 @@ export default class TripController {
     }
   }
 
-  _renderPoints (days, daysContainerElement, onDataChange) {
+  _renderPoints(days, daysContainerElement, onDataChange) {
     daysContainerElement.innerHTML = ``;
     let dayCount = INITIAL_DAYS_COUNT;
     for (const [day, points] of days.entries()) {
@@ -84,7 +83,7 @@ export default class TripController {
         pointController.render(point);
       });
     }
-  };
+  }
 
   render(days) {
     this._days = days;
@@ -130,7 +129,7 @@ export default class TripController {
       const dayComponent = new Day();
       render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
       const container = dayComponent.getElement().querySelector(`.trip-events__list`);
-      this._pointControllers = null;
+      this._pointControllers = [];
       sortedPoints.forEach((point) => {
         const pointController = new PointController(container, this._onDataChange, this._onViewChange);
         this._pointControllers = this._pointControllers.concat(pointController);
