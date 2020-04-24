@@ -203,7 +203,6 @@ export default class EditPoint extends AbstractSmartComponent {
 
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
-        debugger;
         this._point.type = capitalize(evt.target.value);
         this._point.offers = randomOffers.get(this._point.type);
         this.rerender();
@@ -216,8 +215,6 @@ export default class EditPoint extends AbstractSmartComponent {
         this._point.description = randomDescriptions.get(this._point.city);
         this.rerender();
     });
-
-
   }
 }
 

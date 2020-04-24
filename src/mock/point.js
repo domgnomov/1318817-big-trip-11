@@ -98,7 +98,6 @@ const generateDescriptions = () => {
     new Array(getDescription(Descriptions, 1, 6))]));
 };
 
-debugger;
 export const randomOffers = generateRandomOffers();
 export const randomDescriptions = generateDescriptions();
 
