@@ -5,6 +5,10 @@ export default class AbstractSmartComponent extends AbstractComponent {
     throw new Error(`Abstract method not implemented: recoveryListeners`);
   }
 
+  recoveryFlatpickr() {
+    throw new Error(`Abstract method not implemented: recoveryListeners`);
+  }
+
   rerender() {
     const oldElement = this.getElement();
     const parent = oldElement.parentElement;
@@ -16,5 +20,6 @@ export default class AbstractSmartComponent extends AbstractComponent {
     parent.replaceChild(newElement, oldElement);
 
     this.recoveryListeners();
+    this.recoveryFlatpickr();
   }
 }

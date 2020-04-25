@@ -179,8 +179,8 @@ export default class EditPoint extends AbstractSmartComponent {
     this._editedType = point.type;
     this._editedOffers = point.offers;
     this._editedDescription = point.description;
-    this._flatpickr = null;
-    this._flatpickr2 = null;
+    this._startDateFlatpickr = null;
+    this._endDateFlatpickr = null;
     this._submitHandler = null;
     this._setFavoritesHandler = null;
 
@@ -232,35 +232,35 @@ export default class EditPoint extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
+  recoveryFlatpickr() {
+    this._applyFlatpickr();
+  }
+
+  _destroyFlatpickr(flatpickr) {
+    if (flatpickr) {
+      flatpickr.destroy();
+      flatpickr = null;
+    }
+  }
+
+  _flatpickr(element, date) {
+    return flatpickr(element, {
+      altInput: true,
+      altFormat: 'd/m/y h:m',
+      allowInput: true,
+      enableTime: true,
+      defaultDate: date || `today`,
+    });
+  }
+
   _applyFlatpickr() {
-    if (this._flatpickr) {
-      this._flatpickr.destroy();
-      this._flatpickr = null;
-    }
+    this._destroyFlatpickr(this._startDateFlatpickr);
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    this._startDateFlatpickr = this._flatpickr(startDateElement, this._point.startDate);
 
-    if (this._flatpickr2) {
-      this._flatpickr2.destroy();
-      this._flatpickr2 = null;
-    }
-
-
-    const dateElement = this.getElement().querySelector(`#event-start-time-1`);
-    this._flatpickr = flatpickr(dateElement, {
-      altInput: true,
-      allowInput: true,
-      defaultDate: `today`,
-    });
-    //TODO
-    //ВЫШЕ надо дату defaultDate: this._task.dueDate || `today`, вроде этого
-    const dateElement2 = this.getElement().querySelector(`#event-end-time-1`);
-    this._flatpickr2 = flatpickr(dateElement2, {
-      altInput: true,
-      allowInput: true,
-      defaultDate: `today`,
-    });
-    //TODO
-    //ВЫШЕ надо дату defaultDate: this._task.dueDate || `today`, вроде этого
-
+    this._destroyFlatpickr(this._endDateFlatpickr);
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+    this._endDateFlatpickr = this._flatpickr(endDateElement, this._point.endDate);
   }
 
   _subscribeOnEvents() {
