@@ -5,8 +5,14 @@ export const formatTime = (date) => {
   return moment(date).format(`hh:mm`);
 };
 
-export const formatDate = (date) => {
-  return moment(date).format(`DD MMMM`);
+export const formatDateTime = (date) => {
+  return moment(date).format(`YYYY-MM-DDTHH:mm:ss`);
+};
+
+export const getDuration = (startDate, endDate) => {
+  const diff = moment(endDate).diff(moment(startDate));
+  const duration = moment.duration(diff);
+  return moment.utc(duration.asMilliseconds()).format("DD[d] HH[h] MM[m]");
 };
 
 export const getPreposition = (type) => {

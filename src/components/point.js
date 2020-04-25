@@ -1,4 +1,4 @@
-import {formatTime, getPreposition} from "../utils/common.js";
+import {formatTime, formatDateTime, getDuration, getPreposition} from "../utils/common.js";
 import AbstractComponent from "./abstract-component";
 
 const createOffersMarkup = (offers) => {
@@ -16,15 +16,18 @@ const createOffersMarkup = (offers) => {
 };
 
 const createPointTemplate = (point) => {
-  const {type, city, offers, price, startDate, endDate, duration} = point;
+  const {type, city, offers, price, startDate, endDate} = point;
 
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
   const typePreposition = getPreposition(type);
-  const startDateTime = startDate.toISOString().split(`.`)[0];
-  const endDateTime = endDate.toISOString().split(`.`)[0];
+
+  const startDateTime = formatDateTime(startDate);
+  const endDateTime = formatDateTime(endDate);
   const startTime = formatTime(startDate);
   const endTime = formatTime(endDate);
+
+  const duration = getDuration(startDate, endDate);
 
   return (
     `<li class="trip-events__item">
@@ -40,7 +43,7 @@ const createPointTemplate = (point) => {
             &mdash;
             <time class="event__end-time" datetime="${endDateTime}">${endTime}</time>
           </p>
-          <p class="event__duration">${duration}M</p>
+          <p class="event__duration">${duration}</p>
         </div>
 
         <p class="event__price">
