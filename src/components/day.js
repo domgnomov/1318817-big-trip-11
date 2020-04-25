@@ -1,10 +1,10 @@
 import AbstractComponent from "./abstract-component";
-import {getDateWithMonthName, formatYearMonthDate} from "../utils/common.js";
+import {formatDateWithMonthName, formatDate} from "../utils/common.js";
 
 const createDayTemplate = (day, dayCount) => {
   const date = day ? new Date(day) : null;
-  const formattedDate = date ? formatYearMonthDate(date) : ``;
-  const dateWithMonthName = date ? getDateWithMonthName(date) : ``;
+  const formattedDate = date ? formatDate(date) : ``;
+  const dateWithMonthName = date ? formatDateWithMonthName(date) : ``;
 
   return (
     `<li class="trip-days__item  day">

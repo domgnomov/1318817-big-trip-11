@@ -231,17 +231,17 @@ export default class EditPoint extends AbstractSmartComponent {
     this._applyFlatpickr();
   }
 
-  _destroyFlatpickr(flatpickr) {
-    if (flatpickr) {
-      flatpickr.destroy();
-      flatpickr = null;
+  _destroyFlatpickr(fpickr) {
+    if (fpickr) {
+      fpickr.destroy();
+      fpickr = null;
     }
   }
 
   _flatpickr(element, date) {
     return flatpickr(element, {
       altInput: true,
-      altFormat: 'd/m/y h:m',
+      altFormat: `d/m/y h:m`,
       allowInput: true,
       enableTime: true,
       defaultDate: date || `today`,

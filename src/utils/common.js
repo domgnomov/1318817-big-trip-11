@@ -5,25 +5,25 @@ export const formatTime = (date) => {
   return moment(date).format(`hh:mm`);
 };
 
+export const formatDate = (date) => {
+  return moment(date).format(`YYYY-MM-DD`);
+};
+
 export const formatDateTime = (date) => {
   return moment(date).format(`YYYY-MM-DDTHH:mm:ss`);
 };
 
-export const formatYearMonthDate = (date) => {
-  return moment(date).format(`YYYY-MM-DD`);
+export const formatDateWithMonthName = (date, previousDate) => {
+  if (previousDate && date.getMonth() === previousDate.getMonth()) {
+    return moment(date).format(`DD`);
+  }
+  return moment(date).format(`MMMM DD`);
 };
 
 export const getDuration = (startDate, endDate) => {
   const diff = moment(endDate).diff(moment(startDate));
   const duration = moment.duration(diff);
-  return moment.utc(duration.asMilliseconds()).format("DD[d] HH[h] MM[m]");
-};
-
-export const getDateWithMonthName = (date, prefixDate) => {
-  if (prefixDate && date.getMonth() === prefixDate.getMonth()) {
-    return moment(date).format(`DD`);
-  }
-  return moment(date).format(`MMMM DD`);
+  return moment.utc(duration.asMilliseconds()).format(`DD[d] HH[h] MM[m]`);
 };
 
 export const getPreposition = (type) => {

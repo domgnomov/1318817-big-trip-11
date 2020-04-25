@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import {getAllPoints, getDateWithMonthName} from "../utils/common";
+import {getAllPoints, formatDateWithMonthName} from "../utils/common";
 
 
 const DELIMITER = `&mdash;`;
@@ -19,8 +19,8 @@ const getDateInterval = (days) => {
   const startDate = new Date(daysKeys[0]);
   const endDate = new Date(daysKeys[daysKeys.length - 1]);
 
-  const startDateWithMonthName = getDateWithMonthName(startDate);
-  const endDateWithMonthName = getDateWithMonthName(endDate, startDate);
+  const startDateWithMonthName = formatDateWithMonthName(startDate);
+  const endDateWithMonthName = formatDateWithMonthName(endDate, startDate);
 
   return `${startDateWithMonthName} ${DELIMITER} ${endDateWithMonthName}`;
 };
