@@ -1,7 +1,5 @@
-/* global require */
-
 import AbstractComponent from "./abstract-component";
-import {getAllPoints} from "../utils/common";
+import {getAllPoints, getDateWithMonthName} from "../utils/common";
 
 
 const DELIMITER = `&mdash;`;
@@ -18,14 +16,13 @@ const getDateInterval = (days) => {
     return ``;
   }
   const daysKeys = Array.from(days.keys());
-  const startDate = daysKeys[0];
-  const endDate = daysKeys[daysKeys.length - 1];
+  const startDate = new Date(daysKeys[0]);
+  const endDate = new Date(daysKeys[daysKeys.length - 1]);
 
-  const dateFormat = require(`dateformat`);
-  const formattedStartDateWithMonthName = String(dateFormat(startDate, `mmmm dd`)).toUpperCase();
-  const formattedEndDate = dateFormat(endDate, `dd`);
+  const startDateWithMonthName = getDateWithMonthName(startDate);
+  const endDateWithMonthName = getDateWithMonthName(endDate, startDate);
 
-  return `${formattedStartDateWithMonthName} ${DELIMITER} ${formattedEndDate}`;
+  return `${startDateWithMonthName} ${DELIMITER} ${endDateWithMonthName}`;
 };
 
 const createInfoMainTemplate = (days) => {
