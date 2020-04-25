@@ -3,6 +3,9 @@
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
 import {randomOffers, randomDescriptions} from "../mock/point.js";
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -176,9 +179,12 @@ export default class EditPoint extends AbstractSmartComponent {
     this._editedType = point.type;
     this._editedOffers = point.offers;
     this._editedDescription = point.description;
+    this._flatpickr = null;
+    this._flatpickr2 = null;
     this._submitHandler = null;
     this._setFavoritesHandler = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
@@ -224,6 +230,37 @@ export default class EditPoint extends AbstractSmartComponent {
     this.setSubmitHandler(this._submitHandler);
     this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
     this._subscribeOnEvents();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._flatpickr2) {
+      this._flatpickr2.destroy();
+      this._flatpickr2 = null;
+    }
+
+
+    const dateElement = this.getElement().querySelector(`#event-start-time-1`);
+    this._flatpickr = flatpickr(dateElement, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: `today`,
+    });
+    //TODO
+    //ВЫШЕ надо дату defaultDate: this._task.dueDate || `today`, вроде этого
+    const dateElement2 = this.getElement().querySelector(`#event-end-time-1`);
+    this._flatpickr2 = flatpickr(dateElement2, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: `today`,
+    });
+    //TODO
+    //ВЫШЕ надо дату defaultDate: this._task.dueDate || `today`, вроде этого
+
   }
 
   _subscribeOnEvents() {
