@@ -1,7 +1,8 @@
 /* global require */
 
-import {getPreposition} from "../utils/common.js";
-import AbstractComponent from "./abstract-component";
+import {getPreposition, capitalize} from "../utils/common.js";
+import AbstractSmartComponent from "./abstract-smart-component";
+import {randomOffers, randomDescriptions} from "../mock/point.js";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -20,8 +21,9 @@ const createOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
-const createEditDayItemTemplate = (item) => {
-  const {type, city, offers, price, startDate, endDate, isFavorite} = item;
+const createEditPointTemplate = (point, options = {}) => {
+  const {price, startDate, endDate, isFavorite} = point;
+  const {city, type, offers} = options;
 
   const typePreposition = getPreposition(type);
   const hasOffers = Array.isArray(offers) && offers.length;
@@ -108,9 +110,10 @@ const createEditDayItemTemplate = (item) => {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              <option value="Moscow"></option>
+              <option value="New-York"></option>
+              <option value="London"></option>
+              <option value="Paris"></option>
             </datalist>
           </div>
 
@@ -163,20 +166,83 @@ const createEditDayItemTemplate = (item) => {
   );
 };
 
-export default class EditDayItem extends AbstractComponent {
-  constructor(item) {
+export default class EditPoint extends AbstractSmartComponent {
+  constructor(point) {
     super();
 
-    this._item = item;
+    this._point = point;
+
+    this._editedCity = point.city;
+    this._editedType = point.type;
+    this._editedOffers = point.offers;
+    this._editedDescription = point.description;
+    this._submitHandler = null;
+    this._setFavoritesHandler = null;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createEditDayItemTemplate(this._item);
+    return createEditPointTemplate(this._point, {
+      city: this._editedCity,
+      type: this._editedType,
+      offers: this._editedOffers,
+      description: this._editedDescription
+    });
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+  reset() {
+    const point = this._point;
+
+    this._editedCity = point.city;
+    this._editedType = point.type;
+    this._editedOffers = point.offers;
+    this._editedDescription = point.description;
+
+    this.rerender();
   }
 
   setSubmitHandler(handler) {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, handler);
+
+    this._submitHandler = handler;
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__favorite-checkbox`)
+      .addEventListener(`click`, handler);
+
+    this._setFavoritesHandler = handler;
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
+    this._subscribeOnEvents();
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelectorAll(`.event__type-list input`).forEach((el) => {
+      el.addEventListener(`click`, (evt) => {
+        this._editedType = capitalize(evt.target.value);
+        this._editedOffers = randomOffers.get(this._point.type);
+        this.rerender();
+      });
+    });
+
+    element.querySelector(`.event__input--destination `)
+      .addEventListener(`change`, (evt) => {
+        this._editedCity = capitalize(evt.target.value);
+        this._editedDescription = randomDescriptions.get(this._editedCity);
+        this.rerender();
+      });
   }
 }
 

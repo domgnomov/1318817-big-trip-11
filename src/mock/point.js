@@ -1,6 +1,6 @@
 import {getRandomIntegerNumber} from "../utils/common";
 
-const DayItemTypes = [
+const PointTypes = [
   `Taxi`,
   `Bus`,
   `Train`,
@@ -62,22 +62,44 @@ const Descriptions = [
   `In rutrum ac purus sit amet tempus.`,
 ];
 
-let randomOffers;
+const getRandomArrayPoint = (array) => {
+  const randomIndex = getRandomIntegerNumber(0, array.length);
+
+  return array[randomIndex];
+};
+
+const getRandomArrayPoints = (array, min, max) => {
+  const randomIndex = getRandomIntegerNumber(min, max);
+
+  return array.slice(min, randomIndex);
+};
+
+const getDescription = (array, min, max) => {
+  return getRandomArrayPoints(array, min, max).join(` `);
+};
 
 const generateRandomOffers = () => {
-  return new Map(DayItemTypes.map((type) => [type,
+  return new Map(PointTypes.map((type) => [type,
     new Array(getRandomIntegerNumber(1, 6))
         .fill(``)
         .map(() => {
           const offer = {
             type,
-            title: getRandomArrayItem(Array.from(Object.values(Offers))).title,
+            title: getRandomArrayPoint(Array.from(Object.values(Offers))).title,
             cost: Math.floor(Math.random() * 10),
           };
           return offer;
         })
   ]));
 };
+
+const generateDescriptions = () => {
+  return new Map(Cities.map((city) => [city,
+    new Array(getDescription(Descriptions, 1, 6))]));
+};
+
+export const randomOffers = generateRandomOffers();
+export const randomDescriptions = generateDescriptions();
 
 const getRandomPhotos = (min, max) => {
   const randomIndex = getRandomIntegerNumber(min, max);
@@ -86,46 +108,28 @@ const getRandomPhotos = (min, max) => {
     .map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
 };
 
-const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-
-  return array[randomIndex];
-};
-
-const getRandomArrayItems = (array, min, max) => {
-  const randomIndex = getRandomIntegerNumber(min, max);
-
-  return array.slice(min, randomIndex);
-};
-
-const getDescription = (array, min, max) => {
-  return getRandomArrayItems(array, min, max).join(` `);
-};
-
 const getRandomBoolean = () => {
   const randomInteger = getRandomIntegerNumber(0, 2);
 
   return randomInteger === 1;
 };
 
-export const generateDayItem = () => {
-  if (!randomOffers) {
-    randomOffers = generateRandomOffers();
-  }
-  const type = getRandomArrayItem(DayItemTypes);
+export const generatePoint = () => {
+  const type = getRandomArrayPoint(PointTypes);
   const duration = getRandomIntegerNumber(1, 31);
   const startTime = new Date();
   const endTime = new Date(startTime.getTime() + duration * 60000);
+  const city = getRandomArrayPoint(Cities);
 
   return {
     type,
-    city: getRandomArrayItem(Cities),
+    city,
     offers: randomOffers.get(type),
     price: getRandomIntegerNumber(1, 100),
     startDate: startTime,
     endDate: endTime,
     duration,
-    description: getDescription(Descriptions, 1, 6),
+    description: randomDescriptions.get(city),
     photos: getRandomPhotos(1, 6),
     isFavorite: getRandomBoolean(),
   };

@@ -1,27 +1,27 @@
-import {generateDayItem} from "./dayItem";
+import {generatePoint} from "./point";
 import {getRandomIntegerNumber} from "../utils/common";
 
-const ITEMS_COUNT = 20;
+const POINTS_COUNT = 20;
 
-const generateDayItems = (count) => {
+const generatePoints = (count) => {
   return new Array(count)
     .fill(``)
-    .map(generateDayItem);
+    .map(generatePoint);
 };
 
 export const generateDays = () => {
-  const dayItems = generateDayItems(ITEMS_COUNT);
-  dayItems.sort(function (a, b) {
+  const points = generatePoints(POINTS_COUNT);
+  points.sort(function (a, b) {
     return a.startDate.getTime() - b.startDate.getTime();
   });
   const days = new Map();
-  dayItems.forEach((dayItem) => {
-    const date = dayItem.startDate;
+  points.forEach((point) => {
+    const date = point.startDate;
     date.setHours(getRandomIntegerNumber(0, 10), 0, 0, 0);
     if (!days.has(date.toString())) {
       days.set(date.toString(), []);
     }
-    days.get(date.toString()).push(dayItem);
+    days.get(date.toString()).push(point);
   });
   return days;
 };

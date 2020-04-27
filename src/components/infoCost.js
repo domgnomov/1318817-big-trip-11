@@ -1,8 +1,8 @@
 import AbstractComponent from "./abstract-component";
+import {getAllPoints} from "../utils/common";
 
 const getCostValue = (days) => {
-  const allDayItems = [].concat(...Array.from(days.values()));
-  return allDayItems.reduce(function (sum, current) {
+  return getAllPoints(days).reduce(function (sum, current) {
     return sum + current.price;
   }, 0);
 };

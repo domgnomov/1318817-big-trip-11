@@ -18,3 +18,11 @@ export const getPreposition = (type) => {
 export const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
+
+export const getAllPoints = (days) => {
+  return [].concat(...Array.from(days.values()));
+};
+
+export const capitalize = (text) => {
+  return text[0].toUpperCase() + text.slice(1);
+};
