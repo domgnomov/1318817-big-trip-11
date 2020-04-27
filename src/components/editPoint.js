@@ -194,6 +194,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this._recoveryFlatpickr();
   }
 
   reset() {
@@ -227,7 +228,7 @@ export default class EditPoint extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
-  recoveryFlatpickr() {
+  _recoveryFlatpickr() {
     this._applyFlatpickr();
   }
 
