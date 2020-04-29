@@ -1,23 +1,16 @@
-/* global require */
-
 import AbstractComponent from "./abstract-component";
+import {formatDateWithMonthName, formatDate} from "../utils/common.js";
 
 const createDayTemplate = (day, dayCount) => {
-  let date;
-  let formattedDate;
-  let formattedDateWithMonthName;
-  if (day) {
-    const dateFormat = require(`dateformat`);
-    date = new Date(day);
-    formattedDate = dateFormat(date, `yyyy-mm-dd`);
-    formattedDateWithMonthName = String(dateFormat(date, `mmmm dd`)).toUpperCase();
-  }
+  const date = day ? new Date(day) : null;
+  const formattedDate = date ? formatDate(date) : ``;
+  const dateWithMonthName = date ? formatDateWithMonthName(date) : ``;
 
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
         <span class="day__counter">${day ? dayCount : ``}</span>
-        <time class="day__date" datetime="${formattedDate}">${day ? formattedDateWithMonthName : ``}</time>
+        <time class="day__date" datetime="${formattedDate}">${day ? dateWithMonthName : ``}</time>
       </div>
 
       <ul class="trip-events__list"></ul>

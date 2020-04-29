@@ -1,8 +1,9 @@
-/* global require */
-
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
 import {randomOffers, randomDescriptions} from "../mock/point.js";
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -22,15 +23,12 @@ const createOffersMarkup = (offers) => {
 };
 
 const createEditPointTemplate = (point, options = {}) => {
-  const {price, startDate, endDate, isFavorite} = point;
+  const {price, isFavorite} = point;
   const {city, type, offers} = options;
 
   const typePreposition = getPreposition(type);
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
-  const dateFormat = require(`dateformat`);
-  const formattedStartDate = dateFormat(startDate, `dd/mm/yy HH:MM`);
-  const formattedEndDate = dateFormat(endDate, `dd/mm/yy HH:MM`);
 
   return (
     `<li class="trip-events__item">
@@ -121,12 +119,12 @@ const createEditPointTemplate = (point, options = {}) => {
             <label class="visually-hidden" for="event-start-time-1">
               From
             </label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formattedStartDate}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">
               To
             </label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formattedEndDate}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -176,9 +174,12 @@ export default class EditPoint extends AbstractSmartComponent {
     this._editedType = point.type;
     this._editedOffers = point.offers;
     this._editedDescription = point.description;
+    this._startDateFlatpickr = null;
+    this._endDateFlatpickr = null;
     this._submitHandler = null;
     this._setFavoritesHandler = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
@@ -193,6 +194,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this._recoveryFlatpickr();
   }
 
   reset() {
@@ -224,6 +226,37 @@ export default class EditPoint extends AbstractSmartComponent {
     this.setSubmitHandler(this._submitHandler);
     this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
     this._subscribeOnEvents();
+  }
+
+  _recoveryFlatpickr() {
+    this._applyFlatpickr();
+  }
+
+  _destroyFlatpickr(fpickr) {
+    if (fpickr) {
+      fpickr.destroy();
+      fpickr = null;
+    }
+  }
+
+  _flatpickr(element, date) {
+    return flatpickr(element, {
+      altInput: true,
+      altFormat: `d/m/y h:m`,
+      allowInput: true,
+      enableTime: true,
+      defaultDate: date || `today`,
+    });
+  }
+
+  _applyFlatpickr() {
+    this._destroyFlatpickr(this._startDateFlatpickr);
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    this._startDateFlatpickr = this._flatpickr(startDateElement, this._point.startDate);
+
+    this._destroyFlatpickr(this._endDateFlatpickr);
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+    this._endDateFlatpickr = this._flatpickr(endDateElement, this._point.endDate);
   }
 
   _subscribeOnEvents() {

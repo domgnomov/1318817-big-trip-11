@@ -1,14 +1,29 @@
 import {TypesInPreposition} from "../const";
-
-const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
-};
+import moment from "moment";
 
 export const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours() % 12);
-  const minutes = castTimeFormat(date.getMinutes());
+  return moment(date).format(`hh:mm`);
+};
 
-  return `${hours}:${minutes}`;
+export const formatDate = (date) => {
+  return moment(date).format(`YYYY-MM-DD`);
+};
+
+export const formatDateTime = (date) => {
+  return moment(date).format(`YYYY-MM-DDTHH:mm:ss`);
+};
+
+export const formatDateWithMonthName = (date, previousDate) => {
+  if (previousDate && date.getMonth() === previousDate.getMonth()) {
+    return moment(date).format(`DD`);
+  }
+  return moment(date).format(`MMMM DD`);
+};
+
+export const getDuration = (startDate, endDate) => {
+  const diff = moment(endDate).diff(moment(startDate));
+  const duration = moment.duration(diff);
+  return moment.utc(duration.asMilliseconds()).format(`DD[d] HH[h] MM[m]`);
 };
 
 export const getPreposition = (type) => {
