@@ -9,7 +9,7 @@ import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 import PointController from "./PointController";
-import {getAllPoints} from "../utils/common";
+import {getDays} from "../utils/common";
 
 export const INITIAL_DAYS_COUNT = 1;
 
@@ -34,10 +34,10 @@ const getSortedPoints = (points, sortType) => {
 };
 
 export default class TripController {
-  constructor(container) {
+  constructor(container, pointsModel) {
     this._container = container;
+    this._pointsModel = pointsModel;
 
-    this._days = [];
     this._pointControllers = [];
     this._infoContainer = new InfoContainer();
     this._menuComponent = new MenuComponent();
@@ -56,18 +56,15 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    for (const [key, value] of this._days.entries()) {
-      const index = value.findIndex((it) => it === oldData);
-      if (index === -1) {
-        continue;
-      }
-
-      const newValue = [].concat(value.slice(0, index), newData, value.slice(index + 1));
-      this._days.set(key, newValue);
-
-      pointController.render(newValue[index]);
+    const value = this._pointsModel.getAllPoints().slice();
+    const index = value.findIndex((it) => it === oldData);
+    if (index === -1) {
       return;
     }
+
+    const newValue = [].concat(value.slice(0, index), newData, value.slice(index + 1));
+    this._pointsModel.setPoints(newValue);
+    pointController.render(newValue[index]);
   }
 
   _renderPoints(days, daysContainerElement, onDataChange) {
@@ -85,8 +82,8 @@ export default class TripController {
     }
   }
 
-  render(days) {
-    this._days = days;
+  render() {
+    const days = getDays(this._pointsModel.getAllPoints());
     render(this._container, this._infoContainer, RenderPosition.AFTERBEGIN);
     const infoContainerElement = this._container.querySelector(`.trip-main__trip-info`);
     const infoMainComponent = new InfoMain(days);
@@ -122,7 +119,7 @@ export default class TripController {
         this._renderPoints(days, daysContainerElement, this._onDataChange);
         return;
       }
-      const sortedPoints = getSortedPoints(getAllPoints(this._days), sortType);
+      const sortedPoints = getSortedPoints(this._pointsModel.getAllPoints(), sortType);
 
       daysContainerElement.innerHTML = ``;
 

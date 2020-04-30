@@ -1,5 +1,7 @@
 import {getRandomIntegerNumber} from "../utils/common";
 
+let id = 1;
+
 const PointTypes = [
   `Taxi`,
   `Bus`,
@@ -118,10 +120,12 @@ export const generatePoint = () => {
   const type = getRandomArrayPoint(PointTypes);
   const duration = getRandomIntegerNumber(1, 31);
   const startTime = new Date();
+  startTime.setHours(getRandomIntegerNumber(0, 10), 0, 0, 0);
   const endTime = new Date(startTime.getTime() + duration * 60000);
   const city = getRandomArrayPoint(Cities);
 
   return {
+    id: id++,
     type,
     city,
     offers: randomOffers.get(type),

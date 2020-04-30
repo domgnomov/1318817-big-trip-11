@@ -38,6 +38,21 @@ export const getAllPoints = (days) => {
   return [].concat(...Array.from(days.values()));
 };
 
+export const getDays = (points) => {
+  points.sort(function (a, b) {
+    return a.startDate.getTime() - b.startDate.getTime();
+  });
+  const days = new Map();
+  points.forEach((point) => {
+    const date = point.startDate;
+    if (!days.has(date.toString())) {
+      days.set(date.toString(), []);
+    }
+    days.get(date.toString()).push(point);
+  });
+  return days;
+};
+
 export const capitalize = (text) => {
   return text[0].toUpperCase() + text.slice(1);
 };
