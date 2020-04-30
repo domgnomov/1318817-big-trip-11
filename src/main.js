@@ -1,5 +1,5 @@
 import {generateDays} from "./mock/day.js";
-import TripController from "./controllers/TripController";
+import TripController from "./controllers/trip";
 import PointsModel from "./models/points.js";
 import {getAllPoints} from "./utils/common";
 
