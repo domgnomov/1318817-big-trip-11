@@ -41,10 +41,6 @@ export const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
-export const getAllPoints = (days) => {
-  return [].concat(...Array.from(days.values()));
-};
-
 export const getSortedPoints = (points, sortType) => {
   let sortedPoints = [];
   const showingPoints = points.slice();

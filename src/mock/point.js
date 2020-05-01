@@ -102,12 +102,6 @@ const generateDescriptions = () => {
     new Array(getDescription(Descriptions, 1, 6))]));
 };
 
-export const generatePoints = () => {
-  return new Array(POINTS_COUNT)
-    .fill(``)
-    .map(generatePoint);
-};
-
 export const randomOffers = generateRandomOffers();
 export const randomDescriptions = generateDescriptions();
 
@@ -122,6 +116,15 @@ const getRandomBoolean = () => {
   const randomInteger = getRandomIntegerNumber(0, 2);
 
   return randomInteger === 1;
+};
+
+export const generatePoints = () => {
+  return new Array(POINTS_COUNT)
+    .fill(``)
+    .map(generatePoint)
+    .sort(function (a, b) {
+      return a.startDate.getTime() - b.startDate.getTime();
+    });
 };
 
 export const generatePoint = () => {

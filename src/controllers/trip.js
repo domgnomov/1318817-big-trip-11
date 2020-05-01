@@ -85,12 +85,11 @@ export default class TripController {
   }
 
   _renderInfo(points) {
-    const days = getDays(points);
     render(this._container, this._infoContainer, RenderPosition.AFTERBEGIN);
     const infoContainerElement = this._container.querySelector(`.trip-main__trip-info`);
-    const infoMainComponent = new InfoMain(days);
+    const infoMainComponent = new InfoMain(points);
     render(infoContainerElement, infoMainComponent, RenderPosition.BEFOREEND);
-    const infoCostComponent = new InfoCost(days);
+    const infoCostComponent = new InfoCost(points);
     render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
   }
 
