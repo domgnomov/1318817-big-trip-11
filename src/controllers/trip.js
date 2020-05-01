@@ -112,10 +112,11 @@ export default class TripController {
     render(eventsContainerElement, this._daysContainer, RenderPosition.BEFOREEND);
   }
 
-  _setSortTypeChangeHandler(points) {
+  _setSortTypeChangeHandler() {
     const daysContainerElement = document.querySelector(`.trip-days`);
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
+      const points = this._pointsModel.getPoints();
       if (sortType === SortType.DEFAULT) {
         this._renderPoints(points);
         return;

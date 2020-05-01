@@ -1,12 +1,9 @@
-import {generateDays} from "./mock/day.js";
+import {generatePoints} from "./mock/point.js";
 import TripController from "./controllers/trip";
 import PointsModel from "./models/points.js";
-import {getAllPoints} from "./utils/common";
 import FilterController from "./controllers/filter";
 
-const days = generateDays();
-const allPoints = getAllPoints(days);
-
+const allPoints = generatePoints();
 const pointsModel = new PointsModel();
 pointsModel.setPoints(allPoints);
 

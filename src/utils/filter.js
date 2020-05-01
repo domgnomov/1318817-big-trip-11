@@ -1,12 +1,12 @@
 import {FilterType} from "../const";
 
 export const getPointsByFilter = (points, filterType) => {
-  //TODO сделать фильтрацию
+  const currentDate = new Date();
   switch (filterType) {
     case FilterType.FUTURE :
-      return points.slice().filter((point) => point.city === `Moscow`);
+      return points.slice().filter((point) => point.startDate > currentDate);
     case FilterType.PAST :
-      return points.slice().filter((point) => point.city === `London`);
+      return points.slice().filter((point) => point.startDate <= currentDate);
     case FilterType.EVERYTHING :
       return points;
   }

@@ -3,7 +3,7 @@ import moment from "moment";
 import {SortType} from "../components/sort";
 
 export const formatTime = (date) => {
-  return moment(date).format(`hh:mm`);
+  return moment(date).format(`HH:mm`);
 };
 
 export const formatDate = (date) => {
@@ -24,7 +24,13 @@ export const formatDateWithMonthName = (date, previousDate) => {
 export const getDuration = (startDate, endDate) => {
   const diff = moment(endDate).diff(moment(startDate));
   const duration = moment.duration(diff);
-  return moment.utc(duration.asMilliseconds()).format(`DD[d] HH[h] MM[m]`);
+  if (duration.days() > 0) {
+    return moment.utc(duration.asMilliseconds()).format(`DD[d] HH[h] mm[m]`);
+  } else if (duration.hours() > 0) {
+    return moment.utc(duration.asMilliseconds()).format(`HH[h] mm[m]`);
+  } else {
+    return moment.utc(duration.asMilliseconds()).format(`mm[m]`);
+  }
 };
 
 export const getPreposition = (type) => {
@@ -59,12 +65,14 @@ export const getSortedPoints = (points, sortType) => {
 };
 
 export const getDays = (points) => {
-  points.sort(function (a, b) {
+  const newPoints = points.slice();
+  newPoints.sort(function (a, b) {
     return a.startDate.getTime() - b.startDate.getTime();
   });
   const days = new Map();
-  points.forEach((point) => {
-    const date = point.startDate;
+  newPoints.forEach((point) => {
+    const date = new Date(point.startDate.getTime());
+    date.setHours(0, 0, 0, 0);
     if (!days.has(date.toString())) {
       days.set(date.toString(), []);
     }
