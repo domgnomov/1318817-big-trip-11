@@ -8,29 +8,9 @@ import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 import PointController from "./point";
-import {getDays} from "../utils/common";
+import {getDays, getSortedPoints} from "../utils/common";
 
 export const INITIAL_DAYS_COUNT = 1;
-
-
-const getSortedPoints = (points, sortType) => {
-  let sortedPoints = [];
-  const showingPoints = points.slice();
-
-  switch (sortType) {
-    case SortType.TIME:
-      sortedPoints = showingPoints.sort((a, b) => a.startDate - b.startDate);
-      break;
-    case SortType.PRICE:
-      sortedPoints = showingPoints.sort((a, b) => b.price - a.price);
-      break;
-    case SortType.DEFAULT:
-      sortedPoints = showingPoints;
-      break;
-  }
-
-  return sortedPoints.slice();
-};
 
 export default class TripController {
   constructor(container, pointsModel) {
@@ -97,6 +77,14 @@ export default class TripController {
 
   render() {
     const points = this._pointsModel.getPoints();
+    this._renderInfo(points);
+    this._renderControls();
+    this._renderEvents(points);
+    this._renderPoints(points);
+    this._setSortTypeChangeHandler(points);
+  }
+
+  _renderInfo(points) {
     const days = getDays(points);
     render(this._container, this._infoContainer, RenderPosition.AFTERBEGIN);
     const infoContainerElement = this._container.querySelector(`.trip-main__trip-info`);
@@ -104,27 +92,28 @@ export default class TripController {
     render(infoContainerElement, infoMainComponent, RenderPosition.BEFOREEND);
     const infoCostComponent = new InfoCost(days);
     render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
+  }
 
+  _renderControls(){
     const controlsContainerElement = this._container.querySelector(`.trip-main__trip-controls`);
-
     const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
     render(controlsFirstElement, this._menuComponent, RenderPosition.AFTEREND);
+  }
 
+  _renderEvents(points){
     const eventsContainerElement = document.querySelector(`.trip-events`);
 
-    if (days.length === 0) {
+    if (points.length === 0) {
       render(eventsContainerElement, this._noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
     render(eventsContainerElement, this._sortComponent, RenderPosition.BEFOREEND);
-
     render(eventsContainerElement, this._daysContainer, RenderPosition.BEFOREEND);
+  }
 
+  _setSortTypeChangeHandler(points) {
     const daysContainerElement = document.querySelector(`.trip-days`);
-
-    this._renderPoints(points);
-
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       if (sortType === SortType.DEFAULT) {

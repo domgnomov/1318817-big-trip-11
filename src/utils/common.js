@@ -1,5 +1,6 @@
 import {TypesInPreposition} from "../const";
 import moment from "moment";
+import {SortType} from "../components/sort";
 
 export const formatTime = (date) => {
   return moment(date).format(`hh:mm`);
@@ -36,6 +37,25 @@ export const getRandomIntegerNumber = (min, max) => {
 
 export const getAllPoints = (days) => {
   return [].concat(...Array.from(days.values()));
+};
+
+export const getSortedPoints = (points, sortType) => {
+  let sortedPoints = [];
+  const showingPoints = points.slice();
+
+  switch (sortType) {
+    case SortType.TIME:
+      sortedPoints = showingPoints.sort((a, b) => a.startDate - b.startDate);
+      break;
+    case SortType.PRICE:
+      sortedPoints = showingPoints.sort((a, b) => b.price - a.price);
+      break;
+    case SortType.DEFAULT:
+      sortedPoints = showingPoints;
+      break;
+  }
+
+  return sortedPoints.slice();
 };
 
 export const getDays = (points) => {
