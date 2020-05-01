@@ -14,6 +14,14 @@ export const formatDateTime = (date) => {
   return moment(date).format(`YYYY-MM-DDTHH:mm:ss`);
 };
 
+const compareByHoursAndMinutes = (a, b) => {
+  return minutesOfDate(a) - minutesOfDate(b);
+}
+
+const minutesOfDate = (m) => {
+  return m.getMinutes() + m.getHours() * 60;
+};
+
 export const formatDateWithMonthName = (date, previousDate) => {
   if (previousDate && date.getMonth() === previousDate.getMonth()) {
     return moment(date).format(`DD`);
@@ -47,7 +55,7 @@ export const getSortedPoints = (points, sortType) => {
 
   switch (sortType) {
     case SortType.TIME:
-      sortedPoints = showingPoints.sort((a, b) => a.startDate - b.startDate);
+      sortedPoints = showingPoints.sort((a, b) => compareByHoursAndMinutes(a.startDate, b.startDate));
       break;
     case SortType.PRICE:
       sortedPoints = showingPoints.sort((a, b) => b.price - a.price);

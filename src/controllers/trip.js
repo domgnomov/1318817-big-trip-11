@@ -120,6 +120,7 @@ export default class TripController {
         this._renderPoints(points);
         return;
       }
+
       const sortedPoints = getSortedPoints(points, sortType);
 
       daysContainerElement.innerHTML = ``;
