@@ -1,4 +1,3 @@
-import {getDays} from "../utils/common";
 import {FilterType} from "../const";
 import {getPointsByFilter} from "../utils/filter";
 

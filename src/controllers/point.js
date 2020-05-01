@@ -1,6 +1,6 @@
 import PointComponent from "../components/point";
 import PointEditComponent from "../components/editPoint";
-import {replace, render, RenderPosition} from "../utils/render.js";
+import {replace, remove, render, RenderPosition} from "../utils/render.js";
 
 const Mode = {
   DEFAULT: `default`,
@@ -78,5 +78,11 @@ export default class PointController {
       this._replaceEditToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
+  }
+
+  destroy() {
+    remove(this._pointComponent);
+    remove(this._pointEditComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 }
