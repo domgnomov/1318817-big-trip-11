@@ -8,7 +8,10 @@ export default class FilterController {
 
     this._filterComponent = null;
 
+    this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+
+    this._pointsModel.setDataChangeHandler(this._onDataChange);
   }
 
   render() {
@@ -27,5 +30,9 @@ export default class FilterController {
 
   _onFilterChange(filterType) {
     this._pointsModel.setFilter(filterType);
+  }
+
+  _onDataChange() {
+    this.render();
   }
 }

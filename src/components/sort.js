@@ -58,6 +58,10 @@ export default class Sort extends AbstractComponent {
     dayLabel.innerText = this._currenSortType === SortType.DEFAULT ? `Day` : ``;
   }
 
+  getSortType() {
+    return this._currenSortType;
+  }
+
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       if (evt.target.tagName !== `LABEL`) {

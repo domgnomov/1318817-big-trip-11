@@ -6,7 +6,9 @@ export default class Points {
     this._points = [];
 
     this._activeFilterType = FilterType.EVERYTHING;
+
     this._filterChangeHandlers = [];
+    this._dataChangeHandlers = [];
   }
 
   getAllPoints() {
@@ -19,8 +21,7 @@ export default class Points {
 
   setPoints(points) {
     this._points = Array.from(points);
-    //TODO
-    //this._callHandlers(this._dataChangeHandlers);
+    this._callHandlers(this._dataChangeHandlers);
   }
 
   setFilter(filterType) {
@@ -28,10 +29,23 @@ export default class Points {
     this._callHandlers(this._filterChangeHandlers);
   }
 
+  removePoint(id) {
+    const index = this._points.findIndex((it) => it.id === id);
+
+    if (index === -1) {
+      return false;
+    }
+
+    this._points = [].concat(this._points.slice(0, index), this._points.slice(index + 1));
+
+    this._callHandlers(this._dataChangeHandlers);
+
+    return true;
+  }
+
   addPoint(point) {
     this._points = [].concat(point, this._points);
-    //TODO
-    //this._callHandlers(this._dataChangeHandlers);
+    this._callHandlers(this._dataChangeHandlers);
   }
 
   updatePoint(id, point) {
@@ -42,14 +56,17 @@ export default class Points {
     }
 
     this._points = [].concat(this._points.slice(0, index), point, this._points.slice(index + 1));
-    //TODO
-    //this._callHandlers(this._dataChangeHandlers);
+    this._callHandlers(this._dataChangeHandlers);
 
     return true;
   }
 
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
+  }
+
+  setDataChangeHandler(handler) {
+    this._dataChangeHandlers.push(handler);
   }
 
   _callHandlers(handlers) {
