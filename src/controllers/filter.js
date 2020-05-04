@@ -1,6 +1,5 @@
 import FilterComponent from "../components/filter";
 import {render, RenderPosition, replace} from "../utils/render";
-import {FilterType} from "../const";
 
 export default class FilterController {
   constructor(container, pointsModel) {
@@ -9,8 +8,6 @@ export default class FilterController {
 
     this._filterComponent = null;
 
-    this._activeFilterType = FilterType.EVERYTHING;
-
     this._onFilterChange = this._onFilterChange.bind(this);
   }
 
@@ -18,7 +15,7 @@ export default class FilterController {
     const container = this._container;
     const oldComponent = this._filterComponent;
 
-    this._filterComponent = new FilterComponent(this._activeFilterType);
+    this._filterComponent = new FilterComponent();
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
     if (oldComponent) {
@@ -30,6 +27,5 @@ export default class FilterController {
 
   _onFilterChange(filterType) {
     this._pointsModel.setFilter(filterType);
-    this._activeFilterType = filterType;
   }
 }
