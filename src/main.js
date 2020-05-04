@@ -14,3 +14,8 @@ tripController.render();
 const filterContainer = mainElement.querySelector(`.trip-main__trip-controls`);
 const filterController = new FilterController(filterContainer, pointsModel);
 filterController.render();
+
+const addButton = mainElement.querySelector(`.trip-main__event-add-btn`);
+addButton.addEventListener(`click`, () => {
+  tripController.createPoint();
+});

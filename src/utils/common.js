@@ -68,11 +68,18 @@ export const getSortedPoints = (points, sortType) => {
   return sortedPoints.slice();
 };
 
+export const getFirstDay = (points) => {
+  const firstPoint = getSortByDate(points)[0];
+  const date = new Date(firstPoint.startDate.getTime());
+  return date.toString();
+};
+
+const getSortByDate = (points) => {
+  return points.slice().sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+};
+
 export const getDays = (points) => {
-  const newPoints = points.slice();
-  newPoints.sort(function (a, b) {
-    return a.startDate.getTime() - b.startDate.getTime();
-  });
+  const newPoints = getSortByDate(points);
   const days = new Map();
   newPoints.forEach((point) => {
     const date = new Date(point.startDate.getTime());

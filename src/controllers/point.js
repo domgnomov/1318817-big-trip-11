@@ -3,8 +3,22 @@ import PointEditComponent from "../components/editPoint";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
 
 const Mode = {
+  ADDING: `adding`,
   DEFAULT: `default`,
   EDIT: `edit`,
+};
+
+export const EmptyPoint = {
+  type: null,
+  city: null,
+  offers: null,
+  price: 0,
+  startDate: null,
+  endDate: null,
+  duration: 0,
+  description: ``,
+  photos: null,
+  isFavorite: false,
 };
 
 export default class PointController {
@@ -21,6 +35,7 @@ export default class PointController {
   }
 
   render(point) {
+    debugger;
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
 

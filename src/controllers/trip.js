@@ -7,8 +7,8 @@ import {render, RenderPosition} from "../utils/render";
 import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
-import {getDays, getSortedPoints} from "../utils/common";
-import PointController from "./point";
+import {getDays, getFirstDay, getSortedPoints} from "../utils/common";
+import PointController, {EmptyPoint} from "./point";
 
 export const INITIAL_DAYS_COUNT = 1;
 
@@ -59,29 +59,41 @@ export default class TripController {
     pointController.render(newValue[index]);
   }
 
+  createPoint() {
+    if (this._creatingPoint) {
+      return;
+    }
+
+    const firstDayElement = this._daysContainer.getFirstDayElement();
+
+    const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
+    this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
+    this._creatingPoint.render(EmptyPoint, PointController.ADDING);
+  }
+
   _renderDayComponentPoints(daysContainerElement, dayComponent, sortedPoints) {
     render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
-    const container = dayComponent.getElement().querySelector(`.trip-events__list`);
+    const dayContainer = dayComponent.getElement().querySelector(`.trip-events__list`);
     sortedPoints.forEach((point) => {
-      const pointController = new PointController(container, this._onDataChange, this._onViewChange);
+      const pointController = new PointController(dayContainer, this._onDataChange, this._onViewChange);
       this._pointControllers = this._pointControllers.concat(pointController);
       pointController.render(point);
     });
   };
 
   _renderPoints(points) {
-    const daysContainerElement = document.querySelector(`.trip-days`);
-    daysContainerElement.innerHTML = ``;
+    const daysContainer = this._daysContainer.getElement();
+    daysContainer.innerHTML = ``;
 
     if (this._sortComponent.getSortType() !== SortType.DEFAULT) {
       const dayComponent = new Day();
-      this._renderDayComponentPoints(daysContainerElement, dayComponent, points);
+      this._renderDayComponentPoints(daysContainer, dayComponent, points);
     } else {
       let dayCount = INITIAL_DAYS_COUNT;
       let days = getDays(points);
       for (const [day, dayPoints] of days.entries()) {
         const dayComponent = new Day(day, dayCount++);
-        this._renderDayComponentPoints(daysContainerElement, dayComponent, dayPoints);
+        this._renderDayComponentPoints(daysContainer, dayComponent, dayPoints);
       }
     }
   }
