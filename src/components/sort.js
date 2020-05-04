@@ -77,6 +77,11 @@ export default class Sort extends AbstractComponent {
       handler(this._currenSortType);
     });
   }
+
+  getDefaultSortTypeElement() {
+    const parentElement = this.getElement().querySelector(`#sort-event`).parentNode;
+    return parentElement.querySelector(`label`);
+  }
 }
 
 

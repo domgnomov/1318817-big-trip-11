@@ -139,6 +139,7 @@ export default class TripController {
 
   _onFilterChange() {
     this._updatePoints();
+    this._sortComponent.getDefaultSortTypeElement().click();
   }
 
 }

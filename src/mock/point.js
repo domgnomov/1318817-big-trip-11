@@ -132,7 +132,7 @@ export const generatePoint = () => {
   const duration = getRandomIntegerNumber(1, 31);
   const startDate = new Date();
   startDate.setDate(startDate.getDate() + getRandomIntegerNumber(0, 5));
-  startDate.setHours(getRandomIntegerNumber(8, 23), 0, 0, 0);
+  startDate.setHours(getRandomIntegerNumber(1, 23), 0, 0, 0);
   const endDate = new Date(startDate.getTime() + duration * 200000);
   const city = getRandomArrayPoint(Cities);
 
