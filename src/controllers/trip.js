@@ -48,15 +48,25 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    const value = this._pointsModel.getAllPoints().slice();
-    const index = value.findIndex((it) => it === oldData);
-    if (index === -1) {
-      return;
-    }
+    if (oldData === EmptyPoint) {
+      this._creatingPoint = null;
+      if (newData === null) {
+        pointController.destroy();
+        this._updatePoints();
+      } else {
+        this._pointsModel.addPoint(newData);
+        pointController.render(newData, Mode.DEFAULT);
+      }
+    } else if (newData === null) {
+      this._pointsModel.removePoint(oldData.id);
+      this._updatePoints();
+    } else {
+      const isSuccess = this._pointsModel.updatePoint(oldData.id, newData);
 
-    const newValue = [].concat(value.slice(0, index), newData, value.slice(index + 1));
-    this._pointsModel.setPoints(newValue);
-    pointController.render(newValue[index], Mode.DEFAULT);
+      if (isSuccess) {
+        pointController.render(newData, Mode.DEFAULT);
+      }
+    }
   }
 
   createPoint() {

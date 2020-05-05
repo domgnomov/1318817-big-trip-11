@@ -37,6 +37,7 @@ export default class PointController {
   render(point, mode) {
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
+    this._mode = mode;
 
     this._pointComponent = new PointComponent(point);
     this._pointEditComponent = new PointEditComponent(point);
@@ -51,6 +52,8 @@ export default class PointController {
       this._replaceEditToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
+
+    this._pointEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, point, null));
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
       this._onDataChange(this, point, Object.assign({}, point, {
