@@ -16,7 +16,7 @@ export const formatDateTime = (date) => {
 
 const compareByHoursAndMinutes = (a, b) => {
   return minutesOfDate(a) - minutesOfDate(b);
-}
+};
 
 const minutesOfDate = (m) => {
   return m.getMinutes() + m.getHours() * 60;

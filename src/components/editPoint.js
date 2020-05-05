@@ -4,7 +4,6 @@ import {randomOffers, randomDescriptions} from "../mock/point.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
-import {getRandomIntegerNumber} from "../utils/common";
 
 const createOffersMarkup = (offers) => {
   return offers

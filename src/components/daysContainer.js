@@ -11,7 +11,7 @@ export default class DaysContainer extends AbstractComponent {
     return createDaysContainerTemplate();
   }
 
-  getFirstDayElement () {
-    return this.getElement().querySelector("ul > li")
+  getFirstDayElement() {
+    return this.getElement().querySelector(`ul > li`);
   }
 }

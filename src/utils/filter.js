@@ -10,4 +10,6 @@ export const getPointsByFilter = (points, filterType) => {
     case FilterType.EVERYTHING :
       return points;
   }
+
+  return points;
 };

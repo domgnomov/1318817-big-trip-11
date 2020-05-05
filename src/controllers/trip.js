@@ -7,7 +7,7 @@ import {render, RenderPosition} from "../utils/render";
 import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
-import {getDays, getFirstDay, getSortedPoints} from "../utils/common";
+import {getDays, getSortedPoints} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
 
 export const INITIAL_DAYS_COUNT = 1;
@@ -40,7 +40,6 @@ export default class TripController {
   }
 
   _onSortTypeChange(sortType) {
-    debugger;
     const sortedPoints = getSortedPoints(this._pointsModel.getPoints(), sortType);
 
     this._removePoints();
@@ -89,7 +88,7 @@ export default class TripController {
       this._pointControllers = this._pointControllers.concat(pointController);
       pointController.render(point, Mode.DEFAULT);
     });
-  };
+  }
 
   _renderPoints(points) {
     const daysContainer = this._daysContainer.getElement();
@@ -135,13 +134,13 @@ export default class TripController {
     render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderControls(){
+  _renderControls() {
     const controlsContainerElement = this._container.querySelector(`.trip-main__trip-controls`);
     const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
     render(controlsFirstElement, this._menuComponent, RenderPosition.AFTEREND);
   }
 
-  _renderEvents(points){
+  _renderEvents(points) {
     const eventsContainerElement = document.querySelector(`.trip-events`);
 
     if (points.length === 0) {
