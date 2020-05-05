@@ -4,6 +4,7 @@ import {randomOffers, randomDescriptions} from "../mock/point.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
+import {getRandomIntegerNumber} from "../utils/common";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -164,6 +165,22 @@ const createEditPointTemplate = (point, options = {}) => {
   );
 };
 
+const parseFormData = (formData) => {
+  return {
+    id: null,
+    type: formData.get(`event-type`),
+    city: formData.get(`event-destination`),
+    offers: null,
+    price: formData.get(`event-price`),
+    startDate: formData.get(`event-start-time`),
+    endDate: formData.get(`event-end-time`),
+    duration: 0,
+    description: null,
+    photos: null,
+    isFavorite: formData.get(`event-favorite`),
+  };
+};
+
 export default class EditPoint extends AbstractSmartComponent {
   constructor(point) {
     super();
@@ -242,6 +259,13 @@ export default class EditPoint extends AbstractSmartComponent {
     this._destroyFlatpickr(this._endDateFlatpickr);
 
     super.removeElement();
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.event--edit`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
   }
 
   _recoveryFlatpickr() {
