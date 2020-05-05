@@ -1,14 +1,13 @@
 import AbstractComponent from "./abstract-component";
-import {getAllPoints} from "../utils/common";
 
-const getCostValue = (days) => {
-  return getAllPoints(days).reduce(function (sum, current) {
+const getCostValue = (points) => {
+  return points.reduce(function (sum, current) {
     return sum + current.price;
   }, 0);
 };
 
-const createInfoCostTemplate = (days) => {
-  const costValue = getCostValue(days);
+const createInfoCostTemplate = (points) => {
+  const costValue = getCostValue(points);
   return (
     `<p class="trip-info__cost">
       Total: &euro;&nbsp;<span class="trip-info__cost-value">${costValue}</span></p>
@@ -17,13 +16,13 @@ const createInfoCostTemplate = (days) => {
 };
 
 export default class InfoCost extends AbstractComponent {
-  constructor(days) {
+  constructor(points) {
     super();
 
-    this._days = days;
+    this._points = points;
   }
 
   getTemplate() {
-    return createInfoCostTemplate(this._days);
+    return createInfoCostTemplate(this._points);
   }
 }

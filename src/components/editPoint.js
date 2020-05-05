@@ -164,6 +164,22 @@ const createEditPointTemplate = (point, options = {}) => {
   );
 };
 
+const parseFormData = (formData) => {
+  return {
+    id: null,
+    type: formData.get(`event-type`),
+    city: formData.get(`event-destination`),
+    offers: null,
+    price: formData.get(`event-price`),
+    startDate: formData.get(`event-start-time`),
+    endDate: formData.get(`event-end-time`),
+    duration: 0,
+    description: null,
+    photos: null,
+    isFavorite: formData.get(`event-favorite`),
+  };
+};
+
 export default class EditPoint extends AbstractSmartComponent {
   constructor(point) {
     super();
@@ -178,6 +194,7 @@ export default class EditPoint extends AbstractSmartComponent {
     this._endDateFlatpickr = null;
     this._submitHandler = null;
     this._setFavoritesHandler = null;
+    this._deleteButtonClickHandler = null;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -222,10 +239,32 @@ export default class EditPoint extends AbstractSmartComponent {
     this._setFavoritesHandler = handler;
   }
 
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
+
+    this._deleteButtonClickHandler = handler;
+  }
+
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
     this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
     this._subscribeOnEvents();
+  }
+
+  removeElement() {
+    this._destroyFlatpickr(this._startDateFlatpickr);
+    this._destroyFlatpickr(this._endDateFlatpickr);
+
+    super.removeElement();
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.event--edit`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
   }
 
   _recoveryFlatpickr() {

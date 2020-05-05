@@ -1,5 +1,9 @@
 import {getRandomIntegerNumber} from "../utils/common";
 
+let id = 1;
+
+const POINTS_COUNT = 20;
+
 const PointTypes = [
   `Taxi`,
   `Bus`,
@@ -114,20 +118,32 @@ const getRandomBoolean = () => {
   return randomInteger === 1;
 };
 
+export const generatePoints = () => {
+  return new Array(POINTS_COUNT)
+    .fill(``)
+    .map(generatePoint)
+    .sort(function (a, b) {
+      return a.startDate.getTime() - b.startDate.getTime();
+    });
+};
+
 export const generatePoint = () => {
   const type = getRandomArrayPoint(PointTypes);
   const duration = getRandomIntegerNumber(1, 31);
-  const startTime = new Date();
-  const endTime = new Date(startTime.getTime() + duration * 60000);
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() + getRandomIntegerNumber(0, 5));
+  startDate.setHours(getRandomIntegerNumber(1, 23), 0, 0, 0);
+  const endDate = new Date(startDate.getTime() + duration * 200000);
   const city = getRandomArrayPoint(Cities);
 
   return {
+    id: id++,
     type,
     city,
     offers: randomOffers.get(type),
     price: getRandomIntegerNumber(1, 100),
-    startDate: startTime,
-    endDate: endTime,
+    startDate,
+    endDate,
     duration,
     description: randomDescriptions.get(city),
     photos: getRandomPhotos(1, 6),

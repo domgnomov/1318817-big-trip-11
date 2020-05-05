@@ -1,23 +1,22 @@
 import AbstractComponent from "./abstract-component";
-import {getAllPoints, formatDateWithMonthName} from "../utils/common";
+import {formatDateWithMonthName} from "../utils/common";
 
 
 const DELIMITER = `&mdash;`;
 
-const getTitle = (days) => {
-  const title = getAllPoints(days).reduce(function (acc, current) {
+const getTitle = (points) => {
+  const title = points.reduce(function (acc, current) {
     return `${acc} ${current.city} ${DELIMITER}`;
   }, ``);
   return title.slice(0, title.length - DELIMITER.length);
 };
 
-const getDateInterval = (days) => {
-  if (days.length === 0) {
+const getDateInterval = (points) => {
+  if (points.length === 0) {
     return ``;
   }
-  const daysKeys = Array.from(days.keys());
-  const startDate = new Date(daysKeys[0]);
-  const endDate = new Date(daysKeys[daysKeys.length - 1]);
+  const startDate = new Date(points[0].startDate);
+  const endDate = new Date(points[points.length - 1].endDate);
 
   const startDateWithMonthName = formatDateWithMonthName(startDate);
   const endDateWithMonthName = formatDateWithMonthName(endDate, startDate);
@@ -25,9 +24,9 @@ const getDateInterval = (days) => {
   return `${startDateWithMonthName} ${DELIMITER} ${endDateWithMonthName}`;
 };
 
-const createInfoMainTemplate = (days) => {
-  const title = getTitle(days);
-  const dateInterval = getDateInterval(days);
+const createInfoMainTemplate = (points) => {
+  const title = getTitle(points);
+  const dateInterval = getDateInterval(points);
 
   return (
     `<div class="trip-info__main">
@@ -39,13 +38,13 @@ const createInfoMainTemplate = (days) => {
 };
 
 export default class InfoMain extends AbstractComponent {
-  constructor(days) {
+  constructor(points) {
     super();
 
-    this._days = days;
+    this._points = points;
   }
 
   getTemplate() {
-    return createInfoMainTemplate(this._days);
+    return createInfoMainTemplate(this._points);
   }
 }

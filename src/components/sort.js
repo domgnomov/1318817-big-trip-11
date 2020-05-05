@@ -58,10 +58,12 @@ export default class Sort extends AbstractComponent {
     dayLabel.innerText = this._currenSortType === SortType.DEFAULT ? `Day` : ``;
   }
 
+  getSortType() {
+    return this._currenSortType;
+  }
+
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
       if (evt.target.tagName !== `LABEL`) {
         return;
       }
@@ -78,6 +80,11 @@ export default class Sort extends AbstractComponent {
 
       handler(this._currenSortType);
     });
+  }
+
+  getDefaultSortTypeElement() {
+    const parentElement = this.getElement().querySelector(`#sort-event`).parentNode;
+    return parentElement.querySelector(`label`);
   }
 }
 
