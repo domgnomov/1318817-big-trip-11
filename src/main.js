@@ -5,13 +5,18 @@ import FilterController from "./controllers/filter";
 import StatisticsComponent from "./components/statistics.js";
 import {render, RenderPosition} from "./utils/render.js";
 import SiteMenuComponent, {MenuItem} from "./components/menu.js";
+import InfoController from "./controllers/info";
 
 const allPoints = generatePoints();
 const pointsModel = new PointsModel();
 pointsModel.setPoints(allPoints);
 
 const mainElement = document.querySelector(`.trip-main`);
-const tripController = new TripController(mainElement, pointsModel);
+
+const infoController = new InfoController(mainElement, pointsModel);
+infoController.render();
+
+const tripController = new TripController(pointsModel);
 tripController.render();
 
 const siteMenuComponent = new SiteMenuComponent();
@@ -35,11 +40,11 @@ statisticsComponent.hide();
 siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
-      tripController.hideEventsContainer();
+      tripController.hide();
       statisticsComponent.show();
       break;
     case MenuItem.TABLE:
-      tripController.showEventsContainer();
+      tripController.show();
       statisticsComponent.hide();
       break;
   }

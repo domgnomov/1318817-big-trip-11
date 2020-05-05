@@ -1,25 +1,20 @@
-import InfoContainer from "../components/infoContainer";
 import NoPointsComponent from "../components/no-points";
 import SortComponent, {SortType} from "../components/sort";
 import DaysContainer from "../components/daysContainer";
 import {render, RenderPosition} from "../utils/render";
-import EventsContainer from "../components/eventsContainer";
-import InfoMain from "../components/infoMain";
-import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 import {getDays, getSortedPoints} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
+import EventsContainer from "../components/eventsContainer";
 
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
-  constructor(container, pointsModel) {
-    this._container = container;
+  constructor(pointsModel) {
+    this._container = new EventsContainer();
     this._pointsModel = pointsModel;
 
     this._pointControllers = [];
-    this._infoContainer = new InfoContainer();
-    this._eventsContainer = new EventsContainer();
     this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
     this._daysContainer = new DaysContainer();
@@ -35,12 +30,12 @@ export default class TripController {
 
   }
 
-  hideEventsContainer() {
-    this._eventsContainer.hide();
+  hide() {
+    this._container.hide();
   }
 
-  showEventsContainer() {
-    this._eventsContainer.show();
+  show() {
+    this._container.show();
   }
 
   _onViewChange() {
@@ -127,30 +122,18 @@ export default class TripController {
 
   render() {
     const points = this._pointsModel.getPoints();
-    this._renderInfo(points);
     this._renderEvents(points);
     this._renderPoints(points);
   }
 
-  _renderInfo(points) {
-    render(this._container, this._infoContainer, RenderPosition.AFTERBEGIN);
-    const infoContainerElement = this._container.querySelector(`.trip-main__trip-info`);
-    const infoMainComponent = new InfoMain(points);
-    render(infoContainerElement, infoMainComponent, RenderPosition.BEFOREEND);
-    const infoCostComponent = new InfoCost(points);
-    render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
-  }
-
   _renderEvents(points) {
-    const eventsContainerElement = this._eventsContainer.getElement();
-
     if (points.length === 0) {
-      render(eventsContainerElement, this._noPointsComponent, RenderPosition.BEFOREEND);
+      render(this._container.getElement(), this._noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    render(eventsContainerElement, this._sortComponent, RenderPosition.BEFOREEND);
-    render(eventsContainerElement, this._daysContainer, RenderPosition.BEFOREEND);
+    render(this._container.getElement(), this._sortComponent, RenderPosition.BEFOREEND);
+    render(this._container.getElement(), this._daysContainer, RenderPosition.BEFOREEND);
   }
 
   _onFilterChange() {
