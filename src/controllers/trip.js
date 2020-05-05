@@ -8,7 +8,7 @@ import InfoMain from "../components/infoMain";
 import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 import {getDays, getFirstDay, getSortedPoints} from "../utils/common";
-import PointController, {EmptyPoint} from "./point";
+import PointController, {EmptyPoint, Mode} from "./point";
 
 export const INITIAL_DAYS_COUNT = 1;
 
@@ -56,7 +56,7 @@ export default class TripController {
 
     const newValue = [].concat(value.slice(0, index), newData, value.slice(index + 1));
     this._pointsModel.setPoints(newValue);
-    pointController.render(newValue[index]);
+    pointController.render(newValue[index], Mode.DEFAULT);
   }
 
   createPoint() {
@@ -68,7 +68,7 @@ export default class TripController {
 
     const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
     this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
-    this._creatingPoint.render(EmptyPoint, PointController.ADDING);
+    this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
   _renderDayComponentPoints(daysContainerElement, dayComponent, sortedPoints) {
@@ -77,7 +77,7 @@ export default class TripController {
     sortedPoints.forEach((point) => {
       const pointController = new PointController(dayContainer, this._onDataChange, this._onViewChange);
       this._pointControllers = this._pointControllers.concat(pointController);
-      pointController.render(point);
+      pointController.render(point, Mode.DEFAULT);
     });
   };
 
