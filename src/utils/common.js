@@ -2,6 +2,8 @@ import {TypesInPreposition} from "../const";
 import moment from "moment";
 import {SortType} from "../components/sort";
 
+const HIDDEN_CLASS = `visually-hidden`;
+
 export const formatTime = (date) => {
   return moment(date).format(`HH:mm`);
 };
@@ -94,4 +96,17 @@ export const getDays = (points) => {
 
 export const capitalize = (text) => {
   return text[0].toUpperCase() + text.slice(1);
+};
+
+
+export const hide = (element) => {
+  if (element) {
+    element.classList.add(HIDDEN_CLASS);
+  }
+};
+
+export const show = (element) => {
+  if (element) {
+    element.classList.remove(HIDDEN_CLASS);
+  }
 };

@@ -19,7 +19,7 @@ export default class TripController {
 
     this._pointControllers = [];
     this._infoContainer = new InfoContainer();
-    this._menuComponent = new MenuComponent();
+    /*this._menuComponent = new MenuComponent();*/
     this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
     this._daysContainer = new DaysContainer();
@@ -33,6 +33,18 @@ export default class TripController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._pointsModel.setFilterChangeHandler(this._onFilterChange);
 
+  }
+
+  hide() {
+    this._getTripEventContainer().hide();
+  }
+
+  show() {
+    this._getTripEventContainer().show();
+  }
+
+  _getTripEventContainer() {
+    return document.querySelector(`.trip-events`);
   }
 
   _onViewChange() {
@@ -120,7 +132,7 @@ export default class TripController {
   render() {
     const points = this._pointsModel.getPoints();
     this._renderInfo(points);
-    this._renderControls();
+    /*this._renderControls();*/
     this._renderEvents(points);
     this._renderPoints(points);
   }
@@ -134,11 +146,11 @@ export default class TripController {
     render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderControls() {
+/*  _renderControls() {
     const controlsContainerElement = this._container.querySelector(`.trip-main__trip-controls`);
     const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
     render(controlsFirstElement, this._menuComponent, RenderPosition.AFTEREND);
-  }
+  }*/
 
   _renderEvents(points) {
     const eventsContainerElement = document.querySelector(`.trip-events`);
