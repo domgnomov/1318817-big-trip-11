@@ -1,5 +1,4 @@
 import {generatePoints} from "./mock/point.js";
-import {hide, show} from "./utils/common.js";
 import TripController from "./controllers/trip";
 import PointsModel from "./models/points.js";
 import FilterController from "./controllers/filter";
@@ -31,20 +30,17 @@ addButton.addEventListener(`click`, () => {
 
 const statisticsComponent = new StatisticsComponent();
 render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
-hide(statisticsComponent.getElement());
-
-const eventsContainerElement = document.querySelector(`.trip-events`);
+statisticsComponent.hide();
 
 siteMenuComponent.setOnChange((menuItem) => {
-  debugger;
   switch (menuItem) {
     case MenuItem.STATS:
-      hide(eventsContainerElement);
-      show(statisticsComponent.getElement());
+      tripController.hideEventsContainer();
+      statisticsComponent.show();
       break;
     case MenuItem.TABLE:
-      hide(statisticsComponent.getElement());
-      show(eventsContainerElement);
+      tripController.showEventsContainer();
+      statisticsComponent.hide();
       break;
   }
 });
