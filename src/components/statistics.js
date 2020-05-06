@@ -4,16 +4,35 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const BAR_HEIGHT = 55;
 
-const renderMoneyChart = (moneyCtx) => {
-  debugger;
-  moneyCtx.height = BAR_HEIGHT * 6;
+const renderMoneyChart = (moneyCtx, points) => {
+  const moneyByPointType = [];
+  points
+    .slice()
+    .reduce(function(result, point) {
+      const type = point.type.toUpperCase();
+      if (!result[type]) {
+        result[type] = {type, price: 0};
+        moneyByPointType.push(result[type])
+      }
+      result[type].price += point.price;
+      return result;
+    }, {});
+
+  const sortedMoneyByPointType = moneyByPointType.sort(function (a, b) {
+    return b.price - a.price
+  });
+
+  const pointTypes = sortedMoneyByPointType.slice().map((point) => point.type);
+  const money = sortedMoneyByPointType.slice().map((point) => point.price);
+
+  moneyCtx.height = BAR_HEIGHT * pointTypes.length;
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`FLY`, `STAY`, `DRIVE`, `LOOK`, `RIDE`],
+      labels: pointTypes,
       datasets: [{
-        data: [400, 300, 200, 160 , 100],
+        data: money,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
