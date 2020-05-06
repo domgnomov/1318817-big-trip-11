@@ -19,10 +19,9 @@ infoController.render();
 const tripController = new TripController(pointsModel);
 tripController.render();
 
+const siteMenuContainer = mainElement.querySelector(`.trip-main__trip-controls .visually-hidden:nth-child(1)`);
 const siteMenuComponent = new SiteMenuComponent();
-const controlsContainerElement = mainElement.querySelector(`.trip-main__trip-controls`);
-const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
-render(controlsFirstElement, siteMenuComponent, RenderPosition.AFTEREND);
+render(siteMenuContainer, siteMenuComponent, RenderPosition.AFTEREND);
 
 const filterContainer = mainElement.querySelector(`.trip-main__trip-controls`);
 const filterController = new FilterController(filterContainer, pointsModel);
