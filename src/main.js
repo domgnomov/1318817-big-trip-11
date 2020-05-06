@@ -17,10 +17,6 @@ const mainElement = document.querySelector(`.trip-main`);
 const infoController = new InfoController(mainElement, pointsModel);
 infoController.render();
 
-const statisticsController = new StatisticsController(mainElement, pointsModel);
-statisticsController.render();
-statisticsController.hide();
-
 const tripController = new TripController(pointsModel);
 tripController.render();
 
@@ -36,6 +32,11 @@ const addButton = mainElement.querySelector(`.trip-main__event-add-btn`);
 addButton.addEventListener(`click`, () => {
   tripController.createPoint();
 });
+
+const statisticsContainer = document.querySelector(`.page-body__page-main .page-body__container`);
+const statisticsController = new StatisticsController(statisticsContainer, pointsModel);
+statisticsController.render();
+statisticsController.hide();
 
 siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
