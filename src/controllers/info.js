@@ -1,5 +1,5 @@
 import {render, RenderPosition, replace} from "../utils/render";
-import InfoComponent from "../components/infoContainer";
+import InfoComponent from "../components/info";
 
 export default class InfoController {
   constructor(container, pointsModel) {

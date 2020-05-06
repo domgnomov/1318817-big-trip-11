@@ -29,7 +29,7 @@ const getDateInterval = (points) => {
   return `${startDateWithMonthName} ${DELIMITER} ${endDateWithMonthName}`;
 };
 
-const createInfoContainerTemplate = (points) => {
+const createInfoTemplate = (points) => {
   const title = getTitle(points);
   const dateInterval = getDateInterval(points);
   const costValue = getCostValue(points);
@@ -49,7 +49,7 @@ const createInfoContainerTemplate = (points) => {
   );
 };
 
-export default class InfoContainer extends AbstractComponent {
+export default class Info extends AbstractComponent {
   constructor(points) {
     super();
 
@@ -57,6 +57,6 @@ export default class InfoContainer extends AbstractComponent {
   }
 
   getTemplate() {
-    return createInfoContainerTemplate(this._points);
+    return createInfoTemplate(this._points);
   }
 }

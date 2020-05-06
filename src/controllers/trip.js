@@ -1,23 +1,23 @@
 import NoPointsComponent from "../components/no-points";
 import SortComponent, {SortType} from "../components/sort";
-import DaysContainer from "../components/daysContainer";
+import DaysComponent from "../components/days";
 import {render, RenderPosition} from "../utils/render";
 import Day from "../components/day";
 import {getDays, getSortedPoints} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
-import EventsContainer from "../components/eventsContainer";
+import EventsComponent from "../components/events";
 
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
   constructor(pointsModel) {
-    this._container = new EventsContainer();
+    this._container = new EventsComponent();
     this._pointsModel = pointsModel;
 
     this._pointControllers = [];
     this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
-    this._daysContainer = new DaysContainer();
+    this._daysComponent = new DaysComponent();
     this._creatingPoint = null;
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -76,7 +76,7 @@ export default class TripController {
       return;
     }
 
-    const firstDayElement = this._daysContainer.getFirstDayElement();
+    const firstDayElement = this._daysComponent.getFirstDayElement();
 
     const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
     this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
@@ -94,7 +94,7 @@ export default class TripController {
   }
 
   _renderPoints(points) {
-    const daysContainer = this._daysContainer.getElement();
+    const daysContainer = this._daysComponent.getElement();
     daysContainer.innerHTML = ``;
 
     if (this._sortComponent.getSortType() !== SortType.DEFAULT) {
@@ -133,7 +133,7 @@ export default class TripController {
     }
 
     render(this._container.getElement(), this._sortComponent, RenderPosition.BEFOREEND);
-    render(this._container.getElement(), this._daysContainer, RenderPosition.BEFOREEND);
+    render(this._container.getElement(), this._daysComponent, RenderPosition.BEFOREEND);
   }
 
   _onFilterChange() {
