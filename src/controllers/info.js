@@ -7,9 +7,9 @@ export default class InfoController {
     this._pointsModel = pointsModel;
 
     this._infoComponent = null;
-    //TODO ?
+
     this._onDataChange = this._onDataChange.bind(this);
-    //TODO ?
+
     this._pointsModel.setDataChangeHandler(this._onDataChange);
   }
 
@@ -18,7 +18,7 @@ export default class InfoController {
 
     const oldComponent = this._infoComponent;
 
-    this._infoComponent = new InfoComponent(this._pointsModel.getPoints());
+    this._infoComponent = new InfoComponent(this._pointsModel);
 
     if (oldComponent) {
       replace(this._infoComponent, oldComponent);

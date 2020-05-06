@@ -50,13 +50,13 @@ const createInfoTemplate = (points) => {
 };
 
 export default class Info extends AbstractComponent {
-  constructor(points) {
+  constructor(pointsModel) {
     super();
 
-    this._points = points;
+    this._pointsModel = pointsModel;
   }
 
   getTemplate() {
-    return createInfoTemplate(this._points);
+    return createInfoTemplate(this._pointsModel.getPoints());
   }
 }

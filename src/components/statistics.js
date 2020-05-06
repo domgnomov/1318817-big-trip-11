@@ -2,7 +2,11 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+const BAR_HEIGHT = 55;
+
 const renderMoneyChart = (moneyCtx) => {
+  debugger;
+  moneyCtx.height = BAR_HEIGHT * 6;
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
@@ -70,6 +74,7 @@ const renderMoneyChart = (moneyCtx) => {
 }
 
 const renderTransportChart = (transportCtx) => {
+  transportCtx.height = BAR_HEIGHT * 4;
   return new Chart(transportCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
@@ -137,6 +142,7 @@ const renderTransportChart = (transportCtx) => {
 }
 
 const renderTimeSpendChart = (timeSpendCtx) => {
+  timeSpendCtx.height = BAR_HEIGHT * 4;
   return new Chart(timeSpendCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
@@ -224,8 +230,10 @@ const createStatisticsTemplate = () => {
 }
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor() {
+  constructor(pointsModel) {
     super();
+
+    this._pointsModel = pointsModel;
 
     this._moneyChart = null;
     this._transportChart = null;
@@ -259,17 +267,13 @@ export default class Statistics extends AbstractSmartComponent {
     const transportCtx = element.querySelector(`.statistics__chart--transport`);
     const timeSpendCtx = element.querySelector(`.statistics__chart--time`);
 
-// Рассчитаем высоту канваса в зависимости от того, сколько данных в него будет передаваться
-    const BAR_HEIGHT = 55;
-    moneyCtx.height = BAR_HEIGHT * 6;
-    transportCtx.height = BAR_HEIGHT * 4;
-    timeSpendCtx.height = BAR_HEIGHT * 4;
-
     this._resetCharts();
 
-    this._moneyChart = renderMoneyChart(moneyCtx);
-    this._transportChart = renderTransportChart(transportCtx);
-    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx);
+    const points = this._pointsModel.getPoints();
+
+    this._moneyChart = renderMoneyChart(moneyCtx, points);
+    this._transportChart = renderTransportChart(transportCtx, points);
+    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, points);
   }
 
   _resetCharts() {

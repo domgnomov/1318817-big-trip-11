@@ -57,7 +57,7 @@ export default class TripController {
         this._updatePoints();
       } else {
         this._pointsModel.addPoint(newData);
-        pointController._renderCharts(newData, Mode.DEFAULT);
+        pointController.render(newData, Mode.DEFAULT);
       }
     } else if (newData === null) {
       this._pointsModel.removePoint(oldData.id);
@@ -66,7 +66,7 @@ export default class TripController {
       const isSuccess = this._pointsModel.updatePoint(oldData.id, newData);
 
       if (isSuccess) {
-        pointController._renderCharts(newData, Mode.DEFAULT);
+        pointController.render(newData, Mode.DEFAULT);
       }
     }
   }
@@ -80,7 +80,7 @@ export default class TripController {
 
     const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
     this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
-    this._creatingPoint._renderCharts(EmptyPoint, Mode.ADDING);
+    this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
   _renderDayComponentPoints(daysContainerElement, dayComponent, sortedPoints) {
