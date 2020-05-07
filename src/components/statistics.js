@@ -1,26 +1,78 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {TransportPointTypes} from "../mock/point";
+import {getFormattedMilliseconds} from "../utils/common";
 
 const BAR_HEIGHT = 55;
 
-const renderMoneyChart = (moneyCtx, points) => {
-  const moneyByPointType = [];
+const getSortedPointTypesByMoney = (points) => {
+  const pointTypesByMoney = [];
   points
     .slice()
     .reduce(function(result, point) {
       const type = point.type.toUpperCase();
       if (!result[type]) {
         result[type] = {type, price: 0};
-        moneyByPointType.push(result[type])
+        pointTypesByMoney.push(result[type])
       }
       result[type].price += point.price;
       return result;
     }, {});
 
-  const sortedMoneyByPointType = moneyByPointType.sort(function (a, b) {
+  const sortedPointTypesByMoney = pointTypesByMoney.sort(function (a, b) {
     return b.price - a.price
   });
+
+  return sortedPointTypesByMoney;
+};
+
+const getSortedTransportByCount = (points) => {
+  const transportByCount = [];
+  points
+    .slice()
+    .filter((point) => TransportPointTypes.includes(point.type))
+    .reduce(function(result, point) {
+      const type = point.type.toUpperCase();
+      if (!result[type]) {
+        result[type] = {type, count: 0};
+        transportByCount.push(result[type])
+      }
+      result[type].count++;
+      return result;
+    }, {});
+
+  const sortedTransportByCount = transportByCount.sort(function (a, b) {
+    return b.count - a.count
+  });
+
+  return sortedTransportByCount;
+};
+
+const getSortedPointTypesByTimeSpend = (points) => {
+  const pointTypesByTimeSpend = [];
+  points
+    .slice()
+    .filter((point) => TransportPointTypes.includes(point.type))
+    .reduce(function(result, point) {
+      const type = point.type.toUpperCase();
+      if (!result[type]) {
+        result[type] = {type, timeSpend: 0};
+        pointTypesByTimeSpend.push(result[type])
+      }
+      result[type].timeSpend += point.getInterval();
+      return result;
+    }, {});
+
+  const sortedPointTypesByTimeSpend = pointTypesByTimeSpend.sort(function (a, b) {
+    return b.timeSpend - a.timeSpend
+  });
+
+  return sortedPointTypesByTimeSpend;
+};
+
+const renderMoneyChart = (moneyCtx, points) => {
+  const sortedMoneyByPointType = getSortedPointTypesByMoney(points)
 
   const pointTypes = sortedMoneyByPointType.slice().map((point) => point.type);
   const money = sortedMoneyByPointType.slice().map((point) => point.price);
@@ -92,15 +144,20 @@ const renderMoneyChart = (moneyCtx, points) => {
   });
 }
 
-const renderTransportChart = (transportCtx) => {
-  transportCtx.height = BAR_HEIGHT * 4;
+const renderTransportChart = (transportCtx, points) => {
+  const sortedTransportByCount = getSortedTransportByCount(points)
+
+  const transport = sortedTransportByCount.slice().map((point) => point.type);
+  const counts = sortedTransportByCount.slice().map((point) => point.count);
+
+  transportCtx.height = BAR_HEIGHT * transport.length;
   return new Chart(transportCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`FLY`, `DRIVE`,  `RIDE`],
+      labels: transport,
       datasets: [{
-        data: [4, 2, 1],
+        data: counts,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -160,15 +217,20 @@ const renderTransportChart = (transportCtx) => {
   });
 }
 
-const renderTimeSpendChart = (timeSpendCtx) => {
-  timeSpendCtx.height = BAR_HEIGHT * 4;
+const renderTimeSpendChart = (timeSpendCtx, points) => {
+  const sortedPointTypesByTimeSpend = getSortedPointTypesByTimeSpend(points);
+
+  const pointTypes = sortedPointTypesByTimeSpend.slice().map((point) => point.type);
+  const timeSpends = sortedPointTypesByTimeSpend.slice().map((point) => point.timeSpend);
+
+  timeSpendCtx.height = BAR_HEIGHT * pointTypes.length;
   return new Chart(timeSpendCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`FLY`, `DRIVE`,  `RIDE`],
+      labels: pointTypes,
       datasets: [{
-        data: [4, 2, 1],
+        data: timeSpends,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -183,7 +245,7 @@ const renderTimeSpendChart = (timeSpendCtx) => {
           color: `#000000`,
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `${val}x`
+          formatter: (val) => `${getFormattedMilliseconds(val)}`
         }
       },
       title: {

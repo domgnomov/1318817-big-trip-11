@@ -1,10 +1,10 @@
-import {getRandomIntegerNumber} from "../utils/common";
+import {getMillisecondsByInterval, getRandomIntegerNumber} from "../utils/common";
 
 let id = 1;
 
 const POINTS_COUNT = 20;
 
-const PointTypes = [
+export const TransportPointTypes = [
   `Taxi`,
   `Bus`,
   `Train`,
@@ -12,10 +12,15 @@ const PointTypes = [
   `Transport`,
   `Drive`,
   `Flight`,
+];
+
+const PlacePointTypes = [
   `Check-in`,
   `Sightseeing`,
   `Restaurant`,
 ];
+
+const PointTypes = TransportPointTypes.concat(PlacePointTypes);
 
 const Cities = [
   `Moscow`,
@@ -144,7 +149,9 @@ export const generatePoint = () => {
     price: getRandomIntegerNumber(1, 100),
     startDate,
     endDate,
-    duration,
+    getInterval: function () {
+      return getMillisecondsByInterval(startDate, endDate)
+    },
     description: randomDescriptions.get(city),
     photos: getRandomPhotos(1, 6),
     isFavorite: getRandomBoolean(),
