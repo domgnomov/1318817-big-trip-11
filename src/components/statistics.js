@@ -107,9 +107,9 @@ const renderChart = (ctx, labels, data, formatter) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: labels,
+      labels,
       datasets: [{
-        data: data,
+        data,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -124,7 +124,7 @@ const renderChart = (ctx, labels, data, formatter) => {
           color: `#000000`,
           anchor: `end`,
           align: `start`,
-          formatter: formatter
+          formatter
         }
       },
       title: {
