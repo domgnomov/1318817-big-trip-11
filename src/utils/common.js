@@ -2,6 +2,11 @@ import {TypesInPreposition} from "../const";
 import moment from "moment";
 import {SortType} from "../components/sort";
 
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = MINUTE * 60;
+const DAY = HOUR * 24;
+
 export const formatTime = (date) => {
   return moment(date).format(`HH:mm`);
 };
@@ -29,16 +34,19 @@ export const formatDateWithMonthName = (date, previousDate) => {
   return moment(date).format(`MMMM DD`);
 };
 
-export const getDuration = (startDate, endDate) => {
-  const diff = moment(endDate).diff(moment(startDate));
-  const duration = moment.duration(diff);
-  if (duration.days() > 0) {
-    return moment.utc(duration.asMilliseconds()).format(`DD[d] HH[h] mm[m]`);
-  } else if (duration.hours() > 0) {
-    return moment.utc(duration.asMilliseconds()).format(`HH[h] mm[m]`);
+export const getFormattedMilliseconds = (milliseconds) => {
+  if (milliseconds / DAY > 1 || milliseconds % DAY === 0) {
+    return moment.utc(milliseconds).format(`DD[d] HH[h] mm[m]`);
+  } else if (milliseconds / HOUR > 1 || milliseconds % HOUR === 0) {
+    return moment.utc(milliseconds).format(`HH[h] mm[m]`);
   } else {
-    return moment.utc(duration.asMilliseconds()).format(`mm[m]`);
+    return moment.utc(milliseconds).format(`mm[m]`);
   }
+};
+
+export const getMillisecondsByInterval = (startDate, endDate) => {
+  const diff = moment(endDate).diff(moment(startDate));
+  return moment.duration(diff).asMilliseconds();
 };
 
 export const getPreposition = (type) => {

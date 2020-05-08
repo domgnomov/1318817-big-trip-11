@@ -1,8 +1,13 @@
-import AbstractComponent from "./abstract-component";
+import AbstractComponent from "./abstract-component.js";
 import {formatDateWithMonthName} from "../utils/common";
 
-
 const DELIMITER = `&mdash;`;
+
+const getCostValue = (points) => {
+  return points.reduce(function (sum, current) {
+    return sum + current.price;
+  }, 0);
+};
 
 const getTitle = (points) => {
   const title = points.reduce(function (acc, current) {
@@ -24,27 +29,34 @@ const getDateInterval = (points) => {
   return `${startDateWithMonthName} ${DELIMITER} ${endDateWithMonthName}`;
 };
 
-const createInfoMainTemplate = (points) => {
+const createInfoTemplate = (points) => {
   const title = getTitle(points);
   const dateInterval = getDateInterval(points);
+  const costValue = getCostValue(points);
 
   return (
-    `<div class="trip-info__main">
+    `<section class="trip-main__trip-info  trip-info">
+      <div class="trip-info__main">
         <h1 class="trip-info__title">${title}</h1>
         
         <p class="trip-info__dates">${dateInterval}</p>
-     </div>`
+      </div>
+
+      <p class="trip-info__cost">
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${costValue}</span>
+      </p>
+    </section>`
   );
 };
 
-export default class InfoMain extends AbstractComponent {
-  constructor(points) {
+export default class Info extends AbstractComponent {
+  constructor(pointsModel) {
     super();
 
-    this._points = points;
+    this._pointsModel = pointsModel;
   }
 
   getTemplate() {
-    return createInfoMainTemplate(this._points);
+    return createInfoTemplate(this._pointsModel.getPoints());
   }
 }

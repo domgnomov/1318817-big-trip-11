@@ -1,5 +1,6 @@
-import {formatTime, formatDateTime, getDuration, getPreposition} from "../utils/common.js";
+import {formatTime, formatDateTime, getPreposition} from "../utils/common.js";
 import AbstractComponent from "./abstract-component";
+import {getFormattedMilliseconds} from "../utils/common";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -16,7 +17,7 @@ const createOffersMarkup = (offers) => {
 };
 
 const createPointTemplate = (point) => {
-  const {type, city, offers, price, startDate, endDate} = point;
+  const {type, city, offers, price, startDate, endDate, getInterval} = point;
 
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
@@ -27,7 +28,7 @@ const createPointTemplate = (point) => {
   const startTime = formatTime(startDate);
   const endTime = formatTime(endDate);
 
-  const duration = getDuration(startDate, endDate);
+  const interval = getFormattedMilliseconds(getInterval());
 
   return (
     `<li class="trip-events__item">
@@ -43,7 +44,7 @@ const createPointTemplate = (point) => {
             &mdash;
             <time class="event__end-time" datetime="${endDateTime}">${endTime}</time>
           </p>
-          <p class="event__duration">${duration}</p>
+          <p class="event__duration">${interval}</p>
         </div>
 
         <p class="event__price">

@@ -1,28 +1,23 @@
-import InfoContainer from "../components/infoContainer";
-import MenuComponent from "../components/menu";
 import NoPointsComponent from "../components/no-points";
 import SortComponent, {SortType} from "../components/sort";
-import DaysContainer from "../components/daysContainer";
+import DaysComponent from "../components/days";
 import {render, RenderPosition} from "../utils/render";
-import InfoMain from "../components/infoMain";
-import InfoCost from "../components/infoCost";
 import Day from "../components/day";
 import {getDays, getSortedPoints} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
+import EventsComponent from "../components/events";
 
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
-  constructor(container, pointsModel) {
-    this._container = container;
+  constructor(pointsModel) {
+    this._container = new EventsComponent();
     this._pointsModel = pointsModel;
 
     this._pointControllers = [];
-    this._infoContainer = new InfoContainer();
-    this._menuComponent = new MenuComponent();
     this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
-    this._daysContainer = new DaysContainer();
+    this._daysComponent = new DaysComponent();
     this._creatingPoint = null;
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -33,6 +28,14 @@ export default class TripController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._pointsModel.setFilterChangeHandler(this._onFilterChange);
 
+  }
+
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
   }
 
   _onViewChange() {
@@ -73,7 +76,7 @@ export default class TripController {
       return;
     }
 
-    const firstDayElement = this._daysContainer.getFirstDayElement();
+    const firstDayElement = this._daysComponent.getFirstDayElement();
 
     const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
     this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
@@ -91,7 +94,7 @@ export default class TripController {
   }
 
   _renderPoints(points) {
-    const daysContainer = this._daysContainer.getElement();
+    const daysContainer = this._daysComponent.getElement();
     daysContainer.innerHTML = ``;
 
     if (this._sortComponent.getSortType() !== SortType.DEFAULT) {
@@ -119,37 +122,18 @@ export default class TripController {
 
   render() {
     const points = this._pointsModel.getPoints();
-    this._renderInfo(points);
-    this._renderControls();
     this._renderEvents(points);
     this._renderPoints(points);
   }
 
-  _renderInfo(points) {
-    render(this._container, this._infoContainer, RenderPosition.AFTERBEGIN);
-    const infoContainerElement = this._container.querySelector(`.trip-main__trip-info`);
-    const infoMainComponent = new InfoMain(points);
-    render(infoContainerElement, infoMainComponent, RenderPosition.BEFOREEND);
-    const infoCostComponent = new InfoCost(points);
-    render(infoContainerElement, infoCostComponent, RenderPosition.BEFOREEND);
-  }
-
-  _renderControls() {
-    const controlsContainerElement = this._container.querySelector(`.trip-main__trip-controls`);
-    const controlsFirstElement = controlsContainerElement.querySelector(`.visually-hidden:nth-child(1)`);
-    render(controlsFirstElement, this._menuComponent, RenderPosition.AFTEREND);
-  }
-
   _renderEvents(points) {
-    const eventsContainerElement = document.querySelector(`.trip-events`);
-
     if (points.length === 0) {
-      render(eventsContainerElement, this._noPointsComponent, RenderPosition.BEFOREEND);
+      render(this._container.getElement(), this._noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    render(eventsContainerElement, this._sortComponent, RenderPosition.BEFOREEND);
-    render(eventsContainerElement, this._daysContainer, RenderPosition.BEFOREEND);
+    render(this._container.getElement(), this._sortComponent, RenderPosition.BEFOREEND);
+    render(this._container.getElement(), this._daysComponent, RenderPosition.BEFOREEND);
   }
 
   _onFilterChange() {
