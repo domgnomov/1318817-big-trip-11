@@ -149,8 +149,8 @@ export const generatePoint = () => {
     price: getRandomIntegerNumber(1, 100),
     startDate,
     endDate,
-    getInterval: function () {
-      return getMillisecondsByInterval(startDate, endDate)
+    getInterval() {
+      return getMillisecondsByInterval(startDate, endDate);
     },
     description: randomDescriptions.get(city),
     photos: getRandomPhotos(1, 6),

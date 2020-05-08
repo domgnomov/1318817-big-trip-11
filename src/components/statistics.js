@@ -10,18 +10,18 @@ const getSortedPointTypesByMoney = (points) => {
   const pointTypesByMoney = [];
   points
     .slice()
-    .reduce(function(result, point) {
+    .reduce(function (result, point) {
       const type = point.type.toUpperCase();
       if (!result[type]) {
         result[type] = {type, price: 0};
-        pointTypesByMoney.push(result[type])
+        pointTypesByMoney.push(result[type]);
       }
       result[type].price += point.price;
       return result;
     }, {});
 
   const sortedPointTypesByMoney = pointTypesByMoney.sort(function (a, b) {
-    return b.price - a.price
+    return b.price - a.price;
   });
 
   return sortedPointTypesByMoney;
@@ -32,18 +32,18 @@ const getSortedTransportByCount = (points) => {
   points
     .slice()
     .filter((point) => TransportPointTypes.includes(point.type))
-    .reduce(function(result, point) {
+    .reduce(function (result, point) {
       const type = point.type.toUpperCase();
       if (!result[type]) {
         result[type] = {type, count: 0};
-        transportByCount.push(result[type])
+        transportByCount.push(result[type]);
       }
       result[type].count++;
       return result;
     }, {});
 
   const sortedTransportByCount = transportByCount.sort(function (a, b) {
-    return b.count - a.count
+    return b.count - a.count;
   });
 
   return sortedTransportByCount;
@@ -54,25 +54,25 @@ const getSortedPointTypesByTimeSpend = (points) => {
   points
     .slice()
     .filter((point) => TransportPointTypes.includes(point.type))
-    .reduce(function(result, point) {
+    .reduce(function (result, point) {
       const type = point.type.toUpperCase();
       if (!result[type]) {
         result[type] = {type, timeSpend: 0};
-        pointTypesByTimeSpend.push(result[type])
+        pointTypesByTimeSpend.push(result[type]);
       }
       result[type].timeSpend += point.getInterval();
       return result;
     }, {});
 
   const sortedPointTypesByTimeSpend = pointTypesByTimeSpend.sort(function (a, b) {
-    return b.timeSpend - a.timeSpend
+    return b.timeSpend - a.timeSpend;
   });
 
   return sortedPointTypesByTimeSpend;
 };
 
 const renderMoneyChart = (moneyCtx, points) => {
-  const sortedMoneyByPointType = getSortedPointTypesByMoney(points)
+  const sortedMoneyByPointType = getSortedPointTypesByMoney(points);
 
   const pointTypes = sortedMoneyByPointType.slice().map((point) => point.type);
   const money = sortedMoneyByPointType.slice().map((point) => point.price);
@@ -97,8 +97,8 @@ const renderMoneyChart = (moneyCtx, points) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `€ ${val}`
         }
       },
@@ -142,10 +142,10 @@ const renderMoneyChart = (moneyCtx, points) => {
       }
     }
   });
-}
+};
 
 const renderTransportChart = (transportCtx, points) => {
-  const sortedTransportByCount = getSortedTransportByCount(points)
+  const sortedTransportByCount = getSortedTransportByCount(points);
 
   const transport = sortedTransportByCount.slice().map((point) => point.type);
   const counts = sortedTransportByCount.slice().map((point) => point.count);
@@ -170,8 +170,8 @@ const renderTransportChart = (transportCtx, points) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `${val}x`
         }
       },
@@ -215,7 +215,7 @@ const renderTransportChart = (transportCtx, points) => {
       }
     }
   });
-}
+};
 
 const renderTimeSpendChart = (timeSpendCtx, points) => {
   const sortedPointTypesByTimeSpend = getSortedPointTypesByTimeSpend(points);
@@ -243,8 +243,8 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `${getFormattedMilliseconds(val)}`
         }
       },
@@ -288,7 +288,7 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
       }
     }
   });
-}
+};
 
 const createStatisticsTemplate = () => {
   return (
@@ -307,8 +307,8 @@ const createStatisticsTemplate = () => {
         <canvas class="statistics__chart  statistics__chart--time" width="900"></canvas>
       </div>
     </section>`
-  )
-}
+  );
+};
 
 export default class Statistics extends AbstractSmartComponent {
   constructor(pointsModel) {
@@ -361,7 +361,7 @@ export default class Statistics extends AbstractSmartComponent {
     this._resetChart(this._moneyChart);
     this._resetChart(this._transportChart);
     this._resetChart(this._timeSpendChart);
-  };
+  }
 
   _resetChart(chart) {
     if (chart) {
