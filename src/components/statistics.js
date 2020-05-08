@@ -76,72 +76,9 @@ const renderMoneyChart = (moneyCtx, points) => {
 
   const pointTypes = sortedMoneyByPointType.slice().map((point) => point.type);
   const money = sortedMoneyByPointType.slice().map((point) => point.price);
+  const formatted = (val) => `€ ${val}`;
 
-  moneyCtx.height = BAR_HEIGHT * pointTypes.length;
-  return new Chart(moneyCtx, {
-    plugins: [ChartDataLabels],
-    type: `horizontalBar`,
-    data: {
-      labels: pointTypes,
-      datasets: [{
-        data: money,
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
-      }]
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13
-          },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `€ ${val}`
-        }
-      },
-      title: {
-        display: true,
-        text: `MONEY`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          minBarLength: 50
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: false,
-      }
-    }
-  });
+  return renderChart(moneyCtx, pointTypes, money, formatted);
 };
 
 const renderTransportChart = (transportCtx, points) => {
@@ -149,72 +86,9 @@ const renderTransportChart = (transportCtx, points) => {
 
   const transport = sortedTransportByCount.slice().map((point) => point.type);
   const counts = sortedTransportByCount.slice().map((point) => point.count);
+  const formatted = (val) => `${val}x`;
 
-  transportCtx.height = BAR_HEIGHT * transport.length;
-  return new Chart(transportCtx, {
-    plugins: [ChartDataLabels],
-    type: `horizontalBar`,
-    data: {
-      labels: transport,
-      datasets: [{
-        data: counts,
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
-      }]
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13
-          },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `${val}x`
-        }
-      },
-      title: {
-        display: true,
-        text: `TRANSPORT`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          minBarLength: 50
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: false,
-      }
-    }
-  });
+  return renderChart(transportCtx, transport, counts, formatted);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, points) => {
@@ -222,15 +96,20 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
 
   const pointTypes = sortedPointTypesByTimeSpend.slice().map((point) => point.type);
   const timeSpends = sortedPointTypesByTimeSpend.slice().map((point) => point.timeSpend);
+  const formatted = (val) => `${getFormattedMilliseconds(val)}`;
 
-  timeSpendCtx.height = BAR_HEIGHT * pointTypes.length;
-  return new Chart(timeSpendCtx, {
+  return renderChart(timeSpendCtx, pointTypes, timeSpends, formatted);
+};
+
+const renderChart = (ctx, labels, data, formatter) => {
+  ctx.height = BAR_HEIGHT * labels.length;
+  return new Chart(ctx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: pointTypes,
+      labels: labels,
       datasets: [{
-        data: timeSpends,
+        data: data,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -245,7 +124,7 @@ const renderTimeSpendChart = (timeSpendCtx, points) => {
           color: `#000000`,
           anchor: `end`,
           align: `start`,
-          formatter: (val) => `${getFormattedMilliseconds(val)}`
+          formatter: formatter
         }
       },
       title: {
