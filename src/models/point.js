@@ -12,7 +12,7 @@ export default class Point {
     this.city = data[`destination`].name;
     this.pictures = data[`destination`].pictures;
     this.description = data[`destination`].description;
-    this.getInterval = function() {
+    this.getInterval = function () {
       return getMillisecondsByInterval(this.startDate, this.endDate);
     };
 

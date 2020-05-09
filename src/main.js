@@ -54,7 +54,7 @@ siteMenuComponent.setOnChange((menuItem) => {
 
 api.getPoints()
   .then((points) => {
-    pointsModel.setPoints(points);;
+    pointsModel.setPoints(points);
     infoController.render();
     tripController.render();
     filterController.render();
