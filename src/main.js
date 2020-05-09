@@ -6,7 +6,11 @@ import {render, RenderPosition} from "./utils/render.js";
 import SiteMenuComponent, {MenuItem} from "./components/menu.js";
 import InfoController from "./controllers/info";
 import StatisticsController from "./controllers/statistics";
+import API from "./api";
 
+const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
+
+const api = new API(AUTHORIZATION);
 
 const allPoints = generatePoints();
 const pointsModel = new PointsModel();
@@ -15,10 +19,8 @@ pointsModel.setPoints(allPoints);
 const mainElement = document.querySelector(`.trip-main`);
 
 const infoController = new InfoController(mainElement, pointsModel);
-infoController.render();
 
 const tripController = new TripController(pointsModel);
-tripController.render();
 
 const siteMenuContainer = mainElement.querySelector(`.trip-main__trip-controls .visually-hidden:nth-child(1)`);
 const siteMenuComponent = new SiteMenuComponent();
@@ -26,7 +28,6 @@ render(siteMenuContainer, siteMenuComponent, RenderPosition.AFTEREND);
 
 const filterContainer = mainElement.querySelector(`.trip-main__trip-controls`);
 const filterController = new FilterController(filterContainer, pointsModel);
-filterController.render();
 
 const addButton = mainElement.querySelector(`.trip-main__event-add-btn`);
 addButton.addEventListener(`click`, () => {
@@ -50,3 +51,12 @@ siteMenuComponent.setOnChange((menuItem) => {
       break;
   }
 });
+
+api.getPoints()
+  .then((points) => {
+    pointsModel.setPoints(points);;
+    infoController.render();
+    tripController.render();
+    filterController.render();
+  });
+
