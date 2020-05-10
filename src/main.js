@@ -25,7 +25,7 @@ const mainElement = document.querySelector(`.trip-main`);
 const infoController = new InfoController(mainElement, pointsModel);
 
 const eventsComponent = new EventsComponent();
-const tripController = new TripController(pointsModel, eventsComponent, offersModel, destinationsModel);
+const tripController = new TripController(pointsModel, eventsComponent, offersModel, destinationsModel, api);
 
 const loadingPointComponent = new PointLoadingComponent();
 render(eventsComponent.getElement(), loadingPointComponent, RenderPosition.BEFOREEND);

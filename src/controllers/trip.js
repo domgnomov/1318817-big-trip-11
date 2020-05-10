@@ -9,11 +9,12 @@ import PointController, {EmptyPoint, Mode} from "./point";
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
-  constructor(pointsModel, eventsComponent, offersModel, destinationsModel) {
+  constructor(pointsModel, eventsComponent, offersModel, destinationsModel, api) {
     this._container = eventsComponent;
     this._pointsModel = pointsModel;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this._api = api;
 
     this._pointControllers = [];
     this._noPointsComponent = new NoPointsComponent();
@@ -57,18 +58,37 @@ export default class TripController {
         pointController.destroy();
         this._updatePoints();
       } else {
-        this._pointsModel.addPoint(newData);
-        pointController.render(newData, Mode.DEFAULT);
+        this._api.createPoint(newData)
+          .then((point) => {
+            this._pointsModel.addPoint(point);
+            pointController.render(point, Mode.DEFAULT);
+          })
+          .catch(() => {
+            //TODO
+          });
       }
     } else if (newData === null) {
-      this._pointsModel.removePoint(oldData.id);
-      this._updatePoints();
+      this._api.deletePoint(oldData.id)
+        .then(() => {
+          this._pointsModel.removePoint(oldData.id);
+          this._updatePoints();
+        })
+        .catch(() => {
+          //TODO
+        });
     } else {
-      const isSuccess = this._pointsModel.updatePoint(oldData.id, newData);
+      this._api.updatePoint(oldData.id, newData)
+        .then((point) => {
+          const isSuccess = this._pointsModel.updatePoint(oldData.id, point);
 
-      if (isSuccess) {
-        pointController.render(newData, Mode.DEFAULT);
-      }
+          if (isSuccess) {
+            pointController.render(point, Mode.DEFAULT);
+            this._updatePoints();
+          }
+        })
+        .catch(() => {
+          //TODO
+        });
     }
   }
 
