@@ -12,8 +12,9 @@ import DestinationsModel from "./models/destinations";
 import OffersModel from "./models/offers";
 
 const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
+const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
 
-const api = new API(AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
 const destinationsModel = new DestinationsModel();

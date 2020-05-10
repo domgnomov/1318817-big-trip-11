@@ -19,6 +19,25 @@ export default class Point {
     this.getInterval = this.getInterval.bind(this);
   }
 
+  toRAW() {
+    debugger;
+    const destination = {
+      name: this.city,
+      pictures: this.pictures,
+      description: this.description,
+    }
+    return {
+      "id": this.id,
+      "type": this.type.toLowerCase(),
+      "is_favorite": this.isFavorite,
+      "base_price": this.price,
+      "offers": this.offers,
+      "date_from": this.startDate,
+      "date_to": this.endDate,
+      "destination": destination,
+    };
+  }
+
   static parsePoint(data) {
     return new Point(data);
   }
