@@ -7,6 +7,8 @@ import SiteMenuComponent, {MenuItem} from "./components/menu.js";
 import InfoController from "./controllers/info";
 import StatisticsController from "./controllers/statistics";
 import API from "./api";
+import PointLoadingComponent from "./components/pointLoading";
+import EventsComponent from "./components/events";
 
 const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
 
@@ -20,7 +22,11 @@ const mainElement = document.querySelector(`.trip-main`);
 
 const infoController = new InfoController(mainElement, pointsModel);
 
-const tripController = new TripController(pointsModel);
+const eventsComponent = new EventsComponent();
+const tripController = new TripController(pointsModel, eventsComponent);
+
+const loadingPointComponent = new PointLoadingComponent();
+render(eventsComponent.getElement(), loadingPointComponent, RenderPosition.BEFOREEND);
 
 const siteMenuContainer = mainElement.querySelector(`.trip-main__trip-controls .visually-hidden:nth-child(1)`);
 const siteMenuComponent = new SiteMenuComponent();
@@ -54,6 +60,7 @@ siteMenuComponent.setOnChange((menuItem) => {
 
 api.getPoints()
   .then((points) => {
+    loadingPointComponent.hide();
     pointsModel.setPoints(points);
     infoController.render();
     tripController.render();

@@ -5,13 +5,12 @@ import {render, RenderPosition} from "../utils/render";
 import Day from "../components/day";
 import {getDays, getSortedPoints} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
-import EventsComponent from "../components/events";
 
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
-  constructor(pointsModel) {
-    this._container = new EventsComponent();
+  constructor(pointsModel, eventsComponent) {
+    this._container = eventsComponent;
     this._pointsModel = pointsModel;
 
     this._pointControllers = [];
