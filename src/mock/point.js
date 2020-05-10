@@ -1,10 +1,10 @@
 import {getMillisecondsByInterval, getRandomIntegerNumber} from "../utils/common";
-
+/*
 let id = 1;
 
-const POINTS_COUNT = 20;
+const POINTS_COUNT = 20;*/
 
-export const TransportPointTypes = [
+/*export const TransportPointTypes = [
   `Taxi`,
   `Bus`,
   `Train`,
@@ -18,18 +18,18 @@ const PlacePointTypes = [
   `Check-in`,
   `Sightseeing`,
   `Restaurant`,
-];
+];*/
 
-const PointTypes = TransportPointTypes.concat(PlacePointTypes);
+/*const PointTypes = TransportPointTypes.concat(PlacePointTypes);
 
 const Cities = [
   `Moscow`,
   `New-York`,
   `London`,
   `Paris`,
-];
+];*/
 
-const Offers = {
+/*const Offers = {
   luggage: {
     name: `luggage`,
     title: `Add luggage`,
@@ -55,8 +55,9 @@ const Offers = {
     title: `Travel by train`,
     price: 40
   },
-};
+};*/
 
+/*
 const Descriptions = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
@@ -70,24 +71,25 @@ const Descriptions = [
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`,
 ];
+*/
 
-const getRandomArrayPoint = (array) => {
+/*const getRandomArrayPoint = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
   return array[randomIndex];
-};
-
+};*/
+/*
 const getRandomArrayPoints = (array, min, max) => {
   const randomIndex = getRandomIntegerNumber(min, max);
 
   return array.slice(min, randomIndex);
-};
+};*/
 
-const getDescription = (array, min, max) => {
+/*const getDescription = (array, min, max) => {
   return getRandomArrayPoints(array, min, max).join(` `);
-};
+};*/
 
-const generateRandomOffers = () => {
+/*const generateRandomOffers = () => {
   return new Map(PointTypes.map((type) => [type,
     new Array(getRandomIntegerNumber(1, 6))
         .fill(``)
@@ -100,29 +102,32 @@ const generateRandomOffers = () => {
           return offer;
         })
   ]));
-};
+};*/
 
-const generateDescriptions = () => {
+/*const generateDescriptions = () => {
   return new Map(Cities.map((city) => [city,
     new Array(getDescription(Descriptions, 1, 6))]));
-};
+};*/
 
-export const randomOffers = generateRandomOffers();
-export const randomDescriptions = generateDescriptions();
+/*export const randomOffers = generateRandomOffers();
+export const randomDescriptions = generateDescriptions();*/
 
-const getRandomPhotos = (min, max) => {
+/*const getRandomPhotos = (min, max) => {
   const randomIndex = getRandomIntegerNumber(min, max);
   return Array(randomIndex)
     .fill(``)
     .map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
-};
+};*/
 
+/*
 const getRandomBoolean = () => {
   const randomInteger = getRandomIntegerNumber(0, 2);
 
   return randomInteger === 1;
 };
+*/
 
+/*
 export const generatePoints = () => {
   return new Array(POINTS_COUNT)
     .fill(``)
@@ -131,8 +136,9 @@ export const generatePoints = () => {
       return a.startDate.getTime() - b.startDate.getTime();
     });
 };
+*/
 
-export const generatePoint = () => {
+/*export const generatePoint = () => {
   const type = getRandomArrayPoint(PointTypes);
   const duration = getRandomIntegerNumber(1, 31);
   const startDate = new Date();
@@ -156,4 +162,4 @@ export const generatePoint = () => {
     photos: getRandomPhotos(1, 6),
     isFavorite: getRandomBoolean(),
   };
-};
+};*/

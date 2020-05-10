@@ -9,9 +9,11 @@ import PointController, {EmptyPoint, Mode} from "./point";
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
-  constructor(pointsModel, eventsComponent) {
+  constructor(pointsModel, eventsComponent, offersModel, destinationsModel) {
     this._container = eventsComponent;
     this._pointsModel = pointsModel;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._pointControllers = [];
     this._noPointsComponent = new NoPointsComponent();
@@ -86,7 +88,7 @@ export default class TripController {
     render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
     const dayContainer = dayComponent.getElement().querySelector(`.trip-events__list`);
     sortedPoints.forEach((point) => {
-      const pointController = new PointController(dayContainer, this._onDataChange, this._onViewChange);
+      const pointController = new PointController(dayContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel);
       this._pointControllers = this._pointControllers.concat(pointController);
       pointController.render(point, Mode.DEFAULT);
     });

@@ -22,8 +22,10 @@ export const EmptyPoint = {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, offersModel, destinationsModel) {
     this._container = container;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._onViewChange = onViewChange;
     this._pointComponent = null;
@@ -40,7 +42,7 @@ export default class PointController {
     this._mode = mode;
 
     this._pointComponent = new PointComponent(point);
-    this._pointEditComponent = new PointEditComponent(point);
+    this._pointEditComponent = new PointEditComponent(point, this._offersModel, this._destinationsModel);
 
     this._pointComponent.setEditButtonClickHandler(() => {
       this._replacePointToEdit();

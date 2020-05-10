@@ -1,7 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {TransportPointTypes} from "../mock/point";
 import {getFormattedMilliseconds} from "../utils/common";
 
 const BAR_HEIGHT = 55;
@@ -27,11 +26,11 @@ const getSortedPointTypesByMoney = (points) => {
   return sortedPointTypesByMoney;
 };
 
-const getSortedTransportByCount = (points) => {
+const getSortedTransportByCount = (points, transportOfferTypes) => {
   const transportByCount = [];
   points
     .slice()
-    .filter((point) => TransportPointTypes.includes(point.type))
+    .filter((point) => transportOfferTypes.includes(point.type))
     .reduce(function (result, point) {
       const type = point.type.toUpperCase();
       if (!result[type]) {
@@ -49,11 +48,11 @@ const getSortedTransportByCount = (points) => {
   return sortedTransportByCount;
 };
 
-const getSortedPointTypesByTimeSpend = (points) => {
+const getSortedPointTypesByTimeSpend = (points, transportOfferTypes) => {
   const pointTypesByTimeSpend = [];
   points
     .slice()
-    .filter((point) => TransportPointTypes.includes(point.type))
+    .filter((point) => transportOfferTypes.includes(point.type))
     .reduce(function (result, point) {
       const type = point.type.toUpperCase();
       if (!result[type]) {
@@ -81,8 +80,8 @@ const renderMoneyChart = (moneyCtx, points) => {
   return renderChart(moneyCtx, pointTypes, money, formatted);
 };
 
-const renderTransportChart = (transportCtx, points) => {
-  const sortedTransportByCount = getSortedTransportByCount(points);
+const renderTransportChart = (transportCtx, points, transportOfferTypes) => {
+  const sortedTransportByCount = getSortedTransportByCount(points, transportOfferTypes);
 
   const transport = sortedTransportByCount.slice().map((point) => point.type);
   const counts = sortedTransportByCount.slice().map((point) => point.count);
@@ -91,8 +90,8 @@ const renderTransportChart = (transportCtx, points) => {
   return renderChart(transportCtx, transport, counts, formatted);
 };
 
-const renderTimeSpendChart = (timeSpendCtx, points) => {
-  const sortedPointTypesByTimeSpend = getSortedPointTypesByTimeSpend(points);
+const renderTimeSpendChart = (timeSpendCtx, points, transportOfferTypes) => {
+  const sortedPointTypesByTimeSpend = getSortedPointTypesByTimeSpend(points, transportOfferTypes);
 
   const pointTypes = sortedPointTypesByTimeSpend.slice().map((point) => point.type);
   const timeSpends = sortedPointTypesByTimeSpend.slice().map((point) => point.timeSpend);
@@ -190,10 +189,11 @@ const createStatisticsTemplate = () => {
 };
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor(pointsModel) {
+  constructor(pointsModel, offersModel) {
     super();
 
     this._pointsModel = pointsModel;
+    this.__offersModel = offersModel;
 
     this._moneyChart = null;
     this._transportChart = null;
@@ -230,10 +230,11 @@ export default class Statistics extends AbstractSmartComponent {
     this._resetCharts();
 
     const points = this._pointsModel.getPoints();
+    const transportOfferTypes = this.__offersModel.getTransportOfferTypes();
 
     this._moneyChart = renderMoneyChart(moneyCtx, points);
-    this._transportChart = renderTransportChart(transportCtx, points);
-    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, points);
+    this._transportChart = renderTransportChart(transportCtx, points, transportOfferTypes);
+    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, points, transportOfferTypes);
   }
 
   _resetCharts() {

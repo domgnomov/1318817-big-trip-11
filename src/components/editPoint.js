@@ -1,6 +1,5 @@
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
-import {randomOffers, randomDescriptions} from "../mock/point.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
@@ -8,10 +7,11 @@ import "flatpickr/dist/flatpickr.min.css";
 const createOffersMarkup = (offers) => {
   return offers
     .map((offer) => {
+      const title = offer.title.toLowerCase();
       return (
         `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.name}-1" type="checkbox" name="event-offer-${offer.name}" checked>
-            <label class="event__offer-label" for="event-offer-${offer.name}-1">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-1" type="checkbox" name="event-offer-${title}" checked>
+            <label class="event__offer-label" for="event-offer-${title}-1">
               <span class="event__offer-title">${offer.title}</span>
               &plus;
               &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
@@ -181,10 +181,12 @@ const parseFormData = (formData) => {
 };
 
 export default class EditPoint extends AbstractSmartComponent {
-  constructor(point) {
+  constructor(point, offersModel, destinationsModel) {
     super();
 
     this._point = point;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._editedCity = point.city;
     this._editedType = point.type;
@@ -304,7 +306,7 @@ export default class EditPoint extends AbstractSmartComponent {
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
         this._editedType = capitalize(evt.target.value);
-        this._editedOffers = randomOffers.get(this._point.type);
+        this._editedOffers = this._offersModel.getOffersByType(this._editedType);
         this.rerender();
       });
     });
@@ -312,7 +314,7 @@ export default class EditPoint extends AbstractSmartComponent {
     element.querySelector(`.event__input--destination `)
       .addEventListener(`change`, (evt) => {
         this._editedCity = capitalize(evt.target.value);
-        this._editedDescription = randomDescriptions.get(this._editedCity);
+        this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
         this.rerender();
       });
   }

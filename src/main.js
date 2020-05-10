@@ -1,4 +1,3 @@
-import {generatePoints} from "./mock/point.js";
 import TripController from "./controllers/trip";
 import PointsModel from "./models/points.js";
 import FilterController from "./controllers/filter";
@@ -9,21 +8,23 @@ import StatisticsController from "./controllers/statistics";
 import API from "./api";
 import PointLoadingComponent from "./components/pointLoading";
 import EventsComponent from "./components/events";
+import DestinationsModel from "./models/destinations";
+import OffersModel from "./models/offers";
 
 const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
 
 const api = new API(AUTHORIZATION);
 
-const allPoints = generatePoints();
 const pointsModel = new PointsModel();
-pointsModel.setPoints(allPoints);
+const destinationsModel = new DestinationsModel();
+const offersModel = new OffersModel();
 
 const mainElement = document.querySelector(`.trip-main`);
 
 const infoController = new InfoController(mainElement, pointsModel);
 
 const eventsComponent = new EventsComponent();
-const tripController = new TripController(pointsModel, eventsComponent);
+const tripController = new TripController(pointsModel, eventsComponent, offersModel, destinationsModel);
 
 const loadingPointComponent = new PointLoadingComponent();
 render(eventsComponent.getElement(), loadingPointComponent, RenderPosition.BEFOREEND);
@@ -41,7 +42,7 @@ addButton.addEventListener(`click`, () => {
 });
 
 const statisticsContainer = document.querySelector(`.page-body__page-main .page-body__container`);
-const statisticsController = new StatisticsController(statisticsContainer, pointsModel);
+const statisticsController = new StatisticsController(statisticsContainer, pointsModel, offersModel);
 statisticsController.render();
 statisticsController.hide();
 
@@ -58,10 +59,20 @@ siteMenuComponent.setOnChange((menuItem) => {
   }
 });
 
+api.getDestinations()
+  .then((destinations) => {
+    destinationsModel.setDestinations(destinations)
+  });
+
+api.getOffers()
+  .then((offers) => {
+    offersModel.setOffers(offers)
+  });
+
 api.getPoints()
   .then((points) => {
-    loadingPointComponent.hide();
     pointsModel.setPoints(points);
+    loadingPointComponent.hide();
     infoController.render();
     tripController.render();
     filterController.render();

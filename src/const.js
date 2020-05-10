@@ -1,4 +1,4 @@
-export const TypesInPreposition = [
+export const PlaceTypes = [
   `Check-in`,
   `Sightseeing`,
   `Restaurant`,
