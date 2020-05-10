@@ -4,6 +4,11 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
+};
+
 const createOffersMarkup = (offers) => {
   return offers
     .map((offer) => {
@@ -24,11 +29,14 @@ const createOffersMarkup = (offers) => {
 
 const createEditPointTemplate = (point, options = {}) => {
   const {price, isFavorite} = point;
-  const {city, type, offers} = options;
+  const {city, type, offers, externalData} = options;
 
   const typePreposition = getPreposition(type);
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
+
+  const deleteButtonText = externalData.deleteButtonText;
+  const saveButtonText = externalData.saveButtonText;
 
   return (
     `<li class="trip-events__item">
@@ -135,8 +143,8 @@ const createEditPointTemplate = (point, options = {}) => {
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit">${saveButtonText}</button>
+          <button class="event__reset-btn" type="reset">${deleteButtonText}</button>
 
           <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
           <label class="event__favorite-btn" for="event-favorite-1">
@@ -197,6 +205,7 @@ export default class EditPoint extends AbstractSmartComponent {
     this._submitHandler = null;
     this._setFavoritesHandler = null;
     this._deleteButtonClickHandler = null;
+    this._externalData = DefaultData;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -206,6 +215,7 @@ export default class EditPoint extends AbstractSmartComponent {
     return createEditPointTemplate(this._point, {
       city: this._editedCity,
       type: this._editedType,
+      externalData: this._externalData,
       offers: this._editedOffers,
       description: this._editedDescription
     });
@@ -267,6 +277,11 @@ export default class EditPoint extends AbstractSmartComponent {
     const formData = new FormData(form);
 
     return parseFormData(formData);
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   _recoveryFlatpickr() {
