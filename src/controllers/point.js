@@ -78,7 +78,7 @@ export default class PointController {
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
       const newPoint = PointModel.clone(point);
-      point.isFavorite = !newPoint.isFavorite;
+      newPoint.isFavorite = !newPoint.isFavorite;
 
       this._onDataChange(this, point, newPoint);
     });
