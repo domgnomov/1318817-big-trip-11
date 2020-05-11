@@ -67,15 +67,16 @@ api.getDestinations()
 
 api.getOffers()
   .then((offers) => {
-    offersModel.setOffers(offers)
+    offersModel.setOffers(offers);
+    api.getPoints()
+      .then((points) => {
+        pointsModel.setPoints(points);
+        loadingPointComponent.hide();
+        infoController.render();
+        tripController.render();
+        filterController.render();
+      });
   });
 
-api.getPoints()
-  .then((points) => {
-    pointsModel.setPoints(points);
-    loadingPointComponent.hide();
-    infoController.render();
-    tripController.render();
-    filterController.render();
-  });
+
 

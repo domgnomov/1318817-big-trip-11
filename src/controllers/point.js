@@ -24,6 +24,39 @@ export const EmptyPoint = {
   isFavorite: false,
 };
 
+const parseFormData = (formData, destinationModel, offersModel) => {
+  const name = formData.get(`event-destination`);
+  const type = formData.get(`event-type`);
+  const description = destinationModel.getDescriptionByName(name);
+
+  const offers = offersModel.getOffersWithIdByType(type);
+
+  //TODO получать pictures как?
+  const destination = {name, description, pictures: []};
+  return new PointModel({
+    "type": type,
+    "is_favorite": !!formData.get(`event-favorite`),
+    "base_price": Number.parseInt(formData.get(`event-price`)),
+    "date_from": formData.get(`event-start-time`),
+    "date_to": formData.get(`event-end-time`),
+    "destination": destination,
+    "offers": getSelectedOffers(formData, offers),
+  });
+};
+
+const getSelectedOffers = (formData, offers) => {
+  debugger;
+  const selectedOffers = [];
+  offers.forEach((offer) => {
+    const checked = !!formData.get(`event-offer-${offer.id}`);
+    if (checked) {
+      delete offer.id;
+      selectedOffers.push(offer);
+    }
+  });
+  return selectedOffers;
+};
+
 export default class PointController {
   constructor(container, onDataChange, onViewChange, offersModel, destinationsModel) {
     this._container = container;
@@ -56,9 +89,8 @@ export default class PointController {
         evt.preventDefault();
 
         const formData = this._pointEditComponent.getData();
-        //TODO
-        //const data = parseFormData(formData);
-        const data = formData;
+
+        const data = parseFormData(formData, this._destinationsModel, this._offersModel);
 
         this._pointEditComponent.setData({
           saveButtonText: `Saving...`,

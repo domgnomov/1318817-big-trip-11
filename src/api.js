@@ -9,6 +9,10 @@ const Method = {
   DELETE: `DELETE`
 };
 
+export const checkR = {
+  obj: null
+};
+
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -26,6 +30,10 @@ const API = class {
   getPoints() {
     return this._load({url: `points`})
       .then((response) => response.json())
+      .then(data => {
+        checkR.obj = data[0];
+        return data;
+      })
       .then(Point.parsePoints);
   }
 
@@ -41,10 +49,13 @@ const API = class {
   }
 
   updatePoint(id, data) {
+    const check1 = data.toRAW();
+    check1.id = id;
+    debugger;
     return this._load({
       url: `points/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(check1),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())

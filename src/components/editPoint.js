@@ -9,14 +9,15 @@ const DefaultData = {
   saveButtonText: `Save`,
 };
 
-const createOffersMarkup = (offers) => {
-  return offers
+const createOffersMarkup = (selectedOffers, allOffers) => {
+  debugger;
+  const selectOfferTitles = selectedOffers.map((offer) => offer.title);
+  return allOffers
     .map((offer) => {
-      const title = offer.title.toLowerCase();
       return (
         `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-1" type="checkbox" name="event-offer-${title}" checked>
-            <label class="event__offer-label" for="event-offer-${title}-1">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${selectOfferTitles.includes(offer.title) ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-${offer.id}">
               <span class="event__offer-title">${offer.title}</span>
               &plus;
               &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
@@ -29,11 +30,12 @@ const createOffersMarkup = (offers) => {
 
 const createEditPointTemplate = (point, options = {}) => {
   const {price, isFavorite} = point;
-  const {city, type, offers, externalData} = options;
+  const {city, type, selectedOffers, allOffers, externalData} = options;
 
   const typePreposition = getPreposition(type);
-  const hasOffers = Array.isArray(offers) && offers.length;
-  const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
+  const hasOffers = Array.isArray(selectedOffers) && selectedOffers.length;
+
+  const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, allOffers) : [];
 
   const deleteButtonText = externalData.deleteButtonText;
   const saveButtonText = externalData.saveButtonText;
@@ -172,22 +174,6 @@ const createEditPointTemplate = (point, options = {}) => {
   );
 };
 
-const parseFormData = (formData) => {
-  return {
-    id: null,
-    type: formData.get(`event-type`),
-    city: formData.get(`event-destination`),
-    offers: null,
-    price: formData.get(`event-price`),
-    startDate: formData.get(`event-start-time`),
-    endDate: formData.get(`event-end-time`),
-    duration: 0,
-    description: null,
-    photos: null,
-    isFavorite: formData.get(`event-favorite`),
-  };
-};
-
 export default class EditPoint extends AbstractSmartComponent {
   constructor(point, offersModel, destinationsModel) {
     super();
@@ -216,9 +202,16 @@ export default class EditPoint extends AbstractSmartComponent {
       city: this._editedCity,
       type: this._editedType,
       externalData: this._externalData,
-      offers: this._editedOffers,
+      selectedOffers: this._editedOffers,
+      allOffers: this._offersModel.getOffersWithIdByType(this._editedType),
       description: this._editedDescription
     });
+  }
+
+  getElement() {
+    const element = super.getElement();
+    element.querySelector(`input[value=${this._editedType.toLowerCase()}]`).checked = true;
+    return element;
   }
 
   rerender() {
@@ -274,7 +267,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.event--edit`);
-    const formData = new FormData(form);
+    return  new FormData(form);
 
     return parseFormData(formData);
   }
@@ -321,7 +314,7 @@ export default class EditPoint extends AbstractSmartComponent {
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
         this._editedType = capitalize(evt.target.value);
-        this._editedOffers = this._offersModel.getOffersByType(this._editedType);
+        this._editedOffers = this._offersModel.getOffersByType(this._editedType.toLowerCase());
         this.rerender();
       });
     });
@@ -332,6 +325,14 @@ export default class EditPoint extends AbstractSmartComponent {
         this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
         this.rerender();
       });
+
+    //TODO сделать чтобы по клику на чекбокс менялось состояние checked
+    /*element.querySelector(`.event__offer-checkbox`)
+      .addEventListener(`change`, (evt) => {
+        this._editedCity = capitalize(evt.target.value);
+        this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
+        this.rerender();
+      });*/
   }
 }
 

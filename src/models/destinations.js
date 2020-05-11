@@ -10,9 +10,9 @@ export default class Destinations {
   }
 
   getDescriptionByName(name) {
-    return this._destinations
+    const destinations = this._destinations
       .slice()
       .filter((destination) => destination.name === name)
-      .map((destination) => destination.description)
+     return destinations[0].description;
   }
 }

@@ -20,20 +20,19 @@ export default class Point {
   }
 
   toRAW() {
-    debugger;
     const destination = {
       name: this.city,
       pictures: this.pictures,
       description: this.description,
-    }
+    };
     return {
       "id": this.id,
       "type": this.type.toLowerCase(),
       "is_favorite": this.isFavorite,
       "base_price": this.price,
       "offers": this.offers,
-      "date_from": this.startDate,
-      "date_to": this.endDate,
+      "date_from": this.startDate.toISOString(),
+      "date_to": this.endDate.toISOString(),
       "destination": destination,
     };
   }
