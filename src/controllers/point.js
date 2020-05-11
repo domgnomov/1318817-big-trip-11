@@ -1,6 +1,7 @@
 import PointComponent from "../components/point";
 import PointEditComponent from "../components/editPoint";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
+import PointModel from "../models/point";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -52,17 +53,34 @@ export default class PointController {
     });
 
     this._pointEditComponent.setSubmitHandler((evt) => {
-      evt.preventDefault();
-      const data = this._pointEditComponent.getData();
-      this._onDataChange(this, point, data);
+        evt.preventDefault();
+
+        const formData = this._pointEditComponent.getData();
+        //TODO
+        //const data = parseFormData(formData);
+        const data = formData;
+
+        this._pointEditComponent.setData({
+          saveButtonText: `Saving...`,
+        });
+
+        this._onDataChange(this, point, data);
     });
 
-    this._pointEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, point, null));
+    this._pointEditComponent.setDeleteButtonClickHandler(() => {
+        this._pointEditComponent.setData({
+          deleteButtonText: `Deleting...`,
+        });
+
+        this._onDataChange(this, point, null);
+      }
+    );
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
-      this._onDataChange(this, point, Object.assign({}, point, {
-        isFavorite: !point.isFavorite,
-      }));
+      const newPoint = PointModel.clone(point);
+      point.isFavorite = !newPoint.isFavorite;
+
+      this._onDataChange(this, point, newPoint);
     });
 
     switch (mode) {

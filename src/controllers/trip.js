@@ -64,7 +64,7 @@ export default class TripController {
             pointController.render(point, Mode.DEFAULT);
           })
           .catch(() => {
-            //TODO
+            pointController.shake();
           });
       }
     } else if (newData === null) {
@@ -74,7 +74,7 @@ export default class TripController {
           this._updatePoints();
         })
         .catch(() => {
-          //TODO
+          pointController.shake();
         });
     } else {
       this._api.updatePoint(oldData.id, newData)
@@ -87,7 +87,7 @@ export default class TripController {
           }
         })
         .catch(() => {
-          //TODO
+          pointController.shake();
         });
     }
   }
