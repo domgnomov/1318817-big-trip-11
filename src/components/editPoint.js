@@ -33,7 +33,7 @@ const createEditPointTemplate = (point, options = {}) => {
   const {city, type, selectedOffers, allOffers, externalData} = options;
 
   const typePreposition = getPreposition(type);
-  const hasOffers = Array.isArray(selectedOffers) && selectedOffers.length;
+  const hasOffers = Array.isArray(allOffers) && allOffers.length;
 
   const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, allOffers) : [];
 
