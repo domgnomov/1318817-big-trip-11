@@ -28,15 +28,15 @@ const createPointTemplate = (point) => {
   const startTime = formatTime(startDate);
   const endTime = formatTime(endDate);
 
-  const interval = getFormattedMilliseconds(getInterval());
+  const interval = getInterval ? getFormattedMilliseconds(getInterval()) : ``;
 
   return (
     `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
         </div>
-        <h3 class="event__title">${capitalize(type)} ${typePreposition} ${city}</h3>
+        <h3 class="event__title">${type ? capitalize(type) : ``} ${typePreposition} ${city ? city : ``}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
@@ -76,7 +76,6 @@ export default class Point extends AbstractComponent {
   }
 
   setEditButtonClickHandler(handler) {
-    this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, handler);
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }

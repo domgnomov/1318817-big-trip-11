@@ -10,7 +10,8 @@ const DefaultData = {
 };
 
 const createOffersMarkup = (selectedOffers, allOffers) => {
-  const selectOfferTitles = selectedOffers.map((offer) => offer.title + offer.price);
+  debugger;
+  const selectOfferTitles = selectedOffers ? selectedOffers.map((offer) => offer.title + offer.price) : [];
   return allOffers
     .map((offer) => {
       return (
@@ -47,7 +48,7 @@ const createEditPointTemplate = (point, options = {}) => {
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -114,9 +115,9 @@ const createEditPointTemplate = (point, options = {}) => {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${capitalize(type)} ${typePreposition}
+              ${type ? capitalize(type) : ``} ${typePreposition}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city ? city : ``}" list="destination-list-1">
             <datalist id="destination-list-1">
               <option value="Moscow"></option>
               <option value="New-York"></option>
@@ -198,19 +199,23 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   getTemplate() {
+    const allOffers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
     return createEditPointTemplate(this._point, {
       city: this._editedCity,
       type: this._editedType,
       externalData: this._externalData,
       selectedOffers: this._editedOffers,
-      allOffers: this._offersModel.getOffersWithIdByType(this._editedType),
+      allOffers,
       description: this._editedDescription
     });
   }
 
   getElement() {
     const element = super.getElement();
-    element.querySelector(`input[value=${this._editedType}]`).checked = true;
+    const editType = element.querySelector(`input[value=${this._editedType}]`);
+    if (editType) {
+      editType.checked = true;
+    }
     return element;
   }
 

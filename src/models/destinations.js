@@ -10,9 +10,13 @@ export default class Destinations {
   }
 
   getDescriptionByName(name) {
-    const destinations = this._destinations
-      .slice()
-      .filter((destination) => destination.name === name)
-     return destinations[0].description;
+    if (name) {
+      const destinations = this._destinations
+        .slice()
+        .filter((destination) => destination.name === name)
+      return destinations[0].description;
+    } else {
+      return ``;
+    }
   }
 }

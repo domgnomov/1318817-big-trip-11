@@ -100,7 +100,7 @@ export default class TripController {
     const firstDayElement = this._daysComponent.getFirstDayElement();
 
     const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
-    this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
+    this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel);
     this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
