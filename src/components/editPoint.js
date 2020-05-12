@@ -10,13 +10,13 @@ const DefaultData = {
 };
 
 const createOffersMarkup = (selectedOffers, allOffers) => {
-  debugger;
-  const selectOfferTitles = selectedOffers.map((offer) => offer.title);
+  const selectOfferTitles = selectedOffers.map((offer) => offer.title + offer.price);
   return allOffers
     .map((offer) => {
       return (
         `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${selectOfferTitles.includes(offer.title) ? `checked` : ``}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" 
+              ${selectOfferTitles.includes(offer.title + offer.price) ? `checked` : ``}>
             <label class="event__offer-label" for="event-offer-${offer.id}">
               <span class="event__offer-title">${offer.title}</span>
               &plus;
@@ -114,7 +114,7 @@ const createEditPointTemplate = (point, options = {}) => {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${type} ${typePreposition}
+              ${capitalize(type)} ${typePreposition}
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
             <datalist id="destination-list-1">
@@ -210,7 +210,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   getElement() {
     const element = super.getElement();
-    element.querySelector(`input[value=${this._editedType.toLowerCase()}]`).checked = true;
+    element.querySelector(`input[value=${this._editedType}]`).checked = true;
     return element;
   }
 
@@ -313,15 +313,15 @@ export default class EditPoint extends AbstractSmartComponent {
 
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
-        this._editedType = capitalize(evt.target.value);
-        this._editedOffers = this._offersModel.getOffersByType(this._editedType.toLowerCase());
+        this._editedType = evt.target.value;
+        /*this._editedOffers = this._offersModel.getOffersByType(this._editedType.toLowerCase());*/
         this.rerender();
       });
     });
 
     element.querySelector(`.event__input--destination `)
       .addEventListener(`change`, (evt) => {
-        this._editedCity = capitalize(evt.target.value);
+        this._editedCity = evt.target.value;
         this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
         this.rerender();
       });

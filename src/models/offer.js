@@ -1,8 +1,6 @@
-import {capitalize} from "../utils/common";
-
 export default class Offer {
   constructor(data) {
-    this.type = capitalize(data[`type`]);
+    this.type = data[`type`];
     this.offers = data[`offers`];
   }
 

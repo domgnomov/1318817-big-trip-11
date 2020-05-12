@@ -1,9 +1,9 @@
-import {capitalize, getMillisecondsByInterval} from "../utils/common";
+import {getMillisecondsByInterval} from "../utils/common";
 
 export default class Point {
   constructor(data) {
     this.id = data[`id`];
-    this.type = capitalize(data[`type`]);
+    this.type = data[`type`];
     this.isFavorite = data[`is_favorite`];
     this.price = data[`base_price`];
     this.offers = data[`offers`];
@@ -27,7 +27,7 @@ export default class Point {
     };
     return {
       "id": this.id,
-      "type": this.type.toLowerCase(),
+      "type": this.type,
       "is_favorite": this.isFavorite,
       "base_price": this.price,
       "offers": this.offers,

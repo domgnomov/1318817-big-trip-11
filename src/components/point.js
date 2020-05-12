@@ -1,6 +1,6 @@
 import {formatTime, formatDateTime, getPreposition} from "../utils/common.js";
 import AbstractComponent from "./abstract-component";
-import {getFormattedMilliseconds} from "../utils/common";
+import {capitalize, getFormattedMilliseconds} from "../utils/common";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -36,7 +36,7 @@ const createPointTemplate = (point) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${typePreposition} ${city}</h3>
+        <h3 class="event__title">${capitalize(type)} ${typePreposition} ${city}</h3>
 
         <div class="event__schedule">
           <p class="event__time">

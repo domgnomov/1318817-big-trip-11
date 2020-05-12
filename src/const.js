@@ -1,7 +1,7 @@
 export const PlaceTypes = [
-  `Check-in`,
-  `Sightseeing`,
-  `Restaurant`,
+  `check-in`,
+  `sightseeing`,
+  `restaurant`,
 ];
 
 export const FilterType = {

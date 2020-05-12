@@ -19,25 +19,18 @@ export default class Offers {
   getOffersByType(type) {
     return this._offers
       .slice()
-      .filter((offer) => offer.type.toLowerCase() === type)
+      .filter((offer) => offer.type === type)
       .map((offer) => offer.offers)
       .flat()
   }
 
   getOffersWithIdByType(type) {
     debugger;
-    const offersByType = this.getOffersByType(type.toLowerCase()).slice();
+    const offersByType = this.getOffersByType(type).slice();
     let id = 0;
     offersByType.forEach((offer) => {
-      offer.id = type.toLowerCase().concat(id++);
+      offer.id = type.concat(id++);
     });
     return offersByType;
-  }
-
-  getPlaceOfferTypes() {
-    return this._offers
-      .slice()
-      .filter((offer) => PlaceTypes.includes(offer.type))
-      .map((offer) => offer.type)
   }
 }

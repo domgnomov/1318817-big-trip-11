@@ -26,7 +26,7 @@ export const EmptyPoint = {
 
 const parseFormData = (formData, destinationModel, offersModel) => {
   const name = formData.get(`event-destination`);
-  const type = formData.get(`event-type`);
+  const type = formData.get(`event-type`).toLowerCase();
   const description = destinationModel.getDescriptionByName(name);
 
   const offers = offersModel.getOffersWithIdByType(type);

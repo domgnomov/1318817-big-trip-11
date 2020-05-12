@@ -63,19 +63,18 @@ siteMenuComponent.setOnChange((menuItem) => {
 api.getDestinations()
   .then((destinations) => {
     destinationsModel.setDestinations(destinations)
-  });
-
-api.getOffers()
-  .then((offers) => {
-    offersModel.setOffers(offers);
-    api.getPoints()
-      .then((points) => {
-        pointsModel.setPoints(points);
-        loadingPointComponent.hide();
-        infoController.render();
-        tripController.render();
-        filterController.render();
-      });
+  }).
+  then(() =>  api.getOffers()).
+  then((offers) => {
+    offersModel.setOffers(offers)
+  })
+  .then(() => api.getPoints())
+  .then((points) => {
+    pointsModel.setPoints(points);
+    loadingPointComponent.hide();
+    infoController.render();
+    tripController.render();
+    filterController.render();
   });
 
 
