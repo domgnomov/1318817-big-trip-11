@@ -10,7 +10,6 @@ const DefaultData = {
 };
 
 const createOffersMarkup = (selectedOffers, allOffers) => {
-  debugger;
   const selectOfferTitles = selectedOffers ? selectedOffers.map((offer) => offer.title + offer.price) : [];
   return allOffers
     .map((offer) => {
@@ -272,9 +271,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.event--edit`);
-    return  new FormData(form);
-
-    return parseFormData(formData);
+    return new FormData(form);
   }
 
   setData(data) {
@@ -319,7 +316,6 @@ export default class EditPoint extends AbstractSmartComponent {
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
         this._editedType = evt.target.value;
-        /*this._editedOffers = this._offersModel.getOffersByType(this._editedType.toLowerCase());*/
         this.rerender();
       });
     });
@@ -330,14 +326,5 @@ export default class EditPoint extends AbstractSmartComponent {
         this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
         this.rerender();
       });
-
-    //TODO сделать чтобы по клику на чекбокс менялось состояние checked
-    /*element.querySelector(`.event__offer-checkbox`)
-      .addEventListener(`change`, (evt) => {
-        this._editedCity = capitalize(evt.target.value);
-        this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
-        this.rerender();
-      });*/
   }
 }
-

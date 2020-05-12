@@ -13,7 +13,7 @@ export default class Offers {
     return this._offers
       .slice()
       .filter((offer) => !PlaceTypes.includes(offer.type))
-      .map((offer) => offer.type)
+      .map((offer) => offer.type);
   }
 
   getOffersByType(type) {
@@ -21,11 +21,10 @@ export default class Offers {
       .slice()
       .filter((offer) => offer.type === type)
       .map((offer) => offer.offers)
-      .flat()
+      .flat();
   }
 
   getOffersWithIdByType(type) {
-    debugger;
     const offersByType = this.getOffersByType(type).slice();
     let id = 0;
     offersByType.forEach((offer) => {

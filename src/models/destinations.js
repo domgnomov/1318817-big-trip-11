@@ -13,7 +13,7 @@ export default class Destinations {
     if (name) {
       const destinations = this._destinations
         .slice()
-        .filter((destination) => destination.name === name)
+        .filter((destination) => destination.name === name);
       return destinations[0].description;
     } else {
       return ``;

@@ -30,7 +30,7 @@ const API = class {
   getPoints() {
     return this._load({url: `points`})
       .then((response) => response.json())
-      .then(data => {
+      .then((data) => {
         checkR.obj = data[0];
         return data;
       })
@@ -51,7 +51,6 @@ const API = class {
   updatePoint(id, data) {
     const check1 = data.toRAW();
     check1.id = id;
-    debugger;
     return this._load({
       url: `points/${id}`,
       method: Method.PUT,

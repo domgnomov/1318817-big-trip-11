@@ -62,11 +62,11 @@ siteMenuComponent.setOnChange((menuItem) => {
 
 api.getDestinations()
   .then((destinations) => {
-    destinationsModel.setDestinations(destinations)
+    destinationsModel.setDestinations(destinations);
   }).
-  then(() =>  api.getOffers()).
+  then(() => api.getOffers()).
   then((offers) => {
-    offersModel.setOffers(offers)
+    offersModel.setOffers(offers);
   })
   .then(() => api.getPoints())
   .then((points) => {
@@ -76,6 +76,3 @@ api.getDestinations()
     tripController.render();
     filterController.render();
   });
-
-
-

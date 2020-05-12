@@ -31,12 +31,11 @@ const parseFormData = (formData, destinationModel, offersModel) => {
 
   const offers = offersModel.getOffersWithIdByType(type);
 
-  //TODO получать pictures как?
   const destination = {name, description, pictures: []};
   return new PointModel({
     "type": type,
     "is_favorite": !!formData.get(`event-favorite`),
-    "base_price": Number.parseInt(formData.get(`event-price`)),
+    "base_price": Number.parseInt(formData.get(`event-price`), 10),
     "date_from": formData.get(`event-start-time`),
     "date_to": formData.get(`event-end-time`),
     "destination": destination,
@@ -45,7 +44,6 @@ const parseFormData = (formData, destinationModel, offersModel) => {
 };
 
 const getSelectedOffers = (formData, offers) => {
-  debugger;
   const selectedOffers = [];
   offers.forEach((offer) => {
     const checked = !!formData.get(`event-offer-${offer.id}`);
@@ -86,27 +84,26 @@ export default class PointController {
     });
 
     this._pointEditComponent.setSubmitHandler((evt) => {
-        evt.preventDefault();
+      evt.preventDefault();
 
-        const formData = this._pointEditComponent.getData();
+      const formData = this._pointEditComponent.getData();
 
-        const data = parseFormData(formData, this._destinationsModel, this._offersModel);
+      const data = parseFormData(formData, this._destinationsModel, this._offersModel);
 
-        this._pointEditComponent.setData({
-          saveButtonText: `Saving...`,
-        });
+      this._pointEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
 
-        this._onDataChange(this, point, data);
+      this._onDataChange(this, point, data);
     });
 
     this._pointEditComponent.setDeleteButtonClickHandler(() => {
-        this._pointEditComponent.setData({
-          deleteButtonText: `Deleting...`,
-        });
+      this._pointEditComponent.setData({
+        deleteButtonText: `Deleting...`,
+      });
 
-        this._onDataChange(this, point, null);
-      }
-    );
+      this._onDataChange(this, point, null);
+    });
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
       const newPoint = PointModel.clone(point);
