@@ -296,7 +296,7 @@ export default class EditPoint extends AbstractSmartComponent {
   _flatpickr(element, date) {
     return flatpickr(element, {
       altInput: true,
-      altFormat: `d/m/y h:m`,
+      altFormat: `d/m/y h:i`,
       allowInput: true,
       enableTime: true,
       defaultDate: date || `today`,
