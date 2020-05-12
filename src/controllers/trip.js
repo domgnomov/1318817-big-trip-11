@@ -5,14 +5,16 @@ import {render, RenderPosition} from "../utils/render";
 import Day from "../components/day";
 import {getDays, getSortedPoints} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
-import EventsComponent from "../components/events";
 
 export const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
-  constructor(pointsModel) {
-    this._container = new EventsComponent();
+  constructor(pointsModel, eventsComponent, offersModel, destinationsModel, api) {
+    this._container = eventsComponent;
     this._pointsModel = pointsModel;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
+    this._api = api;
 
     this._pointControllers = [];
     this._noPointsComponent = new NoPointsComponent();
@@ -56,18 +58,37 @@ export default class TripController {
         pointController.destroy();
         this._updatePoints();
       } else {
-        this._pointsModel.addPoint(newData);
-        pointController.render(newData, Mode.DEFAULT);
+        this._api.createPoint(newData)
+          .then((point) => {
+            this._pointsModel.addPoint(point);
+            pointController.render(point, Mode.DEFAULT);
+          })
+          .catch(() => {
+            pointController.shake();
+          });
       }
     } else if (newData === null) {
-      this._pointsModel.removePoint(oldData.id);
-      this._updatePoints();
+      this._api.deletePoint(oldData.id)
+        .then(() => {
+          this._pointsModel.removePoint(oldData.id);
+          this._updatePoints();
+        })
+        .catch(() => {
+          pointController.shake();
+        });
     } else {
-      const isSuccess = this._pointsModel.updatePoint(oldData.id, newData);
+      this._api.updatePoint(oldData.id, newData)
+        .then((point) => {
+          const isSuccess = this._pointsModel.updatePoint(oldData.id, point);
 
-      if (isSuccess) {
-        pointController.render(newData, Mode.DEFAULT);
-      }
+          if (isSuccess) {
+            pointController.render(point, Mode.DEFAULT);
+            this._updatePoints();
+          }
+        })
+        .catch(() => {
+          pointController.shake();
+        });
     }
   }
 
@@ -79,7 +100,7 @@ export default class TripController {
     const firstDayElement = this._daysComponent.getFirstDayElement();
 
     const dayContainer = firstDayElement.querySelector(`.trip-events__list`);
-    this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange);
+    this._creatingPoint = new PointController(dayContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel);
     this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
@@ -87,7 +108,7 @@ export default class TripController {
     render(daysContainerElement, dayComponent, RenderPosition.BEFOREEND);
     const dayContainer = dayComponent.getElement().querySelector(`.trip-events__list`);
     sortedPoints.forEach((point) => {
-      const pointController = new PointController(dayContainer, this._onDataChange, this._onViewChange);
+      const pointController = new PointController(dayContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel);
       this._pointControllers = this._pointControllers.concat(pointController);
       pointController.render(point, Mode.DEFAULT);
     });

@@ -1,4 +1,3 @@
-import {generatePoints} from "./mock/point.js";
 import TripController from "./controllers/trip";
 import PointsModel from "./models/points.js";
 import FilterController from "./controllers/filter";
@@ -7,20 +6,29 @@ import SiteMenuComponent, {MenuItem} from "./components/menu.js";
 import InfoController from "./controllers/info";
 import StatisticsController from "./controllers/statistics";
 import API from "./api";
+import PointLoadingComponent from "./components/pointLoading";
+import EventsComponent from "./components/events";
+import DestinationsModel from "./models/destinations";
+import OffersModel from "./models/offers";
 
 const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
+const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
 
-const api = new API(AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION);
 
-const allPoints = generatePoints();
 const pointsModel = new PointsModel();
-pointsModel.setPoints(allPoints);
+const destinationsModel = new DestinationsModel();
+const offersModel = new OffersModel();
 
 const mainElement = document.querySelector(`.trip-main`);
 
 const infoController = new InfoController(mainElement, pointsModel);
 
-const tripController = new TripController(pointsModel);
+const eventsComponent = new EventsComponent();
+const tripController = new TripController(pointsModel, eventsComponent, offersModel, destinationsModel, api);
+
+const loadingPointComponent = new PointLoadingComponent();
+render(eventsComponent.getElement(), loadingPointComponent, RenderPosition.BEFOREEND);
 
 const siteMenuContainer = mainElement.querySelector(`.trip-main__trip-controls .visually-hidden:nth-child(1)`);
 const siteMenuComponent = new SiteMenuComponent();
@@ -35,7 +43,7 @@ addButton.addEventListener(`click`, () => {
 });
 
 const statisticsContainer = document.querySelector(`.page-body__page-main .page-body__container`);
-const statisticsController = new StatisticsController(statisticsContainer, pointsModel);
+const statisticsController = new StatisticsController(statisticsContainer, pointsModel, offersModel);
 statisticsController.render();
 statisticsController.hide();
 
@@ -52,11 +60,19 @@ siteMenuComponent.setOnChange((menuItem) => {
   }
 });
 
-api.getPoints()
+api.getDestinations()
+  .then((destinations) => {
+    destinationsModel.setDestinations(destinations);
+  }).
+  then(() => api.getOffers()).
+  then((offers) => {
+    offersModel.setOffers(offers);
+  })
+  .then(() => api.getPoints())
   .then((points) => {
     pointsModel.setPoints(points);
+    loadingPointComponent.hide();
     infoController.render();
     tripController.render();
     filterController.render();
   });
-

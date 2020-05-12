@@ -1,6 +1,6 @@
 import {formatTime, formatDateTime, getPreposition} from "../utils/common.js";
 import AbstractComponent from "./abstract-component";
-import {getFormattedMilliseconds} from "../utils/common";
+import {capitalize, getFormattedMilliseconds} from "../utils/common";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -9,7 +9,7 @@ const createOffersMarkup = (offers) => {
         `<li class="event__offer">
           <span class="event__offer-title">${offer.title}</span>
           &plus;
-          &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
+          &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
         </li>`
       );
     })
@@ -28,15 +28,15 @@ const createPointTemplate = (point) => {
   const startTime = formatTime(startDate);
   const endTime = formatTime(endDate);
 
-  const interval = getFormattedMilliseconds(getInterval());
+  const interval = getInterval ? getFormattedMilliseconds(getInterval()) : ``;
 
   return (
     `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
         </div>
-        <h3 class="event__title">${type} ${typePreposition} ${city}</h3>
+        <h3 class="event__title">${type ? capitalize(type) : ``} ${typePreposition} ${city ? city : ``}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
@@ -76,7 +76,6 @@ export default class Point extends AbstractComponent {
   }
 
   setEditButtonClickHandler(handler) {
-    this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, handler);
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }

@@ -1,17 +1,23 @@
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
-import {randomOffers, randomDescriptions} from "../mock/point.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
-const createOffersMarkup = (offers) => {
-  return offers
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
+};
+
+const createOffersMarkup = (selectedOffers, allOffers) => {
+  const selectOfferTitles = selectedOffers ? selectedOffers.map((offer) => offer.title + offer.price) : [];
+  return allOffers
     .map((offer) => {
       return (
         `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.name}-1" type="checkbox" name="event-offer-${offer.name}" checked>
-            <label class="event__offer-label" for="event-offer-${offer.name}-1">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" 
+              ${selectOfferTitles.includes(offer.title + offer.price) ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-${offer.id}">
               <span class="event__offer-title">${offer.title}</span>
               &plus;
               &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
@@ -24,11 +30,15 @@ const createOffersMarkup = (offers) => {
 
 const createEditPointTemplate = (point, options = {}) => {
   const {price, isFavorite} = point;
-  const {city, type, offers} = options;
+  const {city, type, selectedOffers, allOffers, externalData} = options;
 
   const typePreposition = getPreposition(type);
-  const hasOffers = Array.isArray(offers) && offers.length;
-  const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
+  const hasOffers = Array.isArray(allOffers) && allOffers.length;
+
+  const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, allOffers) : [];
+
+  const deleteButtonText = externalData.deleteButtonText;
+  const saveButtonText = externalData.saveButtonText;
 
   return (
     `<li class="trip-events__item">
@@ -37,7 +47,7 @@ const createEditPointTemplate = (point, options = {}) => {
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -104,9 +114,9 @@ const createEditPointTemplate = (point, options = {}) => {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${type} ${typePreposition}
+              ${type ? capitalize(type) : ``} ${typePreposition}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city ? city : ``}" list="destination-list-1">
             <datalist id="destination-list-1">
               <option value="Moscow"></option>
               <option value="New-York"></option>
@@ -135,8 +145,8 @@ const createEditPointTemplate = (point, options = {}) => {
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit">${saveButtonText}</button>
+          <button class="event__reset-btn" type="reset">${deleteButtonText}</button>
 
           <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
           <label class="event__favorite-btn" for="event-favorite-1">
@@ -164,27 +174,13 @@ const createEditPointTemplate = (point, options = {}) => {
   );
 };
 
-const parseFormData = (formData) => {
-  return {
-    id: null,
-    type: formData.get(`event-type`),
-    city: formData.get(`event-destination`),
-    offers: null,
-    price: formData.get(`event-price`),
-    startDate: formData.get(`event-start-time`),
-    endDate: formData.get(`event-end-time`),
-    duration: 0,
-    description: null,
-    photos: null,
-    isFavorite: formData.get(`event-favorite`),
-  };
-};
-
 export default class EditPoint extends AbstractSmartComponent {
-  constructor(point) {
+  constructor(point, offersModel, destinationsModel) {
     super();
 
     this._point = point;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._editedCity = point.city;
     this._editedType = point.type;
@@ -195,18 +191,31 @@ export default class EditPoint extends AbstractSmartComponent {
     this._submitHandler = null;
     this._setFavoritesHandler = null;
     this._deleteButtonClickHandler = null;
+    this._externalData = DefaultData;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
   getTemplate() {
+    const allOffers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
     return createEditPointTemplate(this._point, {
       city: this._editedCity,
       type: this._editedType,
-      offers: this._editedOffers,
+      externalData: this._externalData,
+      selectedOffers: this._editedOffers,
+      allOffers,
       description: this._editedDescription
     });
+  }
+
+  getElement() {
+    const element = super.getElement();
+    const editType = element.querySelector(`input[value=${this._editedType}]`);
+    if (editType) {
+      editType.checked = true;
+    }
+    return element;
   }
 
   rerender() {
@@ -262,9 +271,12 @@ export default class EditPoint extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.event--edit`);
-    const formData = new FormData(form);
+    return new FormData(form);
+  }
 
-    return parseFormData(formData);
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   _recoveryFlatpickr() {
@@ -281,7 +293,7 @@ export default class EditPoint extends AbstractSmartComponent {
   _flatpickr(element, date) {
     return flatpickr(element, {
       altInput: true,
-      altFormat: `d/m/y h:m`,
+      altFormat: `d/m/y h:i`,
       allowInput: true,
       enableTime: true,
       defaultDate: date || `today`,
@@ -303,18 +315,16 @@ export default class EditPoint extends AbstractSmartComponent {
 
     element.querySelectorAll(`.event__type-list input`).forEach((el) => {
       el.addEventListener(`click`, (evt) => {
-        this._editedType = capitalize(evt.target.value);
-        this._editedOffers = randomOffers.get(this._point.type);
+        this._editedType = evt.target.value;
         this.rerender();
       });
     });
 
     element.querySelector(`.event__input--destination `)
       .addEventListener(`change`, (evt) => {
-        this._editedCity = capitalize(evt.target.value);
-        this._editedDescription = randomDescriptions.get(this._editedCity);
+        this._editedCity = evt.target.value;
+        this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
         this.rerender();
       });
   }
 }
-

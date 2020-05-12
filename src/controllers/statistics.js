@@ -2,9 +2,10 @@ import {render, RenderPosition, replace} from "../utils/render";
 import StatisticsComponent from "../components/statistics";
 
 export default class StatisticsController {
-  constructor(container, pointsModel) {
+  constructor(container, pointsModel, offersModel) {
     this._container = container;
     this._pointsModel = pointsModel;
+    this._offersModel = offersModel;
 
     this._statisticsComponent = null;
   }
@@ -22,7 +23,7 @@ export default class StatisticsController {
 
     const oldComponent = this._statisticsComponent;
 
-    this._statisticsComponent = new StatisticsComponent(this._pointsModel);
+    this._statisticsComponent = new StatisticsComponent(this._pointsModel, this._offersModel);
 
     if (oldComponent) {
       replace(this._statisticsComponent, oldComponent);

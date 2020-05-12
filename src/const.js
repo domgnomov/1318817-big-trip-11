@@ -1,7 +1,7 @@
-export const TypesInPreposition = [
-  `Check-in`,
-  `Sightseeing`,
-  `Restaurant`,
+export const PlaceTypes = [
+  `check-in`,
+  `sightseeing`,
+  `restaurant`,
 ];
 
 export const FilterType = {

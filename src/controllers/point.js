@@ -1,6 +1,9 @@
 import PointComponent from "../components/point";
 import PointEditComponent from "../components/editPoint";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
+import PointModel from "../models/point";
+
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const Mode = {
   ADDING: `adding`,
@@ -21,9 +24,42 @@ export const EmptyPoint = {
   isFavorite: false,
 };
 
+const parseFormData = (formData, destinationModel, offersModel) => {
+  const name = formData.get(`event-destination`);
+  const type = formData.get(`event-type`).toLowerCase();
+  const description = destinationModel.getDescriptionByName(name);
+
+  const offers = offersModel.getOffersWithIdByType(type);
+
+  const destination = {name, description, pictures: []};
+  return new PointModel({
+    "type": type,
+    "is_favorite": !!formData.get(`event-favorite`),
+    "base_price": Number.parseInt(formData.get(`event-price`), 10),
+    "date_from": formData.get(`event-start-time`),
+    "date_to": formData.get(`event-end-time`),
+    "destination": destination,
+    "offers": getSelectedOffers(formData, offers),
+  });
+};
+
+const getSelectedOffers = (formData, offers) => {
+  const selectedOffers = [];
+  offers.forEach((offer) => {
+    const checked = !!formData.get(`event-offer-${offer.id}`);
+    if (checked) {
+      delete offer.id;
+      selectedOffers.push(offer);
+    }
+  });
+  return selectedOffers;
+};
+
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, offersModel, destinationsModel) {
     this._container = container;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._onViewChange = onViewChange;
     this._pointComponent = null;
@@ -40,7 +76,7 @@ export default class PointController {
     this._mode = mode;
 
     this._pointComponent = new PointComponent(point);
-    this._pointEditComponent = new PointEditComponent(point);
+    this._pointEditComponent = new PointEditComponent(point, this._offersModel, this._destinationsModel);
 
     this._pointComponent.setEditButtonClickHandler(() => {
       this._replacePointToEdit();
@@ -49,16 +85,31 @@ export default class PointController {
 
     this._pointEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._pointEditComponent.getData();
+
+      const formData = this._pointEditComponent.getData();
+
+      const data = parseFormData(formData, this._destinationsModel, this._offersModel);
+
+      this._pointEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
+
       this._onDataChange(this, point, data);
     });
 
-    this._pointEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, point, null));
+    this._pointEditComponent.setDeleteButtonClickHandler(() => {
+      this._pointEditComponent.setData({
+        deleteButtonText: `Deleting...`,
+      });
+
+      this._onDataChange(this, point, null);
+    });
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
-      this._onDataChange(this, point, Object.assign({}, point, {
-        isFavorite: !point.isFavorite,
-      }));
+      const newPoint = PointModel.clone(point);
+      newPoint.isFavorite = !newPoint.isFavorite;
+
+      this._onDataChange(this, point, newPoint);
     });
 
     switch (mode) {
@@ -114,5 +165,20 @@ export default class PointController {
     remove(this._pointComponent);
     remove(this._pointEditComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  shake() {
+    this._pointEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._pointComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._pointEditComponent.getElement().style.animation = ``;
+      this._pointComponent.getElement().style.animation = ``;
+
+      this._pointEditComponent.setData({
+        saveButtonText: `Save`,
+        deleteButtonText: `Delete`,
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }

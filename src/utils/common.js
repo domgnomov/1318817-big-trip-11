@@ -1,4 +1,4 @@
-import {TypesInPreposition} from "../const";
+import {PlaceTypes} from "../const";
 import moment from "moment";
 import {SortType} from "../components/sort";
 
@@ -50,7 +50,7 @@ export const getMillisecondsByInterval = (startDate, endDate) => {
 };
 
 export const getPreposition = (type) => {
-  return TypesInPreposition.includes(type) ? `in` : `to`;
+  return PlaceTypes.includes(type) ? `in` : `to`;
 };
 
 export const getRandomIntegerNumber = (min, max) => {
