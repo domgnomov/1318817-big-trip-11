@@ -11,8 +11,8 @@ import EventsComponent from "./components/events";
 import DestinationsModel from "./models/destinations";
 import OffersModel from "./models/offers";
 
-const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
+const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
