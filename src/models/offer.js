@@ -1,7 +1,17 @@
+import {nanoid} from "nanoid";
+
 export default class Offer {
   constructor(data) {
     this.type = data[`type`];
     this.offers = data[`offers`];
+  }
+
+  toRAW() {
+    return {
+      "type": this.type,
+      "offers": this.offers,
+      "id" : nanoid(),
+    };
   }
 
   static parseOffer(data) {
