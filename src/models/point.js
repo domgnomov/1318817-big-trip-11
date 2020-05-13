@@ -42,6 +42,7 @@ export default class Point {
   }
 
   static parsePoints(data) {
+    debugger;
     return data.map(Point.parsePoint);
   }
 

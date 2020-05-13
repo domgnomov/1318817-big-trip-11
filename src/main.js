@@ -14,7 +14,7 @@ import Provider from "./api/provider";
 import API from "./api/index";
 
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
-const AUTHORIZATION = `Basic sfsdf72sd8f83ju=`;
+const AUTHORIZATION = `Basic sfsdf71sd8f83ju=`;
 
 
 const api = new API(END_POINT, AUTHORIZATION);
