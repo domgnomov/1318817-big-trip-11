@@ -15,7 +15,7 @@ import API from "./api/index";
 
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
 const AUTHORIZATION = `Basic sfsdf71sd8f83ju=`;
-
+//TODO Когда делаю point to RAW Надо чтобы не было у Offerов id, может удалять даже
 
 const api = new API(END_POINT, AUTHORIZATION);
 const store = new Store(window.localStorage);
