@@ -31,8 +31,7 @@ const createPointTemplate = (point) => {
   const interval = getInterval ? getFormattedMilliseconds(getInterval()) : ``;
 
   return (
-    `<li class="trip-events__item">
-      <div class="event">
+    `<div class="event">
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
         </div>
@@ -59,8 +58,7 @@ const createPointTemplate = (point) => {
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
-      </div>
-    </li>`
+      </div>`
   );
 };
 

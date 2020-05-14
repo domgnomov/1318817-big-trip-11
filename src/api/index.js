@@ -27,7 +27,6 @@ const API = class {
     return this._load({url: `points`})
       .then((response) => response.json())
       .then((data) => {
-        debugger;
         return data;
       })
       .then(Point.parsePoints);
@@ -62,7 +61,6 @@ const API = class {
   }
 
   sync(data) {
-    debugger;
     const t = `[{"id":"19","type":"taxi","date_from":"2020-05-21T14:15:51.256Z","date_to":"2020-05-22T09:20:19.264Z","destination":{"name":"Berlin","pictures":[{"src":"http://picsum.photos/300/200?r=0.040286200544709105","description":"Berlin biggest supermarket"},{"src":"http://picsum.photos/300/200?r=0.03353477357102408","description":"Berlin park"},{"src":"http://picsum.photos/300/200?r=0.2236749251879535","description":"Berlin parliament building"},{"src":"http://picsum.photos/300/200?r=0.9448811687918204","description":"Berlin street market"},{"src":"http://picsum.photos/300/200?r=0.7144463135807073","description":"Berlin zoo"},{"src":"http://picsum.photos/300/200?r=0.6137874088920714","description":"Berlin park"}],"description":"Berlin, middle-eastern paradise, with an embankment of a mighty river as a centre of attraction, full of of cozy canteens where you can try the best coffee in the Middle East, a perfect place to stay with a family."},"base_price":700,"is_favorite":true,"offers":[{"title":"Upgrade to a business class","price":190},{"title":"Choose the radio station","price":30},{"title":"Choose temperature","price":170},{"title":"Drive quickly, I'm in a hurry","price":100}]}]`;
     return this._load({
       url: `points/sync`,

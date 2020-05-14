@@ -56,10 +56,11 @@ const getSelectedOffers = (formData, offers) => {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange, offersModel, destinationsModel) {
+  constructor(container, onDataChange, onViewChange, offersModel, destinationsModel, firstPointContainer) {
     this._container = container;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this.firstPointContainer = firstPointContainer;
 
     this._onViewChange = onViewChange;
     this._pointComponent = null;
@@ -111,7 +112,7 @@ export default class PointController {
 
       this._onDataChange(this, point, newPoint);
     });
-
+    debugger;
     switch (mode) {
       case Mode.DEFAULT:
         if (oldPointEditComponent && oldPointComponent) {
@@ -128,9 +129,18 @@ export default class PointController {
           remove(oldPointEditComponent);
         }
         document.addEventListener(`keydown`, this._onEscKeyDown);
-        render(this._container, this._pointEditComponent, RenderPosition.AFTERBEGIN);
+        if (this.firstPointContainer) {
+          render(this.firstPointContainer, this._pointEditComponent, RenderPosition.BEFOREEND);
+        } else {
+          debugger;
+          render(this._container, this._pointEditComponent, RenderPosition.AFTERBEGIN);
+        }
         break;
     }
+  }
+
+  ifFirstPoint() {
+    return !!this.firstPointContainer;
   }
 
   _replaceEditToPoint() {

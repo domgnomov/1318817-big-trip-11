@@ -41,8 +41,7 @@ const createEditPointTemplate = (point, options = {}) => {
   const saveButtonText = externalData.saveButtonText;
 
   return (
-    `<li class="trip-events__item">
-      <form class="event  event--edit" action="#" method="post">
+    `<form class="event  event--edit" action="#" method="post">
         <header class="event__header">
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -169,8 +168,7 @@ const createEditPointTemplate = (point, options = {}) => {
             </div>
           </section>
         </section>
-      </form>
-    </li>`
+      </form>`
   );
 };
 
@@ -235,8 +233,7 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, handler);
+    this.getElement().addEventListener(`submit`, handler);
 
     this._submitHandler = handler;
   }
@@ -270,7 +267,7 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = this.getElement().querySelector(`.event--edit`);
+    const form = this.getElement();
     return new FormData(form);
   }
 

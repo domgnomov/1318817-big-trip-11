@@ -9,7 +9,6 @@ const isOnline = () => {
 };
 
 const getSyncedPoints = (items) => {
-  debugger;
   return items.filter(({success}) => success)
     .map(({payload}) => payload.point);
 };
@@ -66,7 +65,6 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getPoints()
         .then((points) => {
-          debugger;
           const items = createStoreStructure(points.map((point) => point.toRAW()));
 
           this._store.setItems(items, POINTS_STORE_NAME);
@@ -130,7 +128,6 @@ export default class Provider {
 
   sync() {
     if (isOnline()) {
-      debugger;
       const storePoints = Object.values(this._store.getItems(POINTS_STORE_NAME));
 
       return this._api.sync(storePoints)
