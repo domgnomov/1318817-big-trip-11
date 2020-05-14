@@ -28,17 +28,58 @@ const createOffersMarkup = (selectedOffers, allOffers) => {
     .join(`\n`);
 };
 
+const getPictureImages = (pictures) => {
+  debugger;
+  const picturesImages = [];
+  debugger;
+  pictures.forEach(picture => {
+    picturesImages.push(`<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
+  });
+  return picturesImages;
+};
+
+const createDestinationsMarkup = (description, pictures) => {
+  const picturesImages = getPictureImages(pictures);
+  return (
+  `<section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${picturesImages}
+          </div>
+        </div>
+      </section>
+    </section>`
+  );
+};
+
+const getDestinationOptions = (destinations) => {
+  const destinationOptions = [];
+  debugger;
+  destinations.forEach(destination => {
+    destinationOptions.push(`<option value="${destination.name}"></option>`);
+  });
+  return destinationOptions;
+};
+
 const createEditPointTemplate = (point, options = {}) => {
   const {price, isFavorite} = point;
-  const {city, type, selectedOffers, allOffers, externalData} = options;
+  const {city, type, selectedOffers, allOffers, externalData, destinations} = options;
 
   const typePreposition = getPreposition(type);
   const hasOffers = Array.isArray(allOffers) && allOffers.length;
 
   const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, allOffers) : [];
+  debugger;
+  const isShowDestination = point.description && point.pictures && point.pictures.length > 0;
+  const destinationsMarkup = isShowDestination ? createDestinationsMarkup(point.description, point.pictures) : ``;
 
   const deleteButtonText = externalData.deleteButtonText;
   const saveButtonText = externalData.saveButtonText;
+
+  const destinationOptions = getDestinationOptions(destinations);
 
   return (
     `<form class="event  event--edit" action="#" method="post">
@@ -117,10 +158,7 @@ const createEditPointTemplate = (point, options = {}) => {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city ? city : ``}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Moscow"></option>
-              <option value="New-York"></option>
-              <option value="London"></option>
-              <option value="Paris"></option>
+              ${destinationOptions}
             </datalist>
           </div>
 
@@ -167,6 +205,7 @@ const createEditPointTemplate = (point, options = {}) => {
               ${hasOffers ? `${offersMarkup}` : ``}
             </div>
           </section>
+          ${destinationsMarkup}
         </section>
       </form>`
   );
@@ -196,6 +235,7 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   getTemplate() {
+    debugger;
     const allOffers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
     return createEditPointTemplate(this._point, {
       city: this._editedCity,
@@ -203,7 +243,8 @@ export default class EditPoint extends AbstractSmartComponent {
       externalData: this._externalData,
       selectedOffers: this._editedOffers,
       allOffers,
-      description: this._editedDescription
+      description: this._editedDescription,
+      destinations: this._destinationsModel.getDestinations(),
     });
   }
 

@@ -28,10 +28,11 @@ const parseFormData = (formData, destinationModel, offersModel) => {
   const name = formData.get(`event-destination`);
   const type = formData.get(`event-type`).toLowerCase();
   const description = destinationModel.getDescriptionByName(name);
-
+  debugger;
+  const pictures = destinationModel.getPicturesByName(name);
   const offers = offersModel.getOffersWithIdByType(type);
 
-  const destination = {name, description, pictures: []};
+  const destination = {name, description, pictures};
   return new PointModel({
     "type": type,
     "is_favorite": !!formData.get(`event-favorite`),

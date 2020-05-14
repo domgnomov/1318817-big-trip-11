@@ -9,14 +9,29 @@ export default class Destinations {
     this._destinations = destinations;
   }
 
+  getDestinations() {
+    return this._destinations;
+  }
+
   getDescriptionByName(name) {
     if (name) {
       const destinations = this._destinations
         .slice()
         .filter((destination) => destination.name === name);
-      return destinations[0].description;
+      return destinations && destinations.length > 0 ? destinations[0].description : ``;
     } else {
       return ``;
+    }
+  }
+
+  getPicturesByName(name) {
+    if (name) {
+      const destinations = this._destinations
+        .slice()
+        .filter((destination) => destination.name === name);
+      return destinations && destinations.length > 0 ? destinations[0].pictures : [];
+    } else {
+      return [];
     }
   }
 }
