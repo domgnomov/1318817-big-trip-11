@@ -17,7 +17,7 @@ const createOffersMarkup = (offers) => {
 };
 
 const createPointTemplate = (point) => {
-  const {type, city, offers, price, startDate, endDate, getInterval} = point;
+  const {type, name, offers, price, startDate, endDate, getInterval} = point;
 
   const hasOffers = Array.isArray(offers) && offers.length;
   const offersMarkup = hasOffers ? createOffersMarkup(offers) : [];
@@ -35,7 +35,7 @@ const createPointTemplate = (point) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
         </div>
-        <h3 class="event__title">${type ? capitalize(type) : ``} ${typePreposition} ${city ? city : ``}</h3>
+        <h3 class="event__title">${type ? capitalize(type) : ``} ${typePreposition} ${name ? name : ``}</h3>
 
         <div class="event__schedule">
           <p class="event__time">

@@ -11,7 +11,7 @@ const getCostValue = (points) => {
 
 const getTitle = (points) => {
   const title = points.reduce(function (acc, current) {
-    return `${acc} ${current.city} ${DELIMITER}`;
+    return `${acc} ${current.name} ${DELIMITER}`;
   }, ``);
   return title.slice(0, title.length - DELIMITER.length);
 };

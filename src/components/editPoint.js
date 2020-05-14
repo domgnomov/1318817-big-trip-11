@@ -38,12 +38,12 @@ const getPictureImages = (pictures) => {
   return picturesImages;
 };
 
-const createDestinationsMarkup = (description, pictures) => {
-  const picturesImages = getPictureImages(pictures);
+const createDestinationsMarkup = (destination) => {
+  const picturesImages = getPictureImages(destination.pictures);
   return (
   `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
+        <p class="event__destination-description">${destination.description}</p>
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
@@ -66,20 +66,18 @@ const getDestinationOptions = (destinations) => {
 
 const createEditPointTemplate = (point, options = {}) => {
   const {price, isFavorite} = point;
-  const {city, type, selectedOffers, allOffers, externalData, destinations} = options;
+  const {name, type, selectedOffers, offers, externalData, destination, allDestinations} = options;
 
   const typePreposition = getPreposition(type);
-  const hasOffers = Array.isArray(allOffers) && allOffers.length;
+  const hasOffers = Array.isArray(offers) && offers.length;
 
-  const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, allOffers) : [];
-  debugger;
-  const isShowDestination = point.description && point.pictures && point.pictures.length > 0;
-  const destinationsMarkup = isShowDestination ? createDestinationsMarkup(point.description, point.pictures) : ``;
+  const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, offers) : [];
+  const destinationsMarkup = destination ? createDestinationsMarkup(destination) : ``;
 
   const deleteButtonText = externalData.deleteButtonText;
   const saveButtonText = externalData.saveButtonText;
 
-  const destinationOptions = getDestinationOptions(destinations);
+  const destinationOptions = getDestinationOptions(allDestinations);
 
   return (
     `<form class="event  event--edit" action="#" method="post">
@@ -156,7 +154,7 @@ const createEditPointTemplate = (point, options = {}) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type ? capitalize(type) : ``} ${typePreposition}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city ? city : ``}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name ? name : ``}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinationOptions}
             </datalist>
@@ -219,10 +217,10 @@ export default class EditPoint extends AbstractSmartComponent {
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
 
-    this._editedCity = point.city;
+    this._editedName = point.name;
     this._editedType = point.type;
     this._editedOffers = point.offers;
-    this._editedDescription = point.description;
+    this._editedDestination = destinationsModel.getDestinationByName(point.name);
     this._startDateFlatpickr = null;
     this._endDateFlatpickr = null;
     this._submitHandler = null;
@@ -236,15 +234,17 @@ export default class EditPoint extends AbstractSmartComponent {
 
   getTemplate() {
     debugger;
-    const allOffers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
+    const offers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
+    const destination = this._editedDestination ? this._destinationsModel.getDestinationByName(this._editedName) : {};
+    const allDestinations = this._destinationsModel.getDestinations();
     return createEditPointTemplate(this._point, {
-      city: this._editedCity,
+      name: this._editedName,
       type: this._editedType,
       externalData: this._externalData,
       selectedOffers: this._editedOffers,
-      allOffers,
-      description: this._editedDescription,
-      destinations: this._destinationsModel.getDestinations(),
+      offers,
+      destination,
+      allDestinations
     });
   }
 
@@ -265,10 +265,10 @@ export default class EditPoint extends AbstractSmartComponent {
   reset() {
     const point = this._point;
 
-    this._editedCity = point.city;
+    this._editedName = point.name;
     this._editedType = point.type;
     this._editedOffers = point.offers;
-    this._editedDescription = point.description;
+    this._editedDestination = this._destinationsModel.getDestinationByName(point.name);
 
     this.rerender();
   }
@@ -360,8 +360,8 @@ export default class EditPoint extends AbstractSmartComponent {
 
     element.querySelector(`.event__input--destination `)
       .addEventListener(`change`, (evt) => {
-        this._editedCity = evt.target.value;
-        this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
+        this._editedName = evt.target.value;
+        this._editedDestination = this._destinationsModel.getDestinationByName(this._editedName);
         this.rerender();
       });
   }

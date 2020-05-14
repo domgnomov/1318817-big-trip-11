@@ -13,7 +13,7 @@ export const Mode = {
 
 export const EmptyPoint = {
   type: null,
-  city: null,
+  name: null,
   offers: null,
   price: 0,
   startDate: null,
