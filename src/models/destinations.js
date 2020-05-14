@@ -20,7 +20,7 @@ export default class Destinations {
         .filter((destination) => destination.name === name);
       return destinations[0];
     }
-    return {};
+    return null;
   }
 
   getDescriptionByName(name) {

@@ -29,9 +29,7 @@ const createOffersMarkup = (selectedOffers, allOffers) => {
 };
 
 const getPictureImages = (pictures) => {
-  debugger;
   const picturesImages = [];
-  debugger;
   pictures.forEach(picture => {
     picturesImages.push(`<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
   });
@@ -57,7 +55,6 @@ const createDestinationsMarkup = (destination) => {
 
 const getDestinationOptions = (destinations) => {
   const destinationOptions = [];
-  debugger;
   destinations.forEach(destination => {
     destinationOptions.push(`<option value="${destination.name}"></option>`);
   });
@@ -233,9 +230,8 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    debugger;
     const offers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
-    const destination = this._editedDestination ? this._destinationsModel.getDestinationByName(this._editedName) : {};
+    const destination = this._editedDestination ? this._destinationsModel.getDestinationByName(this._editedName) : null;
     const allDestinations = this._destinationsModel.getDestinations();
     return createEditPointTemplate(this._point, {
       name: this._editedName,

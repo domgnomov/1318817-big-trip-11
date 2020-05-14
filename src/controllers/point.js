@@ -28,7 +28,6 @@ const parseFormData = (formData, destinationModel, offersModel) => {
   const name = formData.get(`event-destination`);
   const type = formData.get(`event-type`).toLowerCase();
   const description = destinationModel.getDescriptionByName(name);
-  debugger;
   const pictures = destinationModel.getPicturesByName(name);
   const offers = offersModel.getOffersWithIdByType(type);
 
@@ -113,7 +112,6 @@ export default class PointController {
 
       this._onDataChange(this, point, newPoint);
     });
-    debugger;
     switch (mode) {
       case Mode.DEFAULT:
         if (oldPointEditComponent && oldPointComponent) {
@@ -133,7 +131,6 @@ export default class PointController {
         if (this.firstPointContainer) {
           render(this.firstPointContainer, this._pointEditComponent, RenderPosition.BEFOREEND);
         } else {
-          debugger;
           render(this._container, this._pointEditComponent, RenderPosition.AFTERBEGIN);
         }
         break;
