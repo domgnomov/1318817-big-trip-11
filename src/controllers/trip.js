@@ -79,6 +79,11 @@ export default class TripController {
       this._api.deletePoint(oldData.id)
         .then(() => {
           this._pointsModel.removePoint(oldData.id);
+          if (this._pointsModel.getPoints().length === 0) {
+            this._noPointsComponent.show();
+            this._sortComponent.hide();
+            this._daysComponent.hide();
+          }
           this._updatePoints();
         })
         .catch(() => {
@@ -109,6 +114,9 @@ export default class TripController {
     debugger;
     const firstPointContainer = firstDayElement ? firstDayElement.querySelector(`.trip-events__list`) : this._container.getElement();
     this._creatingPoint = new PointController(firstDayElement, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel, firstPointContainer);
+    this._noPointsComponent.hide();
+    this._sortComponent.show();
+    this._daysComponent.show();
     this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
@@ -159,6 +167,7 @@ export default class TripController {
   }
 
   _renderEvents(points) {
+    debugger;
     if (points.length === 0) {
       render(this._container.getElement(), this._noPointsComponent, RenderPosition.BEFOREEND);
       return;
