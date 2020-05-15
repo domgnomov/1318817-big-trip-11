@@ -110,14 +110,18 @@ export default class TripController {
       return;
     }
 
-    const dayContainer = this._daysComponent.getFirstDayElement();
-    const pointContainer = dayContainer ? dayContainer.querySelector(`.trip-events__list`) : null;
-    const firstPointContainer = pointContainer ? null : this._container.getElement();
-
-    this._creatingPoint = new PointController(pointContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel, firstPointContainer);
     this._noPointsComponent.hide();
     this._sortComponent.show();
     this._daysComponent.show();
+
+    this._pointsModel.setDefaultFilter();
+    this._resetSort();
+    this._pointsModel.resetFilter();
+
+    const dayContainer = this._daysComponent.getFirstDayElement();
+    const pointContainer = dayContainer ? dayContainer.querySelector(`.trip-events__list`) : null;
+    const firstPointContainer = pointContainer ? null : this._container.getElement();
+    this._creatingPoint = new PointController(pointContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel, firstPointContainer);
     this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
@@ -178,8 +182,12 @@ export default class TripController {
   }
 
   _onFilterChange() {
+    this._resetSort();
+  }
+
+  _resetSort() {
     this._updatePoints();
-    this._sortComponent.getDefaultSortTypeElement().click();
+    this._sortComponent.resetSort();
   }
 
 }

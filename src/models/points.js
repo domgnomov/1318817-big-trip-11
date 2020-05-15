@@ -11,10 +11,6 @@ export default class Points {
     this._dataChangeHandlers = [];
   }
 
-  getAllPoints() {
-    return this._points;
-  }
-
   getPoints() {
     return getPointsByFilter(this._points, this._activeFilterType);
   }
@@ -27,6 +23,10 @@ export default class Points {
   setFilter(filterType) {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
+  }
+
+  setDefaultFilter() {
+    this._activeFilterType = FilterType.EVERYTHING;
   }
 
   removePoint(id) {
@@ -45,6 +45,10 @@ export default class Points {
 
   addPoint(point) {
     this._points = [].concat(point, this._points);
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
+  resetFilter(){
     this._callHandlers(this._dataChangeHandlers);
   }
 
