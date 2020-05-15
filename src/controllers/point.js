@@ -83,6 +83,10 @@ export default class PointController {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
+    const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
+    this._pointEditComponent.setData({
+      resetButtonText: resetButtonText,
+    });
 
     this._pointEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
@@ -91,16 +95,18 @@ export default class PointController {
 
       const data = parseFormData(formData, this._destinationsModel, this._offersModel);
 
+      const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
       this._pointEditComponent.setData({
         saveButtonText: `Saving...`,
+        resetButtonText: resetButtonText
       });
 
       this._onDataChange(this, point, data);
     });
 
-    this._pointEditComponent.setDeleteButtonClickHandler(() => {
+    this._pointEditComponent.setResetButtonClickHandler(() => {
       this._pointEditComponent.setData({
-        deleteButtonText: `Deleting...`,
+        resetButtonText: `Deleting...`,
       });
 
       this._onDataChange(this, point, null);
@@ -164,6 +170,9 @@ export default class PointController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
+      if (this._mode === Mode.ADDING) {
+        this._onDataChange(this, EmptyPoint, null);
+      }
       this._replaceEditToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
@@ -182,10 +191,9 @@ export default class PointController {
     setTimeout(() => {
       this._pointEditComponent.getElement().style.animation = ``;
       this._pointComponent.getElement().style.animation = ``;
-
+      const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
       this._pointEditComponent.setData({
-        saveButtonText: `Save`,
-        deleteButtonText: `Delete`,
+        resetButtonText: resetButtonText,
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }

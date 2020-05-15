@@ -21,6 +21,7 @@ export default class TripController {
     this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
     this._daysComponent = new DaysComponent();
+    debugger;
     this._creatingPoint = null;
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -53,7 +54,9 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
+    debugger;
     if (oldData === EmptyPoint) {
+      debugger;
       this._creatingPoint = null;
       if (newData === null) {
         pointController.destroy();
@@ -107,9 +110,11 @@ export default class TripController {
       return;
     }
 
-    const firstDayElement = this._daysComponent.getFirstDayElement();
-    const firstPointContainer = firstDayElement ? firstDayElement.querySelector(`.trip-events__list`) : this._container.getElement();
-    this._creatingPoint = new PointController(firstDayElement, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel, firstPointContainer);
+    const dayContainer = this._daysComponent.getFirstDayElement();
+    const pointContainer = dayContainer ? dayContainer.querySelector(`.trip-events__list`) : null;
+    const firstPointContainer = pointContainer ? null : this._container.getElement();
+
+    this._creatingPoint = new PointController(pointContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel, firstPointContainer);
     this._noPointsComponent.hide();
     this._sortComponent.show();
     this._daysComponent.show();
@@ -156,6 +161,7 @@ export default class TripController {
   }
 
   render() {
+    debugger;
     const points = this._pointsModel.getPoints();
     this._renderEvents(points);
     this._renderPoints(points);

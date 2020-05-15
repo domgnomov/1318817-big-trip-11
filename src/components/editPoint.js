@@ -5,7 +5,7 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 const DefaultData = {
-  deleteButtonText: `Delete`,
+  resetButtonText: `Delete`,
   saveButtonText: `Save`,
 };
 
@@ -71,7 +71,7 @@ const createEditPointTemplate = (point, options = {}) => {
   const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, offers) : [];
   const destinationsMarkup = destination ? createDestinationsMarkup(destination) : ``;
 
-  const deleteButtonText = externalData.deleteButtonText;
+  const resetButtonText = externalData.resetButtonText;
   const saveButtonText = externalData.saveButtonText;
 
   const destinationOptions = getDestinationOptions(allDestinations);
@@ -178,7 +178,7 @@ const createEditPointTemplate = (point, options = {}) => {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">${saveButtonText}</button>
-          <button class="event__reset-btn" type="reset">${deleteButtonText}</button>
+          <button class="event__reset-btn" type="reset">${resetButtonText}</button>
 
           <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
           <label class="event__favorite-btn" for="event-favorite-1">
@@ -282,7 +282,7 @@ export default class EditPoint extends AbstractSmartComponent {
     this._setFavoritesHandler = handler;
   }
 
-  setDeleteButtonClickHandler(handler) {
+  setResetButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, handler);
 
@@ -291,7 +291,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
-    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
+    this.setResetButtonClickHandler(this._deleteButtonClickHandler);
     this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
     this._subscribeOnEvents();
   }
