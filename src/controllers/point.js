@@ -36,7 +36,7 @@ const parseFormData = (formData, destinationModel, offersModel) => {
   return new PointModel({
     "type": type ? type.toLowerCase() : ``,
     "is_favorite": !!formData.get(`event-favorite`),
-    "base_price": Number.parseInt(formData.get(`event-price`), 10),
+    "base_price": Number(formData.get(`event-price`)),
     "date_from": formData.get(`event-start-time`),
     "date_to": formData.get(`event-end-time`),
     "destination": destination,
@@ -151,8 +151,9 @@ export default class PointController {
 
   _isDataValid(data) {
     const isDatesValid = data.startDate && data.endDate && compareByDate(data.startDate, data.endDate) >= 0;
+    const isPricePositiveInteger = data.price > 0 && Number.isInteger(Number(data.price));
 
-    return isDatesValid && data.type && data.name;
+    return isDatesValid && data.type && data.name && isPricePositiveInteger;
   }
 
   ifFirstPoint() {
