@@ -21,7 +21,7 @@ export default class TripController {
     this._noPointsComponent = new NoPointsComponent();
     this._sortComponent = new SortComponent();
     this._daysComponent = new DaysComponent();
-    debugger;
+
     this._creatingPoint = null;
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -54,9 +54,7 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    debugger;
     if (oldData === EmptyPoint) {
-      debugger;
       this._creatingPoint = null;
       if (newData === null) {
         pointController.destroy();
@@ -165,7 +163,6 @@ export default class TripController {
   }
 
   render() {
-    debugger;
     const points = this._pointsModel.getPoints();
     this._renderEvents(points);
     this._renderPoints(points);

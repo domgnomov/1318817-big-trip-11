@@ -16,7 +16,7 @@ export const formatDate = (date) => {
 };
 
 export const formatDateTime = (date) => {
-  return moment(date).format(`YYYY-MM-DDTHH:mm:ss`);
+  return moment(date).format(`YYYY-MM-DDTHH:mm`);
 };
 
 const compareByHoursAndMinutes = (a, b) => {
@@ -34,13 +34,13 @@ export const formatDateWithMonthName = (date, previousDate) => {
   return moment(date).format(`MMMM DD`);
 };
 
-export const getFormattedMilliseconds = (milliseconds) => {
-  if (milliseconds / DAY > 1 || milliseconds % DAY === 0) {
-    return moment.utc(milliseconds).format(`DD[d] HH[h] mm[m]`);
-  } else if (milliseconds / HOUR > 1 || milliseconds % HOUR === 0) {
-    return moment.utc(milliseconds).format(`HH[h] mm[m]`);
+export const getFormattedMilliseconds = (ms) => {
+  if (ms / DAY > 1 || (ms % DAY === 0 && ms !== 0)) {
+    return moment.utc(ms - DAY).format(`DD[d] HH[h] mm[m]`);
+  } else if (ms / HOUR > 1 || (ms % HOUR === 0 && ms !== 0)) {
+    return moment.utc(ms).format(`HH[h] mm[m]`);
   } else {
-    return moment.utc(milliseconds).format(`mm[m]`);
+    return moment.utc(ms).format(`mm[m]`);
   }
 };
 
