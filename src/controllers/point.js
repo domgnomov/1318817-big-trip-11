@@ -2,6 +2,7 @@ import PointComponent from "../components/point";
 import PointEditComponent from "../components/editPoint";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
 import PointModel from "../models/point";
+import {compareByDate} from "../utils/common";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -26,14 +27,14 @@ export const EmptyPoint = {
 
 const parseFormData = (formData, destinationModel, offersModel) => {
   const name = formData.get(`event-destination`);
-  const type = formData.get(`event-type`).toLowerCase();
+  const type = formData.get(`event-type`);
   const description = destinationModel.getDescriptionByName(name);
   const pictures = destinationModel.getPicturesByName(name);
   const offers = offersModel.getOffersWithIdByType(type);
 
   const destination = {name, description, pictures};
   return new PointModel({
-    "type": type,
+    "type": type ? type.toLowerCase() : ``,
     "is_favorite": !!formData.get(`event-favorite`),
     "base_price": Number.parseInt(formData.get(`event-price`), 10),
     "date_from": formData.get(`event-start-time`),
@@ -101,6 +102,11 @@ export default class PointController {
         resetButtonText: resetButtonText
       });
 
+      if (!this._isDataValid(data)) {
+        this.shake();
+        return;
+      }
+
       this._onDataChange(this, point, data);
     });
 
@@ -141,6 +147,12 @@ export default class PointController {
         }
         break;
     }
+  }
+
+  _isDataValid(data) {
+    const isDatesValid = data.startDate && data.endDate && compareByDate(data.startDate, data.endDate) >= 0;
+
+    return isDatesValid && data.type && data.name;
   }
 
   ifFirstPoint() {

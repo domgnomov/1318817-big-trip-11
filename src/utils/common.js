@@ -44,6 +44,18 @@ export const getFormattedMilliseconds = (milliseconds) => {
   }
 };
 
+export const compareByDate = (startDate, endDate) => {
+  const from = startDate.getTime();
+  const to = endDate.getTime();
+  if (from === to) {
+    return 0;
+  } else if (from < to) {
+    return 1;
+  } else {
+    return -1;
+  }
+};
+
 export const getMillisecondsByInterval = (startDate, endDate) => {
   const diff = moment(endDate).diff(moment(startDate));
   return moment.duration(diff).asMilliseconds();
