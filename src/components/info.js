@@ -5,9 +5,14 @@ const DELIMITER = `&nbsp;&mdash;&nbsp;`;
 const DOTS = `&nbsp;...&nbsp;`;
 
 const getCostValue = (points) => {
-  return points.reduce(function (sum, current) {
-    return sum + current.price;
-  }, 0);
+  let sum = 0;
+  points.forEach((point) => {
+    point.offers.forEach(offer => {
+      sum += offer.price;
+    });
+    sum += point.price;
+  });
+  return sum;
 };
 
 const getTitle = (points) => {
