@@ -1,7 +1,8 @@
 import AbstractComponent from "./abstract-component.js";
 import {formatDateWithMonthName} from "../utils/common";
 
-const DELIMITER = `&mdash;`;
+const DELIMITER = `&nbsp;&mdash;&nbsp;`;
+const DOTS = `&nbsp;...&nbsp;`;
 
 const getCostValue = (points) => {
   return points.reduce(function (sum, current) {
@@ -10,7 +11,10 @@ const getCostValue = (points) => {
 };
 
 const getTitle = (points) => {
-  const title = points.reduce(function (acc, current) {
+  if (points.length > 3) {
+    return points[0].name.concat(DELIMITER, DOTS, DELIMITER, points[points.length - 1].name);
+  }
+  const title = points.slice().reduce(function (acc, current) {
     return `${acc} ${current.name} ${DELIMITER}`;
   }, ``);
   return title.slice(0, title.length - DELIMITER.length);
