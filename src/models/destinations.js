@@ -13,6 +13,12 @@ export default class Destinations {
     return this._destinations;
   }
 
+  getDestinationNames() {
+    return this._destinations
+      .slice()
+      .map(d => d.name);
+  }
+
   getDestinationByName(name) {
     if (name) {
       const destinations = this._destinations

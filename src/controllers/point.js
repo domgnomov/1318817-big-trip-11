@@ -151,9 +151,10 @@ export default class PointController {
 
   _isDataValid(data) {
     const isDatesValid = data.startDate && data.endDate && compareByDate(data.startDate, data.endDate) >= 0;
-    const isPricePositiveInteger = data.price > 0 && Number.isInteger(Number(data.price));
+    const isPricePositiveInteger = data.price >= 0 && Number.isInteger(Number(data.price));
+    const isNameValid = this._destinationsModel.getDestinationNames().includes(data.name);
 
-    return isDatesValid && data.type && data.name && isPricePositiveInteger;
+    return isDatesValid && data.type && data.name && isPricePositiveInteger && isNameValid;
   }
 
   ifFirstPoint() {

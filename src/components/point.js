@@ -3,7 +3,8 @@ import AbstractComponent from "./abstract-component";
 import {capitalize, getFormattedMilliseconds} from "../utils/common";
 
 const createOffersMarkup = (offers) => {
-  return offers
+  const displayedOffers = offers.length > 3 ? offers.slice(0, 3) : offers.slice();
+  return displayedOffers
     .map((offer) => {
       return (
         `<li class="event__offer">

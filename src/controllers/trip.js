@@ -77,12 +77,12 @@ export default class TripController {
       this._api.deletePoint(oldData.id)
         .then(() => {
           this._pointsModel.removePoint(oldData.id);
+          this._updatePoints();
           if (this._pointsModel.getPoints().length === 0) {
             this._noPointsComponent.show();
             this._sortComponent.hide();
             this._daysComponent.hide();
           }
-          this._updatePoints();
         })
         .catch(() => {
           pointController.shake();
