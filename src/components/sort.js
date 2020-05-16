@@ -86,6 +86,22 @@ export default class Sort extends AbstractComponent {
     const parentElement = this.getElement().querySelector(`#sort-event`).parentNode;
     parentElement.querySelector(`label`).click();
   }
+
+  /*updateSort(type) {
+  const parentElement = this._getSortElementByType(this._currenSortType);
+  parentElement.querySelector(`label`).click();
+}
+
+_getSortElementByType(type) {
+  switch (type) {
+    case SortType.DEFAULT:
+      return this.getElement().querySelector(`#sort-event`).parentNode;
+    case SortType.PRICE:
+      return this.getElement().querySelector(`#sort-price`).parentNode;
+    case SortType.TIME:
+      return this.getElement().querySelector(`#sort-time`).parentNode;
+  }
+}*/
 }
 
 

@@ -62,12 +62,14 @@ export default class TripController {
       } else {
         this._api.createPoint(newData)
           .then((point) => {
-            this._pointsModel.addPoint(point);
-            if (pointController.ifFirstPoint()) {
-              pointController.destroy();
-              this.render();
-            } else {
-              pointController.render(point, Mode.DEFAULT);            }
+              this._pointsModel.addPoint(point);
+              if (pointController.ifFirstPoint()) {
+                pointController.destroy();
+                this.render();
+              } else {
+                 pointController.render(point, Mode.DEFAULT);
+              }
+              this._updatePoints();
           })
           .catch(() => {
             pointController.shake();
@@ -95,6 +97,7 @@ export default class TripController {
           if (isSuccess) {
             pointController.render(point, Mode.DEFAULT);
             this._updatePoints();
+            this._onSortTypeChange(this._sortComponent.getSortType())
           }
         })
         .catch(() => {

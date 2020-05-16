@@ -77,7 +77,7 @@ const renderMoneyChart = (moneyCtx, points) => {
   const money = sortedMoneyByPointType.slice().map((point) => point.price);
   const formatted = (val) => `€ ${val}`;
 
-  return renderChart(moneyCtx, pointTypes, money, formatted);
+  return renderChart(moneyCtx, pointTypes, money, formatted, `MONEY`);
 };
 
 const renderTransportChart = (transportCtx, points, transportOfferTypes) => {
@@ -87,7 +87,7 @@ const renderTransportChart = (transportCtx, points, transportOfferTypes) => {
   const counts = sortedTransportByCount.slice().map((point) => point.count);
   const formatted = (val) => `${val}x`;
 
-  return renderChart(transportCtx, transport, counts, formatted);
+  return renderChart(transportCtx, transport, counts, formatted, `TRANSPORT`);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, points, transportOfferTypes) => {
@@ -97,10 +97,10 @@ const renderTimeSpendChart = (timeSpendCtx, points, transportOfferTypes) => {
   const timeSpends = sortedPointTypesByTimeSpend.slice().map((point) => point.timeSpend);
   const formatted = (val) => `${getFormattedMilliseconds(val)}`;
 
-  return renderChart(timeSpendCtx, pointTypes, timeSpends, formatted);
+  return renderChart(timeSpendCtx, pointTypes, timeSpends, formatted, `TIME SPENT`);
 };
 
-const renderChart = (ctx, labels, data, formatter) => {
+const renderChart = (ctx, labels, data, formatter, title) => {
   ctx.height = BAR_HEIGHT * labels.length;
   return new Chart(ctx, {
     plugins: [ChartDataLabels],
@@ -128,7 +128,7 @@ const renderChart = (ctx, labels, data, formatter) => {
       },
       title: {
         display: true,
-        text: `TRANSPORT`,
+        text: title,
         fontColor: `#000000`,
         fontSize: 23,
         position: `left`
