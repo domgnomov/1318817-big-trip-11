@@ -1,6 +1,7 @@
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
 import flatpickr from "flatpickr";
+import {encode} from "he";
 
 import "flatpickr/dist/flatpickr.min.css";
 
@@ -233,14 +234,15 @@ export default class EditPoint extends AbstractSmartComponent {
     const offers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
     const destination = this._editedDestination ? this._destinationsModel.getDestinationByName(this._editedName) : null;
     const allDestinations = this._destinationsModel.getDestinations();
+
     return createEditPointTemplate(this._point, {
-      name: this._editedName,
-      type: this._editedType,
+      name: this._editedName ? encode(this._editedName) : this._editedName,
+      type: this._editedType ? encode(this._editedType) : this._editedType,
       externalData: this._externalData,
       selectedOffers: this._editedOffers,
-      offers,
-      destination,
-      allDestinations
+      offers : offers,
+      destination : destination,
+      allDestinations : allDestinations
     });
   }
 
@@ -361,4 +363,12 @@ export default class EditPoint extends AbstractSmartComponent {
         this.rerender();
       });
   }
+
+  disable() {
+    const formElements = this.getElement().getElementsByTagName('input');
+    for (let element of formElements) {
+      element.disabled = true;
+    }
+  }
+
 }

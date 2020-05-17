@@ -107,6 +107,8 @@ export default class PointController {
         return;
       }
 
+      this._pointEditComponent.disable();
+
       this._onDataChange(this, point, data);
     });
 

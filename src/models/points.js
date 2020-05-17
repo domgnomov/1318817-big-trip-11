@@ -29,6 +29,11 @@ export default class Points {
     this._callHandlers(this._filterChangeHandlers);
   }
 
+  resetFilter() {
+    this.setDefaultFilter();
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
   setDefaultFilter() {
     this._activeFilterType = FilterType.EVERYTHING;
   }
