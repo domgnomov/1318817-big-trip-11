@@ -43,10 +43,12 @@ export default class TripController {
   }
 
   _onViewChange() {
+    this._creatingPoint = null;
     this._pointControllers.forEach((it) => it.setDefaultView());
   }
 
   _onSortTypeChange(sortType) {
+    this._creatingPoint = null;
     const sortedPoints = getSortedPoints(this._pointsModel.getPoints(), sortType);
 
     this._removePoints();
@@ -123,6 +125,7 @@ export default class TripController {
     const pointContainer = dayContainer ? dayContainer.querySelector(`.trip-events__list`) : null;
     const firstPointContainer = pointContainer ? null : this._container.getElement();
     this._creatingPoint = new PointController(pointContainer, this._onDataChange, this._onViewChange, this._offersModel, this._destinationsModel, firstPointContainer);
+    this._pointControllers = this._pointControllers.concat(this._creatingPoint);
     this._creatingPoint.render(EmptyPoint, Mode.ADDING);
   }
 
@@ -186,6 +189,7 @@ export default class TripController {
   }
 
   _resetSort() {
+    this._creatingPoint = null;
     this._updatePoints();
     this._sortComponent.resetSort();
   }
