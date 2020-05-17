@@ -39,6 +39,7 @@ export default class TripController {
   }
 
   show() {
+    this._updatePoints();
     this._container.show();
   }
 
