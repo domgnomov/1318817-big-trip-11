@@ -10,7 +10,7 @@ export default class Offer {
     return {
       "type": this.type,
       "offers": this.offers,
-      "id" : nanoid(),
+      "id": nanoid(),
     };
   }
 

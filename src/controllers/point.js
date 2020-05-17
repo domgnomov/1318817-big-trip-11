@@ -86,7 +86,7 @@ export default class PointController {
     });
     const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
     this._pointEditComponent.setData({
-      resetButtonText: resetButtonText,
+      resetButtonText,
     });
 
     this._pointEditComponent.setSubmitHandler((evt) => {
@@ -96,10 +96,10 @@ export default class PointController {
 
       const data = parseFormData(formData, this._destinationsModel, this._offersModel);
 
-      const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
+      const resetBtnText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
       this._pointEditComponent.setData({
         saveButtonText: `Saving...`,
-        resetButtonText: resetButtonText
+        resetButtonText: resetBtnText
       });
 
       if (!this._isDataValid(data)) {
@@ -209,7 +209,7 @@ export default class PointController {
       this._pointComponent.getElement().style.animation = ``;
       const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
       this._pointEditComponent.setData({
-        resetButtonText: resetButtonText,
+        resetButtonText,
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }

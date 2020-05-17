@@ -31,7 +31,7 @@ const createOffersMarkup = (selectedOffers, allOffers) => {
 
 const getPictureImages = (pictures) => {
   const picturesImages = [];
-  pictures.forEach(picture => {
+  pictures.forEach((picture) => {
     picturesImages.push(`<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
   });
   return picturesImages;
@@ -40,23 +40,23 @@ const getPictureImages = (pictures) => {
 const createDestinationsMarkup = (destination) => {
   const picturesImages = getPictureImages(destination.pictures);
   return (
-  `<section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destination.description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-            ${picturesImages}
+    `<section class="event__section  event__section--destination">
+          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+          <p class="event__destination-description">${destination.description}</p>
+  
+          <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${picturesImages}
+            </div>
           </div>
-        </div>
-      </section>
-    </section>`
+        </section>
+      </section>`
   );
 };
 
 const getDestinationOptions = (destinations) => {
   const destinationOptions = [];
-  destinations.forEach(destination => {
+  destinations.forEach((destination) => {
     destinationOptions.push(`<option value="${destination.name}"></option>`);
   });
   return destinationOptions;
@@ -240,9 +240,9 @@ export default class EditPoint extends AbstractSmartComponent {
       type: this._editedType ? encode(this._editedType) : this._editedType,
       externalData: this._externalData,
       selectedOffers: this._editedOffers,
-      offers : offers,
-      destination : destination,
-      allDestinations : allDestinations
+      offers,
+      destination,
+      allDestinations
     });
   }
 
@@ -365,7 +365,7 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   disable() {
-    const formElements = this.getElement().getElementsByTagName('input');
+    const formElements = this.getElement().getElementsByTagName(`input`);
     for (let element of formElements) {
       element.disabled = true;
     }

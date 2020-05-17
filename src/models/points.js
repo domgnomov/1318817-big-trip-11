@@ -57,7 +57,7 @@ export default class Points {
     this._callHandlers(this._dataChangeHandlers);
   }
 
-  resetFilter(){
+  resetFilter() {
     this._callHandlers(this._dataChangeHandlers);
   }
 

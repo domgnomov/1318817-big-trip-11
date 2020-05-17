@@ -16,7 +16,7 @@ export default class Destinations {
   getDestinationNames() {
     return this._destinations
       .slice()
-      .map(d => d.name);
+      .map((d) => d.name);
   }
 
   getDestinationByName(name) {

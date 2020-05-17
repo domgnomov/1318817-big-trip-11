@@ -39,7 +39,7 @@ export default class Provider {
         });
     }
 
-    const storeOffers= Object.values(this._store.getItems(OFFERS_STORE_NAME));
+    const storeOffers = Object.values(this._store.getItems(OFFERS_STORE_NAME));
 
     return Promise.resolve(Offer.parseOffers(storeOffers));
   }

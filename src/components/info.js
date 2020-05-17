@@ -7,7 +7,7 @@ const DOTS = `&nbsp;...&nbsp;`;
 const getCostValue = (points) => {
   let sum = 0;
   points.forEach((point) => {
-    point.offers.forEach(offer => {
+    point.offers.forEach((offer) => {
       sum += offer.price;
     });
     sum += point.price;

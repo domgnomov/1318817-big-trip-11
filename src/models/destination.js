@@ -12,7 +12,7 @@ export default class Destination {
       "description": this.description,
       "name": this.name,
       "pictures": this.pictures,
-      "id" : nanoid(),
+      "id": nanoid(),
     };
   }
 
