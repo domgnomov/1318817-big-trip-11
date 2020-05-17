@@ -44,4 +44,21 @@ export default class Filter extends AbstractComponent {
       handler(filterName);
     });
   }
+
+  disable(type) {
+    this._toggle(true, type);
+  }
+
+  enable(type) {
+    this._toggle(false, type);
+  }
+
+  _toggle(isDisable, type){
+    const typeElements = this.getElement().getElementsByTagName('input');
+    for (let typeElement of typeElements) {
+      if (typeElement.value === type) {
+        typeElement.disabled = isDisable;
+      }
+    }
+  }
 }
