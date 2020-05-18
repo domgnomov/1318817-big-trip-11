@@ -1,4 +1,4 @@
-import {getMillisecondsByInterval} from "../utils/common";
+import {getMillisecondsByInterval} from "../utils/date";
 
 export default class Point {
   constructor(data) {
@@ -9,7 +9,7 @@ export default class Point {
     this.offers = data[`offers`];
     this.startDate = new Date(data[`date_from`]);
     this.endDate = new Date(data[`date_to`]);
-    this.city = data[`destination`].name;
+    this.name = data[`destination`].name;
     this.pictures = data[`destination`].pictures;
     this.description = data[`destination`].description;
     this.getInterval = function () {
@@ -21,7 +21,7 @@ export default class Point {
 
   toRAW() {
     const destination = {
-      name: this.city,
+      name: this.name,
       pictures: this.pictures,
       description: this.description,
     };

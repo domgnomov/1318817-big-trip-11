@@ -2,6 +2,7 @@ import PointComponent from "../components/point";
 import PointEditComponent from "../components/editPoint";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
 import PointModel from "../models/point";
+import {compareByDate} from "../utils/date";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -13,7 +14,7 @@ export const Mode = {
 
 export const EmptyPoint = {
   type: null,
-  city: null,
+  name: null,
   offers: null,
   price: 0,
   startDate: null,
@@ -26,16 +27,16 @@ export const EmptyPoint = {
 
 const parseFormData = (formData, destinationModel, offersModel) => {
   const name = formData.get(`event-destination`);
-  const type = formData.get(`event-type`).toLowerCase();
+  const type = formData.get(`event-type`);
   const description = destinationModel.getDescriptionByName(name);
-
+  const pictures = destinationModel.getPicturesByName(name);
   const offers = offersModel.getOffersWithIdByType(type);
 
-  const destination = {name, description, pictures: []};
+  const destination = {name, description, pictures};
   return new PointModel({
-    "type": type,
+    "type": type ? type.toLowerCase() : ``,
     "is_favorite": !!formData.get(`event-favorite`),
-    "base_price": Number.parseInt(formData.get(`event-price`), 10),
+    "base_price": Number(formData.get(`event-price`)),
     "date_from": formData.get(`event-start-time`),
     "date_to": formData.get(`event-end-time`),
     "destination": destination,
@@ -56,10 +57,11 @@ const getSelectedOffers = (formData, offers) => {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange, offersModel, destinationsModel) {
+  constructor(container, onDataChange, onViewChange, offersModel, destinationsModel, firstPointContainer) {
     this._container = container;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this.firstPointContainer = firstPointContainer;
 
     this._onViewChange = onViewChange;
     this._pointComponent = null;
@@ -82,6 +84,10 @@ export default class PointController {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
+    const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
+    this._pointEditComponent.setData({
+      resetButtonText,
+    });
 
     this._pointEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
@@ -90,16 +96,25 @@ export default class PointController {
 
       const data = parseFormData(formData, this._destinationsModel, this._offersModel);
 
+      const resetBtnText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
       this._pointEditComponent.setData({
         saveButtonText: `Saving...`,
+        resetButtonText: resetBtnText
       });
+
+      if (!this._isDataValid(data)) {
+        this.shake();
+        return;
+      }
+
+      this._pointEditComponent.disable();
 
       this._onDataChange(this, point, data);
     });
 
-    this._pointEditComponent.setDeleteButtonClickHandler(() => {
+    this._pointEditComponent.setResetButtonClickHandler(() => {
       this._pointEditComponent.setData({
-        deleteButtonText: `Deleting...`,
+        resetButtonText: `Deleting...`,
       });
 
       this._onDataChange(this, point, null);
@@ -111,7 +126,6 @@ export default class PointController {
 
       this._onDataChange(this, point, newPoint);
     });
-
     switch (mode) {
       case Mode.DEFAULT:
         if (oldPointEditComponent && oldPointComponent) {
@@ -128,9 +142,25 @@ export default class PointController {
           remove(oldPointEditComponent);
         }
         document.addEventListener(`keydown`, this._onEscKeyDown);
-        render(this._container, this._pointEditComponent, RenderPosition.AFTERBEGIN);
+        if (this.firstPointContainer) {
+          render(this.firstPointContainer, this._pointEditComponent, RenderPosition.BEFOREEND);
+        } else {
+          render(this._container, this._pointEditComponent, RenderPosition.AFTERBEGIN);
+        }
         break;
     }
+  }
+
+  _isDataValid(data) {
+    const isDatesValid = data.startDate && data.endDate && compareByDate(data.startDate, data.endDate) >= 0;
+    const isPricePositiveInteger = data.price >= 0 && Number.isInteger(Number(data.price));
+    const isNameValid = this._destinationsModel.getDestinationNames().includes(data.name);
+
+    return isDatesValid && data.type && data.name && isPricePositiveInteger && isNameValid;
+  }
+
+  ifFirstPoint() {
+    return !!this.firstPointContainer;
   }
 
   _replaceEditToPoint() {
@@ -156,6 +186,9 @@ export default class PointController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
+      if (this._mode === Mode.ADDING) {
+        this._onDataChange(this, EmptyPoint, null);
+      }
       this._replaceEditToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
@@ -174,10 +207,9 @@ export default class PointController {
     setTimeout(() => {
       this._pointEditComponent.getElement().style.animation = ``;
       this._pointComponent.getElement().style.animation = ``;
-
+      const resetButtonText = this._mode === Mode.ADDING ? `Cancel` : `Delete`;
       this._pointEditComponent.setData({
-        saveButtonText: `Save`,
-        deleteButtonText: `Delete`,
+        resetButtonText,
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }

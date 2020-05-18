@@ -1,5 +1,7 @@
 import FilterComponent from "../components/filter";
 import {render, RenderPosition, replace} from "../utils/render";
+import {getPointsByFilter} from "../utils/filter";
+import {FilterType} from "../const";
 
 export default class FilterController {
   constructor(container, pointsModel) {
@@ -17,14 +19,28 @@ export default class FilterController {
   render() {
     const container = this._container;
     const oldComponent = this._filterComponent;
-
-    this._filterComponent = new FilterComponent();
+    this._filterComponent = new FilterComponent(this._pointsModel.getActiveFilterType());
+    this._checkFilterTypeAvailability();
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
     } else {
       render(container, this._filterComponent, RenderPosition.BEFOREEND);
+    }
+  }
+
+  _checkFilterTypeAvailability() {
+    this._checkAbility(FilterType.FUTURE);
+    this._checkAbility(FilterType.PAST);
+  }
+
+  _checkAbility(type) {
+    const filteredPoints = getPointsByFilter(this._pointsModel.getAllPoints(), type);
+    if (!Array.isArray(filteredPoints) || filteredPoints.length === 0) {
+      this._filterComponent.disable(type);
+    } else {
+      this._filterComponent.enable(type);
     }
   }
 

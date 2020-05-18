@@ -1,17 +1,27 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatDateWithMonthName} from "../utils/common";
+import {formatDateWithMonthName} from "../utils/date";
 
-const DELIMITER = `&mdash;`;
+const DELIMITER = `&nbsp;&mdash;&nbsp;`;
+const DOTS = `&nbsp;...&nbsp;`;
+const DISPLAYED_OFFERS_LIMIT = 3;
 
 const getCostValue = (points) => {
-  return points.reduce(function (sum, current) {
-    return sum + current.price;
-  }, 0);
+  let sum = 0;
+  points.forEach((point) => {
+    point.offers.forEach((offer) => {
+      sum += offer.price;
+    });
+    sum += point.price;
+  });
+  return sum;
 };
 
 const getTitle = (points) => {
-  const title = points.reduce(function (acc, current) {
-    return `${acc} ${current.city} ${DELIMITER}`;
+  if (points.length > DISPLAYED_OFFERS_LIMIT) {
+    return points[0].name.concat(DELIMITER, DOTS, DELIMITER, points[points.length - 1].name);
+  }
+  const title = points.slice().reduce(function (acc, current) {
+    return `${acc} ${current.name} ${DELIMITER}`;
   }, ``);
   return title.slice(0, title.length - DELIMITER.length);
 };

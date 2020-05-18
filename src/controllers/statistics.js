@@ -15,6 +15,7 @@ export default class StatisticsController {
   }
 
   show() {
+    this._pointsModel.resetFilter();
     this._statisticsComponent.show();
   }
 

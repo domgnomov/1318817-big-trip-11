@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import {formatDateWithMonthName, formatDate} from "../utils/common.js";
+import {formatDateWithMonthName, formatDate} from "../utils/date.js";
 
 const createDayTemplate = (day, dayCount) => {
   const date = day ? new Date(day) : null;

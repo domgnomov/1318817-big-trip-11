@@ -82,9 +82,9 @@ export default class Sort extends AbstractComponent {
     });
   }
 
-  getDefaultSortTypeElement() {
+  resetSort() {
     const parentElement = this.getElement().querySelector(`#sort-event`).parentNode;
-    return parentElement.querySelector(`label`);
+    parentElement.querySelector(`label`).click();
   }
 }
 

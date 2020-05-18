@@ -1,11 +1,12 @@
 import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractSmartComponent from "./abstract-smart-component";
 import flatpickr from "flatpickr";
+import {encode} from "he";
 
 import "flatpickr/dist/flatpickr.min.css";
 
 const DefaultData = {
-  deleteButtonText: `Delete`,
+  resetButtonText: `Delete`,
   saveButtonText: `Save`,
 };
 
@@ -28,26 +29,61 @@ const createOffersMarkup = (selectedOffers, allOffers) => {
     .join(`\n`);
 };
 
+const getPictureImages = (pictures) => {
+  const picturesImages = [];
+  pictures.forEach((picture) => {
+    picturesImages.push(`<img class="event__photo" src="${picture.src}" alt="${picture.description}">`);
+  });
+  return picturesImages;
+};
+
+const createDestinationsMarkup = (destination) => {
+  const picturesImages = getPictureImages(destination.pictures);
+  return (
+    `<section class="event__section  event__section--destination">
+          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+          <p class="event__destination-description">${destination.description}</p>
+  
+          <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${picturesImages}
+            </div>
+          </div>
+        </section>
+      </section>`
+  );
+};
+
+const getDestinationOptions = (destinations) => {
+  const destinationOptions = [];
+  destinations.forEach((destination) => {
+    destinationOptions.push(`<option value="${destination.name}"></option>`);
+  });
+  return destinationOptions;
+};
+
 const createEditPointTemplate = (point, options = {}) => {
   const {price, isFavorite} = point;
-  const {city, type, selectedOffers, allOffers, externalData} = options;
+  const {name, type, selectedOffers, offers, externalData, destination, allDestinations} = options;
 
   const typePreposition = getPreposition(type);
-  const hasOffers = Array.isArray(allOffers) && allOffers.length;
+  const hasOffers = Array.isArray(offers) && offers.length;
 
-  const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, allOffers) : [];
+  const offersMarkup = hasOffers ? createOffersMarkup(selectedOffers, offers) : [];
+  const destinationsMarkup = destination ? createDestinationsMarkup(destination) : ``;
 
-  const deleteButtonText = externalData.deleteButtonText;
+  const resetButtonText = externalData.resetButtonText;
   const saveButtonText = externalData.saveButtonText;
 
+  const destinationOptions = getDestinationOptions(allDestinations);
+
   return (
-    `<li class="trip-events__item">
-      <form class="event  event--edit" action="#" method="post">
+    `<form class="event  event--edit" action="#" method="post">
         <header class="event__header">
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="${type ? `Event type icon` : ``}">
+              <img class="event__type-icon" width="17" height="17" src="${type ? `img/icons/${type}.png` : ``}" alt="${type ? `Event type icon` : ``}">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -86,7 +122,7 @@ const createEditPointTemplate = (point, options = {}) => {
                 </div>
 
                 <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
                   <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
                 </div>
               </fieldset>
@@ -116,12 +152,9 @@ const createEditPointTemplate = (point, options = {}) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type ? capitalize(type) : ``} ${typePreposition}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city ? city : ``}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name ? name : ``}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Moscow"></option>
-              <option value="New-York"></option>
-              <option value="London"></option>
-              <option value="Paris"></option>
+              ${destinationOptions}
             </datalist>
           </div>
 
@@ -146,7 +179,7 @@ const createEditPointTemplate = (point, options = {}) => {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">${saveButtonText}</button>
-          <button class="event__reset-btn" type="reset">${deleteButtonText}</button>
+          <button class="event__reset-btn" type="reset">${resetButtonText}</button>
 
           <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
           <label class="event__favorite-btn" for="event-favorite-1">
@@ -168,9 +201,9 @@ const createEditPointTemplate = (point, options = {}) => {
               ${hasOffers ? `${offersMarkup}` : ``}
             </div>
           </section>
+          ${destinationsMarkup}
         </section>
-      </form>
-    </li>`
+      </form>`
   );
 };
 
@@ -182,10 +215,10 @@ export default class EditPoint extends AbstractSmartComponent {
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
 
-    this._editedCity = point.city;
+    this._editedName = point.name;
     this._editedType = point.type;
     this._editedOffers = point.offers;
-    this._editedDescription = point.description;
+    this._editedDestination = destinationsModel.getDestinationByName(point.name);
     this._startDateFlatpickr = null;
     this._endDateFlatpickr = null;
     this._submitHandler = null;
@@ -198,14 +231,18 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    const allOffers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
+    const offers = this._editedType ? this._offersModel.getOffersWithIdByType(this._editedType) : [];
+    const destination = this._editedDestination ? this._destinationsModel.getDestinationByName(this._editedName) : null;
+    const allDestinations = this._destinationsModel.getDestinations();
+
     return createEditPointTemplate(this._point, {
-      city: this._editedCity,
-      type: this._editedType,
+      name: this._editedName ? encode(this._editedName) : this._editedName,
+      type: this._editedType ? encode(this._editedType) : this._editedType,
       externalData: this._externalData,
       selectedOffers: this._editedOffers,
-      allOffers,
-      description: this._editedDescription
+      offers,
+      destination,
+      allDestinations
     });
   }
 
@@ -226,17 +263,16 @@ export default class EditPoint extends AbstractSmartComponent {
   reset() {
     const point = this._point;
 
-    this._editedCity = point.city;
+    this._editedName = point.name;
     this._editedType = point.type;
     this._editedOffers = point.offers;
-    this._editedDescription = point.description;
+    this._editedDestination = this._destinationsModel.getDestinationByName(point.name);
 
     this.rerender();
   }
 
   setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, handler);
+    this.getElement().addEventListener(`submit`, handler);
 
     this._submitHandler = handler;
   }
@@ -248,7 +284,7 @@ export default class EditPoint extends AbstractSmartComponent {
     this._setFavoritesHandler = handler;
   }
 
-  setDeleteButtonClickHandler(handler) {
+  setResetButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, handler);
 
@@ -257,7 +293,7 @@ export default class EditPoint extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
-    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
+    this.setResetButtonClickHandler(this._deleteButtonClickHandler);
     this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
     this._subscribeOnEvents();
   }
@@ -270,7 +306,7 @@ export default class EditPoint extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = this.getElement().querySelector(`.event--edit`);
+    const form = this.getElement();
     return new FormData(form);
   }
 
@@ -322,9 +358,17 @@ export default class EditPoint extends AbstractSmartComponent {
 
     element.querySelector(`.event__input--destination `)
       .addEventListener(`change`, (evt) => {
-        this._editedCity = evt.target.value;
-        this._editedDescription = this._destinationsModel.getDescriptionByName(this._editedCity);
+        this._editedName = evt.target.value;
+        this._editedDestination = this._destinationsModel.getDestinationByName(this._editedName);
         this.rerender();
       });
   }
+
+  disable() {
+    const formElements = this.getElement().getElementsByTagName(`input`);
+    for (let element of formElements) {
+      element.disabled = true;
+    }
+  }
+
 }

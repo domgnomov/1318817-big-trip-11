@@ -5,14 +5,14 @@ import {render, RenderPosition} from "./utils/render.js";
 import SiteMenuComponent, {MenuItem} from "./components/menu.js";
 import InfoController from "./controllers/info";
 import StatisticsController from "./controllers/statistics";
-import API from "./api";
 import PointLoadingComponent from "./components/pointLoading";
 import EventsComponent from "./components/events";
 import DestinationsModel from "./models/destinations";
 import OffersModel from "./models/offers";
+import API from "./api";
 
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
-const AUTHORIZATION = `Basic sfsdf78sd8f83ju=`;
+const AUTHORIZATION = `Basic sfsdf131sd8f83ju=`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
