@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component";
+import {FilterType} from "../const";
 
 const FILTER_ID_PREFIX = `filter-`;
 
@@ -6,21 +7,21 @@ const getFilterNameById = (id) => {
   return id.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterTemplate = () => {
+const createFilterTemplate = (checkedFilterType) => {
   return (
     `<form class="trip-filters" action="#" method="get">
         <div class="trip-filters__filter">
-          <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
+          <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" ${checkedFilterType === `everything` ? `checked` : ``}>
           <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
         </div>
 
         <div class="trip-filters__filter">
-          <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
+          <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future" ${checkedFilterType === `future` ? `checked` : ``}>
           <label class="trip-filters__filter-label" for="filter-future">Future</label>
         </div>
 
         <div class="trip-filters__filter">
-          <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
+          <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past" ${checkedFilterType === `past` ? `checked` : ``}>
           <label class="trip-filters__filter-label" for="filter-past">Past</label>
         </div>
 
@@ -30,12 +31,14 @@ const createFilterTemplate = () => {
 };
 
 export default class Filter extends AbstractComponent {
-  constructor() {
+  constructor(checkedFilterType) {
     super();
+
+    this._checkedFilterType = checkedFilterType ? checkedFilterType : FilterType.EVERYTHING;
   }
 
   getTemplate() {
-    return createFilterTemplate();
+    return createFilterTemplate(this._checkedFilterType);
   }
 
   setFilterChangeHandler(handler) {

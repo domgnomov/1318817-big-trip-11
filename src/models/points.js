@@ -15,6 +15,10 @@ export default class Points {
     return getPointsByFilter(this._points, this._activeFilterType);
   }
 
+  getActiveFilterType() {
+    return this._activeFilterType;
+  }
+
   getAllPoints() {
     return this._points;
   }

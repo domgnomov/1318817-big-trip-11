@@ -83,7 +83,7 @@ export default class TripController {
         .then(() => {
           this._pointsModel.removePoint(oldData.id);
           this._updatePoints();
-          if (this._pointsModel.getPoints().length === 0) {
+          if (this._pointsModel.getAllPoints().length === 0) {
             this._noPointsComponent.show();
             this._sortComponent.hide();
             this._daysComponent.hide();

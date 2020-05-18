@@ -19,8 +19,7 @@ export default class FilterController {
   render() {
     const container = this._container;
     const oldComponent = this._filterComponent;
-
-    this._filterComponent = new FilterComponent();
+    this._filterComponent = new FilterComponent(this._pointsModel.getActiveFilterType());
     this._checkFilterTypeAbilities();
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
