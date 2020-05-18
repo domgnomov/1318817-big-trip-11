@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatDateWithMonthName} from "../utils/common";
+import {formatDateWithMonthName} from "../utils/date";
 
 const DELIMITER = `&nbsp;&mdash;&nbsp;`;
 const DOTS = `&nbsp;...&nbsp;`;

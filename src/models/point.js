@@ -1,4 +1,4 @@
-import {getMillisecondsByInterval} from "../utils/common";
+import {getMillisecondsByInterval} from "../utils/date";
 
 export default class Point {
   constructor(data) {

@@ -1,7 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {getFormattedMilliseconds} from "../utils/common";
+import {getFormattedMilliseconds} from "../utils/date";
 
 const BAR_HEIGHT = 55;
 

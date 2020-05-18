@@ -1,6 +1,7 @@
-import {formatTime, formatDateTime, getPreposition} from "../utils/common.js";
+import {formatTime, formatDateTime} from "../utils/date.js";
+import {getPreposition, capitalize} from "../utils/common.js";
 import AbstractComponent from "./abstract-component";
-import {capitalize, getFormattedMilliseconds} from "../utils/common";
+import { getFormattedMilliseconds} from "../utils/date";
 
 const createOffersMarkup = (offers) => {
   const displayedOffers = offers.length > 3 ? offers.slice(0, 3) : offers.slice();

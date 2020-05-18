@@ -2,7 +2,7 @@ import PointComponent from "../components/point";
 import PointEditComponent from "../components/editPoint";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
 import PointModel from "../models/point";
-import {compareByDate} from "../utils/common";
+import {compareByDate} from "../utils/date";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 

@@ -3,9 +3,10 @@ import SortComponent, {SortType} from "../components/sort";
 import DaysComponent from "../components/days";
 import {render, RenderPosition} from "../utils/render";
 import Day from "../components/day";
-import {getDays, getSortedPoints} from "../utils/common";
+import {getDays} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
 import PointContainer from "../components/pointContainer";
+import {getSortedPoints} from "../utils/sort";
 
 export const INITIAL_DAYS_COUNT = 1;
 
