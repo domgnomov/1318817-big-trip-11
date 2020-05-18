@@ -20,7 +20,7 @@ export default class FilterController {
     const container = this._container;
     const oldComponent = this._filterComponent;
     this._filterComponent = new FilterComponent(this._pointsModel.getActiveFilterType());
-    this._checkFilterTypeAbilities();
+    this._checkFilterTypeAvailability();
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
     if (oldComponent) {
@@ -30,7 +30,7 @@ export default class FilterController {
     }
   }
 
-  _checkFilterTypeAbilities() {
+  _checkFilterTypeAvailability() {
     this._checkAbility(FilterType.FUTURE);
     this._checkAbility(FilterType.PAST);
   }

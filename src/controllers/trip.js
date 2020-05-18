@@ -82,12 +82,7 @@ export default class TripController {
       this._api.deletePoint(oldData.id)
         .then(() => {
           this._pointsModel.removePoint(oldData.id);
-          this._updatePoints();
-          if (this._pointsModel.getAllPoints().length === 0) {
-            this._noPointsComponent.show();
-            this._sortComponent.hide();
-            this._daysComponent.hide();
-          }
+          this._afterChangeAction();
         })
         .catch(() => {
           pointController.shake();
@@ -99,13 +94,25 @@ export default class TripController {
 
           if (isSuccess) {
             pointController.render(point, Mode.DEFAULT);
-            this._updatePoints();
+            this._afterChangeAction();
             this._onSortTypeChange(this._sortComponent.getSortType());
           }
         })
         .catch(() => {
           pointController.shake();
         });
+    }
+  }
+
+  _afterChangeAction() {
+    if (!this._pointsModel.checkActiveFilterTypePointsExists()) {
+      this._pointsModel.resetFilter();
+    }
+    this._updatePoints();
+    if (this._pointsModel.getAllPoints().length === 0) {
+      this._noPointsComponent.show();
+      this._sortComponent.hide();
+      this._daysComponent.hide();
     }
   }
 
