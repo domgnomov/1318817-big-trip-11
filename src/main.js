@@ -9,7 +9,7 @@ import PointLoadingComponent from "./components/pointLoading";
 import EventsComponent from "./components/events";
 import DestinationsModel from "./models/destinations";
 import OffersModel from "./models/offers";
-import API from "./api/index";
+import API from "./api";
 
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
 const AUTHORIZATION = `Basic sfsdf129sd8f83ju=`;
