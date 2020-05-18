@@ -3,6 +3,7 @@ import {formatDateWithMonthName} from "../utils/date";
 
 const DELIMITER = `&nbsp;&mdash;&nbsp;`;
 const DOTS = `&nbsp;...&nbsp;`;
+const DISPLAYED_OFFERS_LIMIT = 3;
 
 const getCostValue = (points) => {
   let sum = 0;
@@ -16,7 +17,7 @@ const getCostValue = (points) => {
 };
 
 const getTitle = (points) => {
-  if (points.length > 3) {
+  if (points.length > DISPLAYED_OFFERS_LIMIT) {
     return points[0].name.concat(DELIMITER, DOTS, DELIMITER, points[points.length - 1].name);
   }
   const title = points.slice().reduce(function (acc, current) {
