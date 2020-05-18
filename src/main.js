@@ -12,7 +12,7 @@ import OffersModel from "./models/offers";
 import API from "./api/index";
 
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
-const AUTHORIZATION = `Basic sfsdf125sd8f83ju=`;
+const AUTHORIZATION = `Basic sfsdf129sd8f83ju=`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 

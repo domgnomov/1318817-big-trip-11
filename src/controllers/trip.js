@@ -110,6 +110,7 @@ export default class TripController {
     }
     this._updatePoints();
     if (this._pointsModel.getAllPoints().length === 0) {
+      render(this._container.getElement(), this._noPointsComponent, RenderPosition.BEFOREEND);
       this._noPointsComponent.show();
       this._sortComponent.hide();
       this._daysComponent.hide();
@@ -178,12 +179,12 @@ export default class TripController {
 
   render() {
     const points = this._pointsModel.getPoints();
-    this._renderEvents(points);
+    this._renderEvents();
     this._renderPoints(points);
   }
 
-  _renderEvents(points) {
-    if (points.length === 0) {
+  _renderEvents() {
+    if (this._pointsModel.getAllPoints().length === 0) {
       render(this._container.getElement(), this._noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
