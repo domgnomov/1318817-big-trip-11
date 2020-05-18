@@ -9,16 +9,12 @@ import PointLoadingComponent from "./components/pointLoading";
 import EventsComponent from "./components/events";
 import DestinationsModel from "./models/destinations";
 import OffersModel from "./models/offers";
-import Store from "./api/store";
-import Provider from "./api/provider";
 import API from "./api/index";
 
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
-const AUTHORIZATION = `Basic sfsdf118sd8f83ju=`;
+const AUTHORIZATION = `Basic sfsdf125sd8f83ju=`;
 
 const api = new API(END_POINT, AUTHORIZATION);
-const store = new Store(window.localStorage);
-const apiWithProvider = new Provider(api, store);
 
 const pointsModel = new PointsModel();
 const destinationsModel = new DestinationsModel();
@@ -29,7 +25,7 @@ const mainElement = document.querySelector(`.trip-main`);
 const infoController = new InfoController(mainElement, pointsModel);
 
 const eventsComponent = new EventsComponent();
-const tripController = new TripController(pointsModel, eventsComponent, offersModel, destinationsModel, apiWithProvider);
+const tripController = new TripController(pointsModel, eventsComponent, offersModel, destinationsModel, api);
 
 const loadingPointComponent = new PointLoadingComponent();
 render(eventsComponent.getElement(), loadingPointComponent, RenderPosition.BEFOREEND);
@@ -64,15 +60,15 @@ siteMenuComponent.setOnChange((menuItem) => {
   }
 });
 
-apiWithProvider.getDestinations()
+api.getDestinations()
   .then((destinations) => {
     destinationsModel.setDestinations(destinations);
   }).
-  then(() => apiWithProvider.getOffers()).
+  then(() => api.getOffers()).
   then((offers) => {
     offersModel.setOffers(offers);
   })
-  .then(() => apiWithProvider.getPoints())
+  .then(() => api.getPoints())
   .then((points) => {
     pointsModel.setPoints(points);
     loadingPointComponent.hide();
@@ -80,23 +76,3 @@ apiWithProvider.getDestinations()
     tripController.render();
     filterController.render();
   });
-
-//TODO НЕ УДАЛЯТЬ, !!! ВЕНУТЬ В КОНЦЕ ЧТОБЫ ПОКА НЕ МЕШАЛОСЬ
-/*window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`)
-    .then(() => {
-      // Действие, в случае успешной регистрации ServiceWorker
-    }).catch(() => {
-    // Действие, в случае ошибки при регистрации ServiceWorker
-  });
-});*/
-
-window.addEventListener(`online`, () => {
-  document.title = document.title.replace(` [offline]`, ``);
-
-  apiWithProvider.sync();
-});
-
-window.addEventListener(`offline`, () => {
-  document.title += ` [offline]`;
-});

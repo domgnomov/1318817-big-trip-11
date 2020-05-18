@@ -1,4 +1,3 @@
-/*
 import Point from "./models/point";
 import Destination from "./models/destination";
 import Offer from "./models/offer";
@@ -45,12 +44,12 @@ const API = class {
   }
 
   updatePoint(id, data) {
-    const check1 = data.toRAW();
-    check1.id = id;
+    const raw = data.toRAW();
+    raw.id = id;
     return this._load({
       url: `points/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(check1),
+      body: JSON.stringify(raw),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
@@ -86,4 +85,3 @@ const API = class {
 };
 
 export default API;
-*/
