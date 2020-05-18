@@ -366,8 +366,8 @@ export default class EditPoint extends AbstractSmartComponent {
 
   disable() {
     const formElements = this.getElement().getElementsByTagName(`input`);
-    for (const element of formElements) {
-      element.disabled = true;
+    for (const formElement of formElements) {
+      formElement.disabled = true;
     }
   }
 
