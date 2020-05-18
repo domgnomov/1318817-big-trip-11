@@ -58,9 +58,9 @@ export default class Filter extends AbstractComponent {
 
   _toggle(isDisable, type) {
     const typeElements = this.getElement().getElementsByTagName(`input`);
-    for (let typeElement of typeElements) {
-      if (typeElement.value === type) {
-        typeElement.disabled = isDisable;
+    for (const element of typeElements) {
+      if (element.value === type) {
+        element.disabled = isDisable;
       }
     }
   }

@@ -160,7 +160,7 @@ export default class TripController {
       this._renderDayComponentPoints(daysContainer, dayComponent, points);
     } else {
       let dayCount = INITIAL_DAYS_COUNT;
-      let days = getDays(points);
+      const days = getDays(points);
       for (const [day, dayPoints] of days.entries()) {
         const dayComponent = new Day(day, dayCount++);
         this._renderDayComponentPoints(daysContainer, dayComponent, dayPoints);
