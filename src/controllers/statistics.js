@@ -19,7 +19,7 @@ export default class StatisticsController {
     this._statisticsComponent.show();
   }
 
-  isHide(){
+  isHide() {
     return this._statisticsComponent.isHide();
   }
 
