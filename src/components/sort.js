@@ -49,6 +49,10 @@ export default class Sort extends AbstractComponent {
     this._currenSortType = SortType.DEFAULT;
   }
 
+  getSortType() {
+    return this._currenSortType;
+  }
+
   getTemplate() {
     return createSortTemplate();
   }
@@ -56,10 +60,6 @@ export default class Sort extends AbstractComponent {
   changeDayLabel() {
     const dayLabel = this.getElement().querySelector(`.trip-sort__item--day`);
     dayLabel.innerText = this._currenSortType === SortType.DEFAULT ? `Day` : ``;
-  }
-
-  getSortType() {
-    return this._currenSortType;
   }
 
   setSortTypeChangeHandler(handler) {

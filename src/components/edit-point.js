@@ -260,6 +260,20 @@ export default class EditPoint extends AbstractSmartComponent {
     this._recoveryFlatpickr();
   }
 
+  removeElement() {
+    this._destroyFlatpickr(this._startDateFlatpickr);
+    this._destroyFlatpickr(this._endDateFlatpickr);
+
+    super.removeElement();
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this.setResetButtonClickHandler(this._deleteButtonClickHandler);
+    this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
+    this._subscribeOnEvents();
+  }
+
   reset() {
     const point = this._point;
 
@@ -269,6 +283,23 @@ export default class EditPoint extends AbstractSmartComponent {
     this._editedDestination = this._destinationsModel.getDestinationByName(point.name);
 
     this.rerender();
+  }
+
+  getData() {
+    const form = this.getElement();
+    return new FormData(form);
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
+  }
+
+  disable() {
+    const formElements = this.getElement().getElementsByTagName(`input`);
+    for (const element of formElements) {
+      element.disabled = true;
+    }
   }
 
   setSubmitHandler(handler) {
@@ -289,30 +320,6 @@ export default class EditPoint extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
 
     this._deleteButtonClickHandler = handler;
-  }
-
-  recoveryListeners() {
-    this.setSubmitHandler(this._submitHandler);
-    this.setResetButtonClickHandler(this._deleteButtonClickHandler);
-    this.setFavoritesButtonClickHandler(this._setFavoritesHandler);
-    this._subscribeOnEvents();
-  }
-
-  removeElement() {
-    this._destroyFlatpickr(this._startDateFlatpickr);
-    this._destroyFlatpickr(this._endDateFlatpickr);
-
-    super.removeElement();
-  }
-
-  getData() {
-    const form = this.getElement();
-    return new FormData(form);
-  }
-
-  setData(data) {
-    this._externalData = Object.assign({}, DefaultData, data);
-    this.rerender();
   }
 
   _recoveryFlatpickr() {
@@ -363,12 +370,4 @@ export default class EditPoint extends AbstractSmartComponent {
         this.rerender();
       });
   }
-
-  disable() {
-    const formElements = this.getElement().getElementsByTagName(`input`);
-    for (const element of formElements) {
-      element.disabled = true;
-    }
-  }
-
 }

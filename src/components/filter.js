@@ -41,19 +41,19 @@ export default class Filter extends AbstractComponent {
     return createFilterTemplate(this._checkedFilterType);
   }
 
-  setFilterChangeHandler(handler) {
-    this.getElement().addEventListener(`change`, (evt) => {
-      const filterName = getFilterNameById(evt.target.id);
-      handler(filterName);
-    });
-  }
-
   disable(type) {
     this._toggle(true, type);
   }
 
   enable(type) {
     this._toggle(false, type);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      const filterName = getFilterNameById(evt.target.id);
+      handler(filterName);
+    });
   }
 
   _toggle(isDisable, type) {

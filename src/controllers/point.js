@@ -72,6 +72,10 @@ export default class PointController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
+  isFirstPoint() {
+    return !!this.firstPointContainer;
+  }
+
   render(point, mode) {
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
@@ -155,49 +159,6 @@ export default class PointController {
     }
   }
 
-  _isDataValid(data) {
-    const isDatesValid = data.startDate && data.endDate && compareByDate(data.startDate, data.endDate) >= 0;
-    const isPricePositiveInteger = data.price >= 0 && Number.isInteger(Number(data.price));
-    const isNameValid = this._destinationsModel.getDestinationNames().includes(data.name);
-
-    return isDatesValid && data.type && data.name && isPricePositiveInteger && isNameValid;
-  }
-
-  isFirstPoint() {
-    return !!this.firstPointContainer;
-  }
-
-  _replaceEditToPoint() {
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this._pointEditComponent.reset();
-    replace(this._pointComponent, this._pointEditComponent);
-    this._mode = Mode.DEFAULT;
-  }
-
-  _replacePointToEdit() {
-    this._onViewChange();
-    replace(this._pointEditComponent, this._pointComponent);
-    this._mode = Mode.EDIT;
-  }
-
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceEditToPoint();
-    }
-  }
-
-  _onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      if (this._mode === Mode.ADDING) {
-        this._onDataChange(this, EmptyPoint, null);
-      }
-      this._replaceEditToPoint();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
-    }
-  }
-
   destroy() {
     remove(this._pointComponent);
     remove(this._pointEditComponent);
@@ -217,6 +178,46 @@ export default class PointController {
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToPoint();
+    }
+  }
+
+  _isDataValid(data) {
+    const isDatesValid = data.startDate && data.endDate && compareByDate(data.startDate, data.endDate) >= 0;
+    const isPricePositiveInteger = data.price >= 0 && Number.isInteger(Number(data.price));
+    const isNameValid = this._destinationsModel.getDestinationNames().includes(data.name);
+
+    return isDatesValid && data.type && data.name && isPricePositiveInteger && isNameValid;
+  }
+
+  _replaceEditToPoint() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._pointEditComponent.reset();
+    replace(this._pointComponent, this._pointEditComponent);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _replacePointToEdit() {
+    this._onViewChange();
+    replace(this._pointEditComponent, this._pointComponent);
+    this._mode = Mode.EDIT;
+  }
+
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      if (this._mode === Mode.ADDING) {
+        this._onDataChange(this, EmptyPoint, null);
+      }
+      this._replaceEditToPoint();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+
 }
 
 export {Mode, EmptyPoint};
