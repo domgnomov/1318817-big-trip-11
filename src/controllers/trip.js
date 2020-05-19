@@ -5,10 +5,10 @@ import {render, RenderPosition} from "../utils/render";
 import Day from "../components/day";
 import {getDays} from "../utils/common";
 import PointController, {EmptyPoint, Mode} from "./point";
-import PointContainer from "../components/pointContainer";
+import PointContainer from "../components/point-container";
 import {getSortedPoints} from "../utils/sort";
 
-export const INITIAL_DAYS_COUNT = 1;
+const INITIAL_DAYS_COUNT = 1;
 
 export default class TripController {
   constructor(pointsModel, eventsComponent, offersModel, destinationsModel, api) {
@@ -67,7 +67,7 @@ export default class TripController {
         this._api.createPoint(newData)
           .then((point) => {
             this._pointsModel.addPoint(point);
-            if (pointController.ifFirstPoint()) {
+            if (pointController.isFirstPoint()) {
               pointController.destroy();
               this.render();
             } else {
@@ -205,3 +205,5 @@ export default class TripController {
   }
 
 }
+
+export {INITIAL_DAYS_COUNT};

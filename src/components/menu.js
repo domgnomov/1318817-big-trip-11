@@ -2,7 +2,7 @@ import AbstractComponent from "./abstract-component";
 
 const ACTIVE_CLASS = `trip-tabs__btn--active`;
 
-export const MenuItem = {
+const MenuItem = {
   TABLE: `Table`,
   STATS: `Stats`,
 };
@@ -41,3 +41,5 @@ export default class Menu extends AbstractComponent {
     newActiveElement.classList.add(ACTIVE_CLASS);
   }
 }
+
+export {MenuItem};

@@ -5,7 +5,7 @@ import {render, RenderPosition} from "./utils/render.js";
 import SiteMenuComponent, {MenuItem} from "./components/menu.js";
 import InfoController from "./controllers/info";
 import StatisticsController from "./controllers/statistics";
-import PointLoadingComponent from "./components/pointLoading";
+import PointLoadingComponent from "./components/point-loading";
 import EventsComponent from "./components/events";
 import DestinationsModel from "./models/destinations";
 import OffersModel from "./models/offers";

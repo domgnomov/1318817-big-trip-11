@@ -75,9 +75,9 @@ const renderMoneyChart = (moneyCtx, points) => {
 
   const pointTypes = sortedMoneyByPointType.slice().map((point) => point.type);
   const money = sortedMoneyByPointType.slice().map((point) => point.price);
-  const formatted = (val) => `€ ${val}`;
+  const getFormattedValue = (val) => `€ ${val}`;
 
-  return renderChart(moneyCtx, pointTypes, money, formatted, `MONEY`);
+  return renderChart(moneyCtx, pointTypes, money, getFormattedValue, `MONEY`);
 };
 
 const renderTransportChart = (transportCtx, points, transportOfferTypes) => {
@@ -85,9 +85,9 @@ const renderTransportChart = (transportCtx, points, transportOfferTypes) => {
 
   const transport = sortedTransportByCount.slice().map((point) => point.type);
   const counts = sortedTransportByCount.slice().map((point) => point.count);
-  const formatted = (val) => `${val}x`;
+  const getFormattedValue = (val) => `${val}x`;
 
-  return renderChart(transportCtx, transport, counts, formatted, `TRANSPORT`);
+  return renderChart(transportCtx, transport, counts, getFormattedValue, `TRANSPORT`);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, points, transportOfferTypes) => {
@@ -95,9 +95,9 @@ const renderTimeSpendChart = (timeSpendCtx, points, transportOfferTypes) => {
 
   const pointTypes = sortedPointTypesByTimeSpend.slice().map((point) => point.type);
   const timeSpends = sortedPointTypesByTimeSpend.slice().map((point) => point.timeSpend);
-  const formatted = (val) => `${getFormattedMilliseconds(val)}`;
+  const getFormattedValue = (val) => `${getFormattedMilliseconds(val)}`;
 
-  return renderChart(timeSpendCtx, pointTypes, timeSpends, formatted, `TIME SPENT`);
+  return renderChart(timeSpendCtx, pointTypes, timeSpends, getFormattedValue, `TIME SPENT`);
 };
 
 const renderChart = (ctx, labels, data, formatter, title) => {

@@ -1,18 +1,18 @@
 import PointComponent from "../components/point";
-import PointEditComponent from "../components/editPoint";
+import PointEditComponent from "../components/edit-point";
 import {replace, remove, render, RenderPosition} from "../utils/render.js";
 import PointModel from "../models/point";
 import {compareByDate} from "../utils/date";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
-export const Mode = {
+const Mode = {
   ADDING: `adding`,
   DEFAULT: `default`,
   EDIT: `edit`,
 };
 
-export const EmptyPoint = {
+const EmptyPoint = {
   type: null,
   isFavorite: false,
   price: 0,
@@ -163,7 +163,7 @@ export default class PointController {
     return isDatesValid && data.type && data.name && isPricePositiveInteger && isNameValid;
   }
 
-  ifFirstPoint() {
+  isFirstPoint() {
     return !!this.firstPointContainer;
   }
 
@@ -218,3 +218,5 @@ export default class PointController {
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 }
+
+export {Mode, EmptyPoint};

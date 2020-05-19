@@ -18,10 +18,10 @@ export const formatDateTime = (date) => {
 };
 
 export const compareByHoursAndMinutes = (a, b) => {
-  return minutesOfDate(a) - minutesOfDate(b);
+  return getMinutesOfDate(a) - getMinutesOfDate(b);
 };
 
-const minutesOfDate = (m) => {
+const getMinutesOfDate = (m) => {
   return m.getMinutes() + m.getHours() * 60;
 };
 
@@ -37,9 +37,9 @@ export const getFormattedMilliseconds = (ms) => {
     return moment.utc(ms - DAY).format(`DD[d] HH[h] mm[m]`);
   } else if (ms / HOUR > 1 || (ms % HOUR === 0 && ms !== 0)) {
     return moment.utc(ms).format(`HH[h] mm[m]`);
-  } else {
-    return moment.utc(ms).format(`mm[m]`);
   }
+
+  return moment.utc(ms).format(`mm[m]`);
 };
 
 export const compareByDate = (startDate, endDate) => {
@@ -49,9 +49,9 @@ export const compareByDate = (startDate, endDate) => {
     return 0;
   } else if (from < to) {
     return 1;
-  } else {
-    return -1;
   }
+
+  return -1;
 };
 
 export const getMillisecondsByInterval = (startDate, endDate) => {

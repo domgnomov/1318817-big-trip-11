@@ -35,9 +35,9 @@ export default class Destinations {
         .slice()
         .filter((destination) => destination.name === name);
       return destinations && destinations.length > 0 ? destinations[0].description : ``;
-    } else {
-      return ``;
     }
+
+    return ``;
   }
 
   getPicturesByName(name) {
@@ -46,8 +46,8 @@ export default class Destinations {
         .slice()
         .filter((destination) => destination.name === name);
       return destinations && destinations.length > 0 ? destinations[0].pictures : [];
-    } else {
-      return [];
     }
+
+    return [];
   }
 }
