@@ -14,15 +14,15 @@ export const Mode = {
 
 export const EmptyPoint = {
   type: null,
-  name: null,
-  offers: null,
+  isFavorite: false,
   price: 0,
+  offers: null,
   startDate: null,
   endDate: null,
-  duration: 0,
-  description: ``,
-  photos: null,
-  isFavorite: false,
+  name: null,
+  pictures: null,
+  description: null,
+  getInterval: null,
 };
 
 const parseFormData = (formData, destinationModel, offersModel) => {
@@ -121,6 +121,11 @@ export default class PointController {
     });
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
+      debugger;
+      if (!point.id) {
+        this.shake();
+        return;
+      }
       const newPoint = PointModel.clone(point);
       newPoint.isFavorite = !newPoint.isFavorite;
 
