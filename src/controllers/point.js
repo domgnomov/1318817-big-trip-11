@@ -121,7 +121,6 @@ export default class PointController {
     });
 
     this._pointEditComponent.setFavoritesButtonClickHandler(() => {
-      debugger;
       if (!point.id) {
         this.shake();
         return;
