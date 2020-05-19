@@ -42,11 +42,20 @@ export default class Filter extends AbstractComponent {
   }
 
   disable(type) {
-    this._toggle(true, type);
+    this.toggle(true, type);
   }
 
   enable(type) {
-    this._toggle(false, type);
+    this.toggle(false, type);
+  }
+
+  toggle(isDisable, type) {
+    const typeElements = this.getElement().getElementsByTagName(`input`);
+    for (const element of typeElements) {
+      if (element.value === type) {
+        element.disabled = isDisable;
+      }
+    }
   }
 
   setFilterChangeHandler(handler) {
@@ -54,14 +63,5 @@ export default class Filter extends AbstractComponent {
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
     });
-  }
-
-  _toggle(isDisable, type) {
-    const typeElements = this.getElement().getElementsByTagName(`input`);
-    for (const element of typeElements) {
-      if (element.value === type) {
-        element.disabled = isDisable;
-      }
-    }
   }
 }
