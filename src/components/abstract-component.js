@@ -38,4 +38,8 @@ export default class AbstractComponent {
       this._element.classList.add(HIDDEN_CLASS);
     }
   }
+
+  isHide() {
+    return this._element && this._element.classList.contains(HIDDEN_CLASS);
+  }
 }
