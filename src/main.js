@@ -37,15 +37,17 @@ render(siteMenuContainer, siteMenuComponent, RenderPosition.AFTEREND);
 const filterContainer = mainElement.querySelector(`.trip-main__trip-controls`);
 const filterController = new FilterController(filterContainer, pointsModel);
 
-const addButton = mainElement.querySelector(`.trip-main__event-add-btn`);
-addButton.addEventListener(`click`, () => {
-  tripController.createPoint();
-});
-
 const statisticsContainer = document.querySelector(`.page-body__page-main .page-body__container`);
 const statisticsController = new StatisticsController(statisticsContainer, pointsModel, offersModel);
 statisticsController.render();
 statisticsController.hide();
+
+const addButton = mainElement.querySelector(`.trip-main__event-add-btn`);
+addButton.addEventListener(`click`, () => {
+  if (statisticsController.isHide()) {
+    tripController.createPoint();
+  }
+});
 
 siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {

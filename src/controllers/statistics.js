@@ -19,6 +19,10 @@ export default class StatisticsController {
     this._statisticsComponent.show();
   }
 
+  isHide(){
+    return this._statisticsComponent.isHide();
+  }
+
   render() {
     const container = this._container;
 
